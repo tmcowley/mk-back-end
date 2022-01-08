@@ -8,4 +8,10 @@ class AppServerApplication
 
 fun main(args: Array<String>) {
 	runApplication<AppServerApplication>(*args)
+
+	println("Success")
+
+	for (arg in args){
+		println(arg)
+	}
 }

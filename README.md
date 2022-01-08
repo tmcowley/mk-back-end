@@ -9,7 +9,7 @@ My dissertation's software engineering project: The predictive mirrored keyboard
 
 Licensed under the [GNU General Public License v3.0](https://www.gnu.org/licenses/gpl-3.0.en.html). 
 <br />
-This allows for commerical and personal use while preventing the distribution of closed source versions.
+This allows commerical and personal use while preventing the distribution of closed source versions.
 
 
 ## Technical Configuration 
