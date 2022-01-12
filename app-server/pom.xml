@@ -14,10 +14,21 @@
 	<name>app-server</name>
 	<description>CS310 - Dissertation SWE Project</description>
 	<properties>
-		<java.version>11</java.version>
-		<kotlin.version>1.5.31</kotlin.version>
+		<java.version>17</java.version>
+		<kotlin.version>1.6.10</kotlin.version>
+		<!-- <exec.mainClass>tmcowley.appserver.App</exec.mainClass> -->
+		<!-- <kotlin.compiler.incremental>true</kotlin.compiler.incremental> -->
 	</properties>
 	<dependencies>
+		<!-- 
+			Starter for building web, including RESTful, 
+			applications using Spring MVC. 
+			Uses Tomcat as the default embedded container 
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
 		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-oauth2-client</artifactId>
@@ -26,12 +37,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency> -->
-
-		<!-- Required for auto-starting @RestController -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
 
 		<dependency>
 			<groupId>org.jetbrains.kotlin</groupId>

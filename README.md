@@ -16,7 +16,7 @@ This allows commerical and personal use while preventing the distribution of clo
 
 ### Back-end
  - [Spring Boot](https://spring.io/projects/spring-boot) 2.5.6
- - To be written in [Kotlin](https://kotlinlang.org/)
+ - [Kotlin 1.6.10](https://kotlinlang.org/)
  - JDK: [java 17.0.1](https://openjdk.java.net/projects/jdk/17/) 2021-10-19 LTS
 
 ### Front-end Configuration

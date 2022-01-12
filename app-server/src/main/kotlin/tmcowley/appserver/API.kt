@@ -13,33 +13,25 @@ import org.springframework.http.MediaType.*;
 
 // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @RestController
-@RequestMapping(value=["/api"])
-class API
+@RequestMapping(
+    value=["/api"],
+    consumes=["application/json"]
+)
+class API {
 
-@PostMapping("/")
-fun getAll(): String{
-    println("/api/ called")
+    @PostMapping(value=["/test"])
+    fun getAll(@RequestBody body: kotlin.Any): String {
+        println("/api/test called");
 
-    return "/api/ called"
+        // var body: String? = null;
+
+        try {
+            println("test post mapping collected: $body")
+        } catch (e: Exception) {
+            println("printing request body failed");
+        }
+
+        return "/api/test called"
+    }
+
 }
-
-@PostMapping(value=["/test"])
-fun test(): String {
-    println("/api/test called");
-
-    return "/api/test called"
-}
-
-// @PostMapping(value=["/test"])
-// fun test(@RequestBody body: kotlin.Any) {
-
-//     println("/api/test called");
-
-//     try {
-//         println("test post mapping collected: $body")
-//     } catch (e: Exception) {
-//         println("printing request body failed");
-//     }
-
-//     return
-// }

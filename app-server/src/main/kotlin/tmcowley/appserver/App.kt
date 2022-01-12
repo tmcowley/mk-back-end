@@ -4,12 +4,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication;
 
 @SpringBootApplication
-class AppServerApplication
+class App
 
 fun main(args: Array<String>) {
-	runApplication<AppServerApplication>(*args)
-
-	println("Changed jar")
+	runApplication<App>(*args)
 
 	for (arg in args){
 		println(arg)
