@@ -113,6 +113,17 @@
 				</dependencies>
 			</plugin>
 
+			<!-- https://stackoverflow.com/questions/17920920/maven-excluding-java-files-in-compilation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<excludes>
+					<exclude>**/*.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+
 			<!-- For executing the packaged jar with 'mvn exec:exec' -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
