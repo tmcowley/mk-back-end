@@ -1,6 +1,6 @@
 package tmcowley.appserver
 
-import tmcowley.appserver.controllers.API.*
+import tmcowley.appserver.controllers.API
 
 // https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
 import org.junit.Assert.assertEquals;
@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class APITest {
 
+    val apiInstance: API = API();
+
 	@Test
     @Ignore
 	fun api_test(){
@@ -21,5 +23,11 @@ class APITest {
         // for (validReqBody: String in requestBodies) {
         //     assertEquals(kotlin.Unit, test(validReqBody))
         // }
+    }
+
+    @Test
+    fun testSubmit(){
+
+        apiInstance.submit("this is a test");
     }
 }

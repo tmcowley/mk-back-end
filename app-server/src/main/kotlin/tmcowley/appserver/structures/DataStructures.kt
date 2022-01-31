@@ -3,6 +3,9 @@ package tmcowley.appserver.structures;
 import tmcowley.appserver.objects.Key;
 import tmcowley.appserver.objects.KeyPair;
 
+import tmcowley.appserver.structures.WordTree;
+import tmcowley.appserver.structures.SentenceTree;
+
 import java.io.File;
 
 
@@ -27,32 +30,33 @@ class DataStructures {
         return allWords;
     }
 
-    // public fun getWords(MutableList<KeyPair> currentWord): MutableList<String> {
-    //     if (currentWord.isEmpty()) {
-    //         return mutableListOf<String>()
-    //     }
+    fun getWords(currentWord: MutableList<KeyPair>): MutableList<String> {
+        if (currentWord.isEmpty()) {
+            return mutableListOf<String>()
+        }
+    
+        // transform into tree
+        val currentWordTree: WordTree = WordTree();
+    
+        for (keyPair: KeyPair in currentWord) {
+            // println("adding keypair: ${keyPair}")
+            currentWordTree.insert(keyPair);
+        }
+    
+        return currentWordTree.findWords();
+    }
 
-    //     // transform into tree
-    //     val currentWordTree: WordTree = WordTree();
+    public fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
 
-    //     for (keyPair: KeyPair in currentWord) {
-    //         currentWordTree.insert(keyPair);
-    //     }
+        // store in Binary Tree, traverse each as before
+        var sentenceTree: SentenceTree = SentenceTree();
 
-    //     return currentWordTree.getWords();
-    // }
+        for (words: MutableList<String> in listOfMatchedWords) {
+            sentenceTree.insert(words);
+        }
 
-    // public fun getSentences(MutableList<MutableList<String>> text): MutableList<String> {
-
-    //     // store in Binary Tree, traverse each as before
-    //     sentenceTree: SentenceTree = SentenceTree();
-
-    //     for (words: MutableList<String> in text) {
-    //         sentenceTree.insert(words);
-    //     }
-
-    //     return sentenceTree.getWords();
-    // }
+        return sentenceTree.findWords();
+    }
 
     public fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
 

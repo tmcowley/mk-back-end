@@ -112,34 +112,29 @@ class WordTree() {
             // crawl up from leaf node to root node
             var currentNode: Node = n;
             do {
-                potentialWord += n.value;
+                potentialWord += currentNode.value;
 
                 currentNode = currentNode.parent!!;
                 // System.out.print(n.value);
                 // System.out.print(" ");
             } while (currentNode != root);
-            // System.out.println("");
 
-
-            // do {
-            //     potentialWord += n.value;
-            //     // System.out.print(n.value);
-            //     // System.out.print(" ");
-            // } while ((n = n.parent) != root && n != null);
-            // // System.out.println("");
 
             potentialWord = StringBuilder(potentialWord).reverse().toString();
 
             // don't store if word is duplicate
             if (words.contains(potentialWord)) {
+                // println("word is duplicate")
                 return;
             }
 
             // ignore word if it does not exist in the dictionary
             if (!Singleton.wordExists(potentialWord)) {
+                // println("word is not in dictionary")
                 return;
             }
 
+            // println("adding word to words")
             words.add(potentialWord);
 
             return;
