@@ -46,7 +46,19 @@ html {
   color: #61dafb;
 }
 
+#input {
+  margin-top: 1em;
+  margin-bottom: 1em;
+
+  height:45px;
+  /* border:none; */
+  width:500px;
+  font-size:16px;
+  /* outline: none; */
+}
+
 #apiStatsPanel {
+  padding-top: 200px;
   text-align: left;
 }
 
@@ -57,4 +69,12 @@ html {
   to {
     transform: rotate(360deg);
   }
+}
+
+ul {
+  text-align: left;
+}
+
+.boldText {
+  font-weight: bold;
 }

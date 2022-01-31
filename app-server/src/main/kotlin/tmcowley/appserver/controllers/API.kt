@@ -16,13 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import org.springframework.http.MediaType.*;
 
 // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @RestController
+@CrossOrigin(
+    origins = ["http://localhost:3000"]
+)
 @RequestMapping(
     value=["/api"],
-    consumes=["application/json"]
+    consumes=["text/plain"]
+    // consumes=["application/json"]
 )
 class API {
 
@@ -32,7 +38,7 @@ class API {
     )
     fun submit(@RequestBody input: String): Array<String> {
 
-        println("/submit called");
+        println("\n\n/submit endpoint called");
 
         val lowercaseInput = input.lowercase();
 
@@ -130,13 +136,74 @@ class API {
     }
 
     @PostMapping(value=["/convert/rhs"])
-    fun convertToFull(input: String): Array<String> {
-        return arrayOf("")
+    fun convertToRHS(@RequestBody input: String?): String {
+        // for each alphabetic char in string -> lookup keypair, get right key in keypair
+
+        if (input == null) {
+            return "";
+        }
+
+        var inputRHS: String = "";
+
+        for (char: Char in input) {
+            if (isAlphabetic(char)) {
+
+                val key: Key = Key(char);
+
+                val keyPair: KeyPair? = Singleton.getKeyPair(key);
+
+                if (keyPair == null) {
+                    inputRHS += char;
+                    continue;
+                }
+
+                val charRHS: Char = keyPair.rightKey.character;
+
+                inputRHS += charRHS;
+
+                continue;
+            }
+
+            inputRHS += char;
+        }
+
+        return inputRHS;
     }
 
     @PostMapping(value=["/convert/lhs"])
-    fun convertToLHS(input: String): String {
-        return ""
+    fun convertToLHS(@RequestBody input: String?): String {
+
+        // for each alphabetic char in string -> lookup keypair, get right key in keypair
+
+        if (input == null) {
+            return "";
+        }
+
+        var inputLHS: String = "";
+
+        for (char: Char in input) {
+            if (isAlphabetic(char)) {
+
+                val key: Key = Key(char);
+
+                val keyPair: KeyPair? = Singleton.getKeyPair(key);
+
+                if (keyPair == null) {
+                    inputLHS += char;
+                    continue;
+                }
+
+                val charLHS: Char = keyPair.leftKey.character;
+
+                inputLHS += charLHS;
+
+                continue;
+            }
+
+            inputLHS += char;
+        }
+
+        return inputLHS;
     }
 
     @PostMapping(value=["/test"])

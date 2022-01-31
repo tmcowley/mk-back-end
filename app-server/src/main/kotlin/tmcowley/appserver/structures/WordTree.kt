@@ -31,15 +31,15 @@ class WordTree() {
     val root: Node = Node(Key('*'));
 
     fun insert(keyPair: KeyPair) {
-        val key1: Key = keyPair.key1;
-        val key2: Key = keyPair.key2;
+        val leftKey: Key = keyPair.leftKey;
+        val rightKey: Key = keyPair.rightKey;
 
         val leaves: MutableList<Node> = this.findLeaves();
 
         for (leaf: Node in leaves) {
 
-            val leftChild: Node = Node(key1);
-            val rightChild: Node = Node(key2);
+            val leftChild: Node = Node(leftKey);
+            val rightChild: Node = Node(rightKey);
 
             leaf.left = leftChild;
             leaf.right = rightChild;

@@ -2,7 +2,7 @@ package tmcowley.appserver.objects;
 
 import tmcowley.appserver.objects.Key;
 
-data class KeyPair(val key1: Key, val key2: Key) {
+data class KeyPair(val leftKey: Key, val rightKey: Key) {
 
     // equals, hashCode, toString all defined
 
@@ -12,18 +12,18 @@ data class KeyPair(val key1: Key, val key2: Key) {
             return null
         }
 
-        if (key.equals(this.key1)) {
-            return this.key2;
+        if (key.equals(this.leftKey)) {
+            return this.rightKey;
         }
 
-        if (key.equals(this.key2)) {
-            return this.key1;
+        if (key.equals(this.rightKey)) {
+            return this.leftKey;
         }
 
         return null;
     }
 
     override fun toString(): String {
-        return ("(" + this.key1.toString() + ", " + this.key2.toString() + ")");
+        return ("(" + this.leftKey.toString() + ", " + this.rightKey.toString() + ")");
     }
 }
