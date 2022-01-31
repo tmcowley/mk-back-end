@@ -114,15 +114,16 @@
 			</plugin>
 
 			<!-- https://stackoverflow.com/questions/17920920/maven-excluding-java-files-in-compilation -->
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.9.0</version>
 				<configuration>
 					<excludes>
-					<exclude>**/*.java</exclude>
+						<exclude>**/*.java</exclude>
 					</excludes>
 				</configuration>
-			</plugin>
+			</plugin> -->
 
 			<!-- For executing the packaged jar with 'mvn exec:exec' -->
 			<plugin>

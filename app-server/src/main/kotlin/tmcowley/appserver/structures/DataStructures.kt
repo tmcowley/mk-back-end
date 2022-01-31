@@ -112,7 +112,7 @@ class DataStructures {
         var keyPairs: HashMap<Key, KeyPair> = hashMapOf<Key, KeyPair>();
         
         // top row
-        {
+        run {
             // top row: left half
             keyPairs.put(q, qp);
             keyPairs.put(w, wo);
@@ -129,7 +129,7 @@ class DataStructures {
         }
 
         // middle row
-        {
+        run {
             // middle row: left half
             keyPairs.put(a, a_colon);
             keyPairs.put(s, sl);
@@ -146,7 +146,7 @@ class DataStructures {
         }
 
         // bottom row
-        {
+        run {
             // bottom row: left half
             keyPairs.put(z, z_f_slash);
             keyPairs.put(x, x_dot);

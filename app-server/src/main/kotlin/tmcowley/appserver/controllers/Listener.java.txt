@@ -1,0 +1,145 @@
+package keyboard;
+
+import keyboard.structures.*;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import java.util.ArrayList;
+
+public class Listener {
+
+    public Listener() {
+        JTextField textField = new JTextField();
+
+        textField.addKeyListener(new LKeyListener());
+
+        JFrame j_frame = new JFrame();
+        // j_frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        j_frame.add(textField);
+        j_frame.setSize(400, 350);
+        j_frame.setVisible(true);
+    }
+}
+
+/**
+ * TODO
+ * 
+ * for key_code constants, see:
+ * https://docs.oracle.com/javase/7/docs/api/java/awt/event/KeyEvent.html
+ */
+class LKeyListener extends KeyAdapter {
+
+    // current word store as list of keypairs
+    ArrayList<KeyPair> currentWord = new ArrayList<>(12);
+
+    // text: list of lists containing each viable word
+    ArrayList<ArrayList<String>> text = new ArrayList<>();
+
+    // raw text input store
+    StringBuilder rawInput = new StringBuilder();
+
+    @Override
+    public void keyPressed(KeyEvent event) {
+
+        // collect character pressed
+        char ch = event.getKeyChar();
+        char key_code = event.getKeyChar();
+
+        // enter key pressed
+        if (key_code == KeyEvent.VK_ENTER) {
+            // store the previous word
+            storeWord(currentWord);
+            currentWord = new ArrayList<>(12);
+
+            // calculate viable sentences from text
+            computeText(text);
+            text = new ArrayList<>();
+
+            // exit
+            System.exit(0);
+        }
+
+        // space key pressed
+        if (key_code == KeyEvent.VK_SPACE) {
+            rawInput.append(" ");
+            storeWord(currentWord);
+            currentWord = new ArrayList<>(12);
+        }
+
+        // character is alphabetic
+        if (Character.isAlphabetic(ch)) {
+
+            // convert character input to lower case
+            ch = Character.toLowerCase(ch);
+            System.out.print(ch);
+
+            // get key-pair corresponding to the key pressed
+            App instance = App.getInstance();
+            KeyPair key_pair = instance.getKeyPair(new Key(ch));
+            System.out.print(" to " + key_pair + "\n");
+
+            // add character to character stores
+            rawInput.append(ch);
+            currentWord.add(key_pair);
+        }
+
+        // character is not alphabetic, not space, not enter
+        return;
+    }
+
+    public void computeText(@NonNull ArrayList<ArrayList<String>> text) {
+
+        // no words have been computed
+        if (text.isEmpty()) {
+            System.out.println("Notice: text array is empty");
+            return;
+        }
+
+        // compute viable sentences from text array
+        ArrayList<String> resultingSentences = DataStructures.getSentences(text);
+
+        if (resultingSentences.isEmpty()) {
+            System.out.println("Notice: Resulting sentences array list is empty");
+            return;
+        }
+
+        System.out.println("\nInput: " + rawInput.toString());
+
+        System.out.println("\nResults: ");
+        for (String sentence : resultingSentences) {
+            System.out.println(sentence);
+        }
+    }
+
+    public void storeWord(ArrayList<KeyPair> currentWord) {
+        System.out.println("\nSpace: store previous word");
+
+        // boolean first = true;
+        // for (KeyPair kp : currentWord) {
+        // if (first) {
+        // System.out.print(kp);
+        // first = false;
+        // }
+        // System.out.print(" -> " + kp);
+        // }
+
+        ArrayList<String> wordMatches = DataStructures.getWords(currentWord);
+
+        if (wordMatches.isEmpty()) {
+            System.out.println("Notice: that word was not matched");
+            return;
+        }
+
+        // for (String word : wordMatches) {
+        // System.out.println("matched word: " + word);
+        // }
+
+        // add the viable words to the list of viable word lists
+        text.add(wordMatches);
+    }
+}
