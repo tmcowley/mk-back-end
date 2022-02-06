@@ -1,25 +1,35 @@
 import { useState } from "react";
 
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
-import ReactDOM from 'react-dom';
+import ReactDOM from "react-dom";
 
 import { useEffect } from "react";
 
 // import logo from './logo.svg';
-import './App.css';
+import "./App.css";
 
 function Header() {
   return (
     <header className="App-header">
-      <p>
-        Mirrored keyboard algorithm POC
-      </p>
+      <p>Mirrored keyboard algorithm POC</p>
     </header>
   );
 }
 
-function DevStatsPanel({ inputDelta, input, lhsEquiv, rhsEquiv }) {
+type DevStatsPanelProps = {
+  inputDelta: string;
+  input: string;
+  lhsEquiv: string;
+  rhsEquiv: string;
+};
+
+function DevStatsPanel({
+  inputDelta,
+  input,
+  lhsEquiv,
+  rhsEquiv,
+}: DevStatsPanelProps) {
   return (
     <div id="apiStatsPanel">
       <hr />
@@ -27,17 +37,19 @@ function DevStatsPanel({ inputDelta, input, lhsEquiv, rhsEquiv }) {
       <span className="boldText">New input:</span> {inputDelta}
       <br />
       <br />
-      <span className="boldText">Input: </span>{input}
+      <span className="boldText">Input: </span>
+      {input}
       <br />
-      <span className="boldText">Left-hand equivalent: </span>{lhsEquiv}
+      <span className="boldText">Left-hand equivalent: </span>
+      {lhsEquiv}
       <br />
-      <span className="boldText">Right-hand equivalent: </span>{rhsEquiv}
+      <span className="boldText">Right-hand equivalent: </span>
+      {rhsEquiv}
     </div>
   );
 }
 
 function App() {
-
   // text input and input delta (added characters)
   const [input, setInput] = useState("");
   const [inputDelta, setInputDelta] = useState("");
@@ -49,10 +61,11 @@ function App() {
   // stores computed success state
   const [computed, setComputed] = useState(false);
 
-
   // on page load => focus and select input box
   useEffect(() => {
-    var input = document.getElementById('input');
+    const input: HTMLInputElement = document.getElementById(
+      "input"
+    )! as HTMLInputElement;
     input.focus();
     input.select();
   }, []);
@@ -71,35 +84,27 @@ function App() {
 
   return (
     <body className="App">
-
       <Header />
 
       <div id="content">
-        <form
-          onSubmit={
-            (e) => handleFormSubmit(e)
-          }
-        >
+        <form onSubmit={(e) => handleFormSubmit(e)}>
           <label>
             <input
               id="input"
               type="text"
               value={input}
-              onInput={
-                (e) => handleOnInput(e)
-              }
+              onInput={(e) => handleOnInput(e)}
             />
           </label>
         </form>
 
         <br />
         <hr />
-        <div id="resultsDiv" hidden={(input === "" || !computed)}>
+        <div id="resultsDiv" hidden={input === "" || !computed}>
           <h2>Results</h2>
           <ul>
             <div id="results"></div>
           </ul>
-
         </div>
 
         <DevStatsPanel
@@ -108,17 +113,15 @@ function App() {
           lhsEquiv={lhsEquiv}
           rhsEquiv={rhsEquiv}
         />
-
       </div>
-
     </body>
   );
 
-  function handleOnInput(event) {
-
+  function handleOnInput(event: React.FormEvent<HTMLInputElement>) {
     const oldValue = input;
-    const newValue = event.target.value;
-    const selectionEnd = event.target.selectionEnd;
+    const inputElement = event.target as HTMLInputElement;
+    const newValue = inputElement.value;
+    const selectionEnd = inputElement.selectionEnd!;
 
     // update the state-stored input
     setInput(newValue);
@@ -128,7 +131,7 @@ function App() {
     setInputDelta(inputDelta);
   }
 
-  function renderEquivalents(input) {
+  function renderEquivalents(input: string) {
     // calculate rhs interpretation
     const host = "http://localhost:8080";
     var path = "/api/convert/lhs";
@@ -136,42 +139,43 @@ function App() {
 
     const data = input;
 
-    var config = {
+    var config: AxiosRequestConfig<string> = {
       headers: {
         // 'Content-Length': 0,
-        'Content-Type': 'text/plain'
+        "Content-Type": "text/plain",
       },
-      responseType: 'json'
+      responseType: "json",
     };
 
-    axios.post(url, data, config)
-      .then((response) => {
+    axios.post(url, data, config).then(
+      (response) => {
         // console.log(response);
 
         const lhsEquiv = response.data;
         setLhsEquiv(lhsEquiv);
-
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-      });
+      }
+    );
 
     path = "/api/convert/rhs";
     url = host + path;
 
-    axios.post(url, data, config)
-      .then((response) => {
+    axios.post(url, data, config).then(
+      (response) => {
         // console.log(response);
 
         const rhsEquiv = response.data;
         setRhsEquiv(rhsEquiv);
-
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
-      });
+      }
+    );
   }
 
-  function handleFormSubmit(event) {
-
+  function handleFormSubmit(event: React.FormEvent) {
     // prevent default form submission
     event.preventDefault();
 
@@ -183,8 +187,7 @@ function App() {
     // postInput(input);
   }
 
-  function postInput(input) {
-
+  function postInput(input: string) {
     if (!input || input === "") {
       setComputed(false);
       return;
@@ -196,56 +199,54 @@ function App() {
 
     const data = input;
 
-    var config = {
+    var config: AxiosRequestConfig<string> = {
       headers: {
         // 'Content-Length': 0,
-        'Content-Type': 'text/plain'
+        "Content-Type": "text/plain",
       },
-      responseType: 'json'
+      responseType: "json",
     };
 
-    axios.post(url, data, config)
-      .then((response) => {
-
+    axios.post(url, data, config).then(
+      (response) => {
         // render results from response
         renderResults(response);
         setComputed(true);
-
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
         setComputed(false);
-      });
-  }
-
-  function renderResults(response) {
-
-    // generate the results list
-    const resultsArray = response.data;
-    let results = resultsArray.map((item, i) => {
-      return (
-        <li key={i}>{item}</li>
-      );
-    });
-
-    // render the results list
-    ReactDOM.render(
-      results,
-      document.getElementById('results')
+      }
     );
   }
 
+  function renderResults(response: AxiosResponse) {
+    // generate the results list
+    const resultsArray = response.data;
+    let results = resultsArray.map((item: string, i: number) => {
+      return <li key={i}>{item}</li>;
+    });
+
+    // render the results list
+    ReactDOM.render(results, document.getElementById("results"));
+  }
+
   // Developed with help from https://stackoverflow.com/a/34217353
-  function getStringDelta(oldString, newString, selEnd) {
-    const textLost = (newString.length < oldString.length);
+  function getStringDelta(
+    oldString: string,
+    newString: string,
+    selEnd: number
+  ) {
+    const textLost: boolean = newString.length < oldString.length;
     if (textLost) {
       console.log("Notice: User has removed or cut character(s)");
       return "";
     }
 
-    const deltaSize = (newString.length - oldString.length);
-    const selStart = (selEnd - deltaSize);
+    const deltaSize: number = newString.length - oldString.length;
+    const selStart: number = selEnd - deltaSize;
 
-    const isAppend = (newString.substring(0, selStart) === oldString);
+    const isAppend: boolean = newString.substring(0, selStart) === oldString;
 
     if (isAppend) {
       return newString.substring(selStart, selEnd);
@@ -254,7 +255,6 @@ function App() {
       return "";
     }
   }
-
 }
 
 export default App;
