@@ -6,7 +6,7 @@ import ReactDOM from 'react-dom';
 
 import { useEffect } from "react";
 
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 function Header() {
@@ -19,12 +19,12 @@ function Header() {
   );
 }
 
-function DevStatsPanel({ newInput, input, lhsEquiv, rhsEquiv }) {
+function DevStatsPanel({ inputDelta, input, lhsEquiv, rhsEquiv }) {
   return (
     <div id="apiStatsPanel">
       <hr />
       <h2>Dev Stats</h2>
-      <span className="boldText">New input:</span> {newInput}
+      <span className="boldText">New input:</span> {inputDelta}
       <br />
       <br />
       <span className="boldText">Input: </span>{input}
@@ -38,20 +38,36 @@ function DevStatsPanel({ newInput, input, lhsEquiv, rhsEquiv }) {
 
 function App() {
 
+  // text input and input delta (added characters)
   const [input, setInput] = useState("");
-  const [newInput, setNewInput] = useState("");
+  const [inputDelta, setInputDelta] = useState("");
+
+  // left and right hand side interpretations of input
   const [lhsEquiv, setLhsEquiv] = useState("");
   const [rhsEquiv, setRhsEquiv] = useState("");
 
+  // stores computed success state
   const [computed, setComputed] = useState(false);
 
 
-  // focus and select input box on load
+  // on page load => focus and select input box
   useEffect(() => {
     var input = document.getElementById('input');
     input.focus();
     input.select();
   }, []);
+
+  // on update of input => update stats, results
+  useEffect(() => {
+    // calculate and render LHS and RHS interpretations
+    renderEquivalents(input);
+
+    // launch post request to back-end
+    // to get matching sentences
+    postInput(input);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [input]);
 
   return (
     <body className="App">
@@ -69,8 +85,8 @@ function App() {
               id="input"
               type="text"
               value={input}
-              onChange={
-                (e) => handleOnChange(e)
+              onInput={
+                (e) => handleOnInput(e)
               }
             />
           </label>
@@ -87,7 +103,7 @@ function App() {
         </div>
 
         <DevStatsPanel
-          newInput={newInput}
+          inputDelta={inputDelta}
           input={input}
           lhsEquiv={lhsEquiv}
           rhsEquiv={rhsEquiv}
@@ -98,53 +114,27 @@ function App() {
     </body>
   );
 
-  // https://stackoverflow.com/a/34217353
-  function getInputtedString(prev, curr, selEnd) {
-    if (prev.length > curr.length) {
-      console.log("User has removed or cut character(s)");
-      return "";
-    }
-
-    var lengthOfPasted = curr.length - prev.length;
-    if (curr.substr(0, selEnd - lengthOfPasted) + curr.substr(selEnd) === prev) {
-      return curr.substr(selEnd - lengthOfPasted, lengthOfPasted);
-    } else {
-      console.log("The user has replaced a selection :(");
-      return "n\\a";
-    }
-  }
-
-  function handleOnChange(event) {
-
-    setComputed(false);
+  function handleOnInput(event) {
 
     const oldValue = input;
-
-    const value = event.target.value;
+    const newValue = event.target.value;
     const selectionEnd = event.target.selectionEnd;
-    setInput(value);
-    // console.log(event);
 
-    const newInput = getInputtedString(oldValue, value, selectionEnd);
-    setNewInput(newInput);
+    // update the state-stored input
+    setInput(newValue);
 
-    // // branch: single character or multiple? 
-    // const isCharInput = (newInput.length === 1);
+    // calculate the input delta (new characters)
+    const inputDelta = getStringDelta(oldValue, newValue, selectionEnd);
+    setInputDelta(inputDelta);
+  }
 
-    // if (isCharInput) {
-    //   // launch char addition
-    // }
-
-    // else {
-    //   // launch multi-char addition
-    // }
-
+  function renderEquivalents(input) {
     // calculate rhs interpretation
     const host = "http://localhost:8080";
     var path = "/api/convert/lhs";
     var url = host + path;
 
-    const data = value;
+    const data = input;
 
     var config = {
       headers: {
@@ -182,16 +172,23 @@ function App() {
 
   function handleFormSubmit(event) {
 
-    // prevent form submission
+    // prevent default form submission
     event.preventDefault();
-    // console.log(event);
 
-    // get input text
-    const input = event.target[0].value;
-    // alert(input);
+    // // get input text
+    // const input = event.target[0].value;
 
-    // launch post request to back-end
-    // to get matching sentences
+    // // launch post request to back-end
+    // // to get matching sentences
+    // postInput(input);
+  }
+
+  function postInput(input) {
+
+    if (!input || input === "") {
+      setComputed(false);
+      return;
+    }
 
     const host = "http://localhost:8080";
     const path = "/api/submit";
@@ -209,29 +206,54 @@ function App() {
 
     axios.post(url, data, config)
       .then((response) => {
-        // console.log(response);
 
-        const resultsArray = response.data;
-
-        let results = resultsArray.map((item, i) => {
-          return (
-            <li key={i}>{item}</li>
-          );
-        });
-
-        ReactDOM.render(
-          results,
-          document.getElementById('results')
-        );
-
+        // render results from response
+        renderResults(response);
         setComputed(true);
 
       }, (error) => {
         console.log(error);
+        setComputed(false);
       });
-
   }
 
+  function renderResults(response) {
+
+    // generate the results list
+    const resultsArray = response.data;
+    let results = resultsArray.map((item, i) => {
+      return (
+        <li key={i}>{item}</li>
+      );
+    });
+
+    // render the results list
+    ReactDOM.render(
+      results,
+      document.getElementById('results')
+    );
+  }
+
+  // Developed with help from https://stackoverflow.com/a/34217353
+  function getStringDelta(oldString, newString, selEnd) {
+    const textLost = (newString.length < oldString.length);
+    if (textLost) {
+      console.log("Notice: User has removed or cut character(s)");
+      return "";
+    }
+
+    const deltaSize = (newString.length - oldString.length);
+    const selStart = (selEnd - deltaSize);
+
+    const isAppend = (newString.substring(0, selStart) === oldString);
+
+    if (isAppend) {
+      return newString.substring(selStart, selEnd);
+    } else {
+      console.log("Notice: User has overwritten content");
+      return "";
+    }
+  }
 
 }
 
