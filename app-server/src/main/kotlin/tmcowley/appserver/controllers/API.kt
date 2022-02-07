@@ -66,9 +66,9 @@ class API {
             }
         }
 
-        // filter ungrammatical and rank viable
-        val langtool: Langtool = Langtool();
-        langtool.countErrors("null");
+        // // filter ungrammatical and rank viable
+        // val langtool: Langtool = Langtool();
+        // langtool.countErrors("null");
 
         // val sortedSentences = Collections.sort(resultingSentences, compareSentenceCorrectness);
 
