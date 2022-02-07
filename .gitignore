@@ -26,3 +26,6 @@ hs_err_pid*
 
 # mac specific
 **/.DS_Store
+
+# nohup is used by ./make
+nohup.out
