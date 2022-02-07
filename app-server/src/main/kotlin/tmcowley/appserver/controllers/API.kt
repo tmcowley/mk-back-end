@@ -5,6 +5,8 @@ import tmcowley.appserver.Singleton;
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 
+import tmcowley.appserver.tools.Langtool
+
 import tmcowley.appserver.structures.DataStructures;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import org.springframework.http.MediaType.*;
+
+
 
 // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @RestController
@@ -62,8 +66,33 @@ class API {
             }
         }
 
+        // filter ungrammatical and rank viable
+        val langtool: Langtool = Langtool();
+        langtool.countErrors("null");
+
+        // val sortedSentences = Collections.sort(resultingSentences, compareSentenceCorrectness);
+
+
         return resultingSentences.toTypedArray();
     }
+
+    // fun compareSentenceCorrectness implements Comparator<String>( first: String, second: String ): Int {
+    //     val langtool: Langtool = Langtool();
+
+    //     val firstScore: Int = langtool.countErrors(first);
+    //     val secondScore: Int = langtool.countErrors(second);
+
+    //     if (firstScore > secondScore) {
+
+    //         // choose second score
+    //         return 1;
+    //     } else if (secondScore > firstScore) {
+    //         return -1;
+    //     } else {
+    //         return 0;
+    //     }
+
+    // } 
 
     fun splitIntoWords(sentence: String): Array<String> {
         return sentence.split(" ").toTypedArray();

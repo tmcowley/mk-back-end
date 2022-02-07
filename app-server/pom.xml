@@ -83,6 +83,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.languagetool/language-en -->
+		<dependency>
+			<groupId>org.languagetool</groupId>
+			<artifactId>language-en</artifactId>
+			<version>5.6</version>
+		  </dependency>
+
 	</dependencies>
 
 	<build>
