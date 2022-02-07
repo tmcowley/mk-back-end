@@ -32,7 +32,6 @@ function DevStatsPanel({
 }: DevStatsPanelProps) {
   return (
     <div id="apiStatsPanel">
-      <hr />
       <h2>Dev Stats</h2>
       <span className="boldText">New input:</span> {inputDelta}
       <br />
@@ -87,7 +86,7 @@ function App() {
       <Header />
 
       <div id="content">
-        <form onSubmit={(e) => handleFormSubmit(e)}>
+        <form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
           <label>
             <input
               id="input"
@@ -100,11 +99,26 @@ function App() {
 
         <br />
         <hr />
-        <div id="resultsDiv" hidden={input === "" || !computed}>
-          <h2>Results</h2>
-          <ul>
-            <div id="results"></div>
-          </ul>
+
+        <div 
+          id="resultsContainer"
+          hidden={input === "" || !computed}
+        >
+        <h2>Results</h2>
+        <div
+          className="grid-container"
+        >
+
+          <div className="grid-child">
+            <h3>Sentence-based algorithm (1)</h3>
+            <ul id="results"></ul>
+          </div>
+
+          <div className="grid-child">
+            <h3>Real-time algorithm (2)</h3>
+            ...
+          </div>
+        </div>
         </div>
 
         <DevStatsPanel
@@ -132,6 +146,11 @@ function App() {
   }
 
   function renderEquivalents(input: string) {
+    if (!input || input === "") {
+      setLhsEquiv("");
+      setRhsEquiv("");
+    }
+
     // calculate rhs interpretation
     const host = "http://localhost:8080";
     var path = "/api/convert/lhs";

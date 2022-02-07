@@ -1,3 +1,4 @@
 #!/bin/bash
 
 pkill java
+# may need to run: kill -KILL $PID
