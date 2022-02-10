@@ -4,6 +4,10 @@ import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.structures.DataStructures
 
+import tmcowley.appserver.utils.Langtool
+
+import java.util.Collections
+
 object Singleton {
 
     val structures: DataStructures = DataStructures()
@@ -11,6 +15,11 @@ object Singleton {
     var keyPairs: HashMap<Key, KeyPair> = structures.getKeyPairHashMap()
 
     var wordSet: HashSet<String> = structures.getWordSet()
+
+    val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
+
+    val langtool: Langtool = Langtool();
+    
 
     init {
         println("Singleton initiated")

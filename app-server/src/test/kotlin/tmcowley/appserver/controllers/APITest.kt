@@ -9,20 +9,18 @@ import org.junit.Ignore;
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
+import tmcowley.appserver.Singleton
+
 @SpringBootTest
 class APITest {
 
     val apiInstance: API = API();
 
+
 	@Test
-    @Ignore
 	fun api_test(){
-
-        // var requestBodies: Array<String>  = arrayOf( "requestBody", "requestBody2", "requestBody3" );
-
-        // for (validReqBody: String in requestBodies) {
-        //     assertEquals(kotlin.Unit, test(validReqBody))
-        // }
+        // for general debugging (for the time being)
+        println(Singleton.maxLengthInDictionary)
     }
 
     @Test

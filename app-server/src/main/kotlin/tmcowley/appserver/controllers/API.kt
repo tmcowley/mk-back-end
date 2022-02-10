@@ -4,9 +4,7 @@ import tmcowley.appserver.Singleton;
 
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
-
-import tmcowley.appserver.tools.Langtool
-
+import tmcowley.appserver.utils.Langtool
 import tmcowley.appserver.structures.DataStructures;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -36,6 +34,10 @@ import org.springframework.http.MediaType.*;
 )
 class API {
 
+    val langtool: Langtool = Singleton.langtool
+
+    init {}
+
     @PostMapping(
         value=["/submit"],
         consumes=["text/plain"]
@@ -54,7 +56,6 @@ class API {
         // report input and output
         run {
             System.out.println("\nInput: ${input}");
-
             System.out.println("\nResults: ");
 
             if (resultingSentences.isEmpty()) {
@@ -66,33 +67,19 @@ class API {
             }
         }
 
-        // // filter ungrammatical and rank viable
-        // val langtool: Langtool = Langtool();
-        // langtool.countErrors("null");
+        // filter ungrammatical and rank viable
+        run {
+            resultingSentences.sortWith( StringComparator );
 
-        // val sortedSentences = Collections.sort(resultingSentences, compareSentenceCorrectness);
+            // test with .reversed()
+
+            // pick top 5 
+            // ...
+        }
 
 
         return resultingSentences.toTypedArray();
     }
-
-    // fun compareSentenceCorrectness implements Comparator<String>( first: String, second: String ): Int {
-    //     val langtool: Langtool = Langtool();
-
-    //     val firstScore: Int = langtool.countErrors(first);
-    //     val secondScore: Int = langtool.countErrors(second);
-
-    //     if (firstScore > secondScore) {
-
-    //         // choose second score
-    //         return 1;
-    //     } else if (secondScore > firstScore) {
-    //         return -1;
-    //     } else {
-    //         return 0;
-    //     }
-
-    // } 
 
     fun splitIntoWords(sentence: String): Array<String> {
         return sentence.split(" ").toTypedArray();
@@ -251,3 +238,39 @@ class API {
     }
 
 }
+
+class StringComparator {
+
+	companion object : Comparator<String> {
+
+        val langtool: Langtool = Singleton.langtool
+
+		override fun compare(first: String, second: String): Int { 
+
+            val firstScore: Int = langtool.countErrors(first);
+            val secondScore: Int = langtool.countErrors(second);
+            
+            when {
+                firstScore != secondScore -> return (firstScore - secondScore)
+                else -> return (0)
+		    }
+        }
+	}
+}
+
+    // fun compareSentenceCorrectness implements Comparator<String>( first: String, second: String ): Int {
+    //     val langtool: Langtool = Langtool();
+
+    //     val firstScore: Int = langtool.countErrors(first);
+    //     val secondScore: Int = langtool.countErrors(second);
+
+    //     if (firstScore > secondScore) {
+
+    //         // choose second score
+    //         return 1;
+    //     } else if (secondScore > firstScore) {
+    //         return -1;
+    //     } else {
+    //         return 0;
+    //     }
+    // } 
