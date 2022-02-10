@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 148.982 150.39" width="148.982" height="150.39" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <style bx:fonts="Concert One">@import url(https://fonts.googleapis.com/css2?family=Concert+One%3Aital%2Cwght%400%2C400&amp;display=swap);</style>
+  </defs>
+  <rect style="fill: rgb(216, 216, 216); stroke-miterlimit: 2; stroke-width: 0px; stroke-opacity: 0.46; paint-order: stroke; stroke: rgb(0, 0, 0);" x="4.764" y="4.872" width="144.218" height="145.518" rx="10" ry="10"/>
+  <rect style="stroke: rgb(0, 0, 0); fill: rgb(216, 216, 216);" x="0" y="0" width="144.218" height="145.518" rx="10" ry="10"/>
+  <text style="fill: rgb(51, 51, 51); font-family: &quot;Concert One&quot;; font-size: 62px; white-space: pre;" x="27.501" y="93.439">MK</text>
+  <style>
+    path {
+        fill: #000;
+    }
+    @media (prefers-color-scheme: dark) {
+        path {
+            fill: #fff;
+        }
+    }
+  </style>
+  <path fill-rule="evenodd" d="M0 0h16v16H0z"/>
+</svg>
