@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import org.springframework.cache.annotation.Cacheable;
+
+
 import org.springframework.http.MediaType.*;
 
 
@@ -34,10 +37,9 @@ import org.springframework.http.MediaType.*;
 )
 class API {
 
-    val langtool: Langtool = Singleton.langtool
-
     init {}
 
+    @Cacheable()
     @PostMapping(
         value=["/submit"],
         consumes=["text/plain"]
@@ -71,7 +73,14 @@ class API {
         run {
             resultingSentences.sortWith( StringComparator );
 
-            // test with .reversed()
+            var i = 0;
+            for (sentence: String in resultingSentences) {
+                println("i: ${i}");
+                println("sentence: ${sentence}");
+                println("error count: ${Singleton.langtool.countErrors(sentence)}")
+                println()
+                i++;
+            }
 
             // pick top 5 
             // ...
@@ -151,6 +160,7 @@ class API {
         return (char in 'a'..'z' || char in 'A'..'Z');
     }
 
+    @Cacheable()
     @PostMapping(value=["/convert/rhs"])
     fun convertToRHS(@RequestBody input: String?): String {
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
@@ -186,6 +196,7 @@ class API {
         return inputRHS;
     }
 
+    @Cacheable()
     @PostMapping(value=["/convert/lhs"])
     fun convertToLHS(@RequestBody input: String?): String {
 
@@ -251,26 +262,10 @@ class StringComparator {
             val secondScore: Int = langtool.countErrors(second);
             
             when {
-                firstScore != secondScore -> return (firstScore - secondScore)
+                // lower score is better
+                firstScore != secondScore -> return (secondScore - firstScore)
                 else -> return (0)
 		    }
         }
 	}
 }
-
-    // fun compareSentenceCorrectness implements Comparator<String>( first: String, second: String ): Int {
-    //     val langtool: Langtool = Langtool();
-
-    //     val firstScore: Int = langtool.countErrors(first);
-    //     val secondScore: Int = langtool.countErrors(second);
-
-    //     if (firstScore > secondScore) {
-
-    //         // choose second score
-    //         return 1;
-    //     } else if (secondScore > firstScore) {
-    //         return -1;
-    //     } else {
-    //         return 0;
-    //     }
-    // } 
