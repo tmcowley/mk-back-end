@@ -1,7 +1,7 @@
 function Header() {
   return (
     <header className="App-header">
-      <p>Mirrored keyboard algorithm POC</p>
+      <p>Mirrored keyboard algorithm - Learning Platform</p>
     </header>
   );
 }

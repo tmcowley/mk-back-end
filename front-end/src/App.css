@@ -98,7 +98,7 @@ body {
   }
 }
 
-ul {
+ul, ol {
   text-align: left;
 }
 
@@ -109,4 +109,9 @@ ul {
 #resultsContainer {
   padding-bottom: 12em;
 
+}
+
+#promptText {
+  font-family: monospace;
+  font-size: x-large;
 }

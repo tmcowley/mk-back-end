@@ -7,26 +7,32 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.utils.Langtool
 
+
 // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
+@CrossOrigin(
+    origins = ["http://localhost:3000"],
+    methods = [RequestMethod.POST]
+)
 @RestController
-@CrossOrigin(origins = ["http://localhost:3000"])
 @RequestMapping(
-        value = ["/api"],
-        consumes = ["text/plain"]
-        // consumes=["application/json"]
-        )
+    value = ["/post"],
+    consumes = ["text/plain"]
+    // consumes=["application/json"]
+    // headers = ["Access-Control-Allow-Origin=http://localhost:3000"]
+)
 class API {
 
     init {}
 
     @Cacheable
-    @PostMapping(value = ["/submit"], consumes = ["text/plain"])
+    @PostMapping(value = ["/submit"])
     fun submit(@RequestBody input: String): Array<String> {
         println("\n\n/submit endpoint called")
         return submitSentence(input)
@@ -44,18 +50,6 @@ class API {
     fun convertToRHS(@RequestBody input: String?): String {
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
         return convertFullToRHS(input)
-    }
-
-    @GetMapping(value = ["/get/random-phrase"])
-    fun getRandomPhrase(): String {
-        // get a random phrase from the phrase list
-        return Singleton.getRandomPhrase()
-    }
-
-    @PostMapping(value = ["/status"])
-    fun status(): Boolean {
-        // return true when active
-        return true
     }
 
     fun submitSentence(input: String): Array<String> {

@@ -8,7 +8,6 @@ import { useEffect } from "react";
 
 // import local components
 import DevStatsPanel from "./components/DevStatsPanel";
-import PromptText from "./components/PromptText";
 import Header from "./components/Header";
 
 // import logo from './logo.svg';
@@ -30,6 +29,11 @@ function App() {
   // stores API active state
   const [apiActive, setApiActive] = useState(false);
 
+  // stores text prompt
+  const [prompt, setPrompt] = useState("");
+
+  const [resultIndex, setResultIndex] = useState(0);
+
   // API & Axios config
   const axiosConfig: AxiosRequestConfig<string> = {
     headers: {
@@ -39,27 +43,6 @@ function App() {
     responseType: "json",
   };
   const host = "http://localhost:8080";
-
-  function queryAPIStatus() {
-    const path = "/api/status";
-    const url = host + path;
-    const data = null;
-
-    axios.post(url, data, axiosConfig).then(
-      (response) => {
-        console.log("queryAPIStatus() - Response found");
-        console.log(response);
-
-        setApiActive(true);
-      },
-      (error) => {
-        console.log("queryAPIStatus() - error found");
-        console.log(error);
-
-        setApiActive(false);
-      }
-    );
-  }
 
   // on page load
   useEffect(() => {
@@ -80,6 +63,34 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input]);
 
+  useEffect(() => {
+
+    // highlight sentence based algorithm box
+    let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
+
+    // highlight first sentence in list
+    let resultsList: HTMLOListElement = (resultsDiv.querySelector("ol") as HTMLOListElement)!;
+    let results: HTMLCollection = (resultsList?.children as HTMLCollection)!;
+    
+    // remove highlighting of previous list element
+    for (let i = 0; i < results.length; i++) {
+      let resultListEl: HTMLLIElement = (results[i] as HTMLLIElement);
+      resultListEl.style.border = "";
+    }
+
+    let index = resultIndex
+
+    // check if index exceeds results count
+    if (index > results.length - 1) {
+      index %= (results.length - 1);
+    }
+
+    // highlight new list element, or loop around ...
+    // (results[index] as HTMLLIElement)?.style?.border? = "1px solid black";
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [resultIndex]);
+
   // when the API becomes active
   useEffect(() => {
     // block inactive api state
@@ -87,15 +98,18 @@ function App() {
       return;
     }
 
+    if (prompt === "") {
+      // if first time -> query text prompt
+      populatePrompt();
+    }
+
     // focus-on and select input box
-    const inputElement: HTMLInputElement = document.getElementById(
-      "input"
-    )! as HTMLInputElement;
-    inputElement.focus();
-    inputElement.select();
+    highlightInputBox();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [apiActive]);
 
-  // when the API becomes active
+  // when the API becomes inactive
   useEffect(() => {
     // block active api state
     if (apiActive) {
@@ -118,9 +132,13 @@ function App() {
       <br />
       <hr />
 
-      <PromptText />
+      <div id="promptText">
+        <p>{
+          (prompt === "") ? ("Prompt goes here") : (prompt)
+        }</p>
+        <button type="button" onClick={(_) => populatePrompt()}>Skip</button>
+      </div>
 
-      <br />
       <hr />
 
       <div id="content">
@@ -143,9 +161,9 @@ function App() {
         <div id="resultsContainer" hidden={input === "" || !computed}>
           <h2>Results</h2>
           <div className="grid-container">
-            <div className="grid-child">
+            <div id="sentenceResults" className="grid-child">
               <h3>Sentence-based algorithm (1)</h3>
-              <ul id="results"></ul>
+              <ol id="results"></ol>
             </div>
 
             <div className="grid-child">
@@ -164,6 +182,25 @@ function App() {
       </div>
     </body>
   );
+
+  function queryAPIStatus() {
+    const path = "/get/status";
+    const url = host + path;
+
+    axios.get(url).then(
+      (response) => {
+        // console.log("queryAPIStatus() - Response found");
+        // console.log(response);
+        setApiActive(true);
+      },
+      (error) => {
+        console.log("queryAPIStatus() - API endpoints down");
+        // console.log(error);
+
+        setApiActive(false);
+      }
+    );
+  }
 
   function handleOnInput(event: React.FormEvent<HTMLInputElement>) {
     queryAPIStatus();
@@ -188,7 +225,7 @@ function App() {
     }
 
     // calculate rhs interpretation
-    var path = "/api/convert/lhs";
+    var path = "/post/convert/lhs";
     var url = host + path;
 
     const data = input;
@@ -206,7 +243,7 @@ function App() {
       }
     );
 
-    path = "/api/convert/rhs";
+    path = "/post/convert/rhs";
     url = host + path;
 
     axios.post(url, data, axiosConfig).then(
@@ -227,12 +264,35 @@ function App() {
     // prevent default form submission
     event.preventDefault();
 
-    // // get input text
-    // const input = event.target[0].value;
+    // remove highlight from text input box
+    unHighlightInputBox();
 
-    // // launch post request to back-end
-    // // to get matching sentences
-    // postInput(input);
+    // highlight sentence based algorithm box
+    let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
+    resultsDiv.style.background = 'lightblue';
+
+    // highlight first sentence in list
+    let resultsList = resultsDiv.querySelector("ol");
+    let results: HTMLCollection = resultsList?.children!
+
+    // ensure there are results
+    const noResults: boolean = (results.length === 0);
+    if (noResults) {
+      // do nothing
+
+      // re-highlight input box
+      highlightInputBox();
+
+      return;
+    }
+
+    for (let i = 0; i < results.length; i++) {
+      let result = results[i].textContent;
+      console.log(result)
+    }
+
+    setResultIndex(0);
+
   }
 
   function postInput(input: string) {
@@ -241,7 +301,7 @@ function App() {
       return;
     }
 
-    const path = "/api/submit";
+    const path = "/post/submit";
     const url = host + path;
 
     const data = input;
@@ -269,6 +329,42 @@ function App() {
 
     // render the results list
     ReactDOM.render(results, document.getElementById("results"));
+  }
+
+  function populatePrompt() {
+    const path = "/get/random-phrase";
+    const url = host + path;
+
+    axios.get(url).then(
+      (response) => {
+        // set prompt text
+        let prompt: string = response.data;
+        prompt = prompt.replaceAll(" ", "_");
+        setPrompt(prompt);
+      },
+      (error) => {
+        alert("error")
+        console.log(error);
+        queryAPIStatus();
+      }
+    );
+  }
+
+  function highlightInputBox() {
+    // focus-on and select input box
+    const inputElement: HTMLInputElement = document.getElementById(
+      "input"
+    )! as HTMLInputElement;
+    inputElement.focus();
+    inputElement.select();
+  }
+
+  function unHighlightInputBox() {
+    // focus-on and select input box
+    const inputElement: HTMLInputElement = document.getElementById(
+      "input"
+    )! as HTMLInputElement;
+    inputElement.blur();
   }
 
   // Developed with help from https://stackoverflow.com/a/34217353
