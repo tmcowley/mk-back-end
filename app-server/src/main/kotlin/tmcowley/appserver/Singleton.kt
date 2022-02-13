@@ -3,10 +3,15 @@ package tmcowley.appserver
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.structures.DataStructures
-
 import tmcowley.appserver.utils.Langtool
 
 import java.util.Collections
+import java.util.Properties
+
+import java.io.FileOutputStream
+import java.io.FileInputStream
+import java.io.File
+
 
 object Singleton {
 
@@ -19,10 +24,15 @@ object Singleton {
     val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
 
     val langtool: Langtool = Langtool();
-    
 
+    private val propertiesFile = File("src/main/resources/application.properties");
+    val prop = Properties()
+    
     init {
         println("Singleton initiated")
+
+        // set prop using application.properties
+        FileInputStream(propertiesFile).use { prop.load(it) }
     }
 
     fun getKeyPair(key: Key): KeyPair? {

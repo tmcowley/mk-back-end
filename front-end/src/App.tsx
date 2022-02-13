@@ -6,47 +6,14 @@ import ReactDOM from "react-dom";
 
 import { useEffect } from "react";
 
+// import local components
+import DevStatsPanel from "./components/DevStatsPanel";
+import PromptText from "./components/PromptText";
+import Header from "./components/Header";
+
 // import logo from './logo.svg';
+
 import "./App.css";
-
-function Header() {
-  return (
-    <header className="App-header">
-      <p>Mirrored keyboard algorithm POC</p>
-    </header>
-  );
-}
-
-type DevStatsPanelProps = {
-  inputDelta: string;
-  input: string;
-  lhsEquiv: string;
-  rhsEquiv: string;
-};
-
-function DevStatsPanel({
-  inputDelta,
-  input,
-  lhsEquiv,
-  rhsEquiv,
-}: DevStatsPanelProps) {
-  return (
-    <div id="apiStatsPanel">
-      <h2>Dev Stats</h2>
-      <span className="boldText">New input:</span> {inputDelta}
-      <br />
-      <br />
-      <span className="boldText">Input: </span>
-      {input}
-      <br />
-      <span className="boldText">Left-hand equivalent: </span>
-      {lhsEquiv}
-      <br />
-      <span className="boldText">Right-hand equivalent: </span>
-      {rhsEquiv}
-    </div>
-  );
-}
 
 function App() {
   // text input and input delta (added characters)
@@ -60,13 +27,46 @@ function App() {
   // stores computed success state
   const [computed, setComputed] = useState(false);
 
-  // on page load => focus and select input box
+  // stores API active state
+  const [apiActive, setApiActive] = useState(false);
+
+  // API & Axios config
+  const axiosConfig: AxiosRequestConfig<string> = {
+    headers: {
+      // 'Content-Length': 0,
+      "Content-Type": "text/plain",
+    },
+    responseType: "json",
+  };
+  const host = "http://localhost:8080";
+
+  function queryAPIStatus() {
+    const path = "/api/status";
+    const url = host + path;
+    const data = null;
+
+    axios.post(url, data, axiosConfig).then(
+      (response) => {
+        console.log("queryAPIStatus() - Response found");
+        console.log(response);
+
+        setApiActive(true);
+      },
+      (error) => {
+        console.log("queryAPIStatus() - error found");
+        console.log(error);
+
+        setApiActive(false);
+      }
+    );
+  }
+
+  // on page load
   useEffect(() => {
-    const input: HTMLInputElement = document.getElementById(
-      "input"
-    )! as HTMLInputElement;
-    input.focus();
-    input.select();
+    // query API active state
+    queryAPIStatus();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // on update of input => update stats, results
@@ -74,16 +74,55 @@ function App() {
     // calculate and render LHS and RHS interpretations
     renderEquivalents(input);
 
-    // launch post request to back-end
-    // to get matching sentences
+    // launch post request to get matching sentences
     postInput(input);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input]);
 
+  // when the API becomes active
+  useEffect(() => {
+    // block inactive api state 
+    if (!apiActive) {
+      return;
+    }
+
+    // focus-on and select input box
+    const inputElement: HTMLInputElement = document.getElementById(
+      "input"
+    )! as HTMLInputElement;
+    inputElement.focus();
+    inputElement.select();
+
+  }, [apiActive]);
+
+  // when the API becomes active
+  useEffect(() => {
+    // block active api state
+    if (apiActive) {
+      return;
+    }
+
+    // query API status every second 
+    const interval = setInterval(() => {
+      queryAPIStatus();
+    }, 1000);
+    return () => clearInterval(interval);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [apiActive]);
+
   return (
     <body className="App">
       <Header />
+
+      <br />
+      <hr />
+
+      <PromptText />
+
+      <br />
+      <hr />
 
       <div id="content">
         <form onSubmit={(e) => handleFormSubmit(e)} autoComplete="off">
@@ -93,6 +132,7 @@ function App() {
               type="text"
               value={input}
               onInput={(e) => handleOnInput(e)}
+              disabled={!apiActive}
             />
           </label>
         </form>
@@ -100,25 +140,19 @@ function App() {
         <br />
         <hr />
 
-        <div 
-          id="resultsContainer"
-          hidden={input === "" || !computed}
-        >
-        <h2>Results</h2>
-        <div
-          className="grid-container"
-        >
+        <div id="resultsContainer" hidden={input === "" || !computed}>
+          <h2>Results</h2>
+          <div className="grid-container">
+            <div className="grid-child">
+              <h3>Sentence-based algorithm (1)</h3>
+              <ul id="results"></ul>
+            </div>
 
-          <div className="grid-child">
-            <h3>Sentence-based algorithm (1)</h3>
-            <ul id="results"></ul>
+            <div className="grid-child">
+              <h3>Real-time algorithm (2)</h3>
+              ...
+            </div>
           </div>
-
-          <div className="grid-child">
-            <h3>Real-time algorithm (2)</h3>
-            ...
-          </div>
-        </div>
         </div>
 
         <DevStatsPanel
@@ -152,21 +186,12 @@ function App() {
     }
 
     // calculate rhs interpretation
-    const host = "http://localhost:8080";
     var path = "/api/convert/lhs";
     var url = host + path;
 
     const data = input;
 
-    var config: AxiosRequestConfig<string> = {
-      headers: {
-        // 'Content-Length': 0,
-        "Content-Type": "text/plain",
-      },
-      responseType: "json",
-    };
-
-    axios.post(url, data, config).then(
+    axios.post(url, data, axiosConfig).then(
       (response) => {
         // console.log(response);
 
@@ -175,13 +200,14 @@ function App() {
       },
       (error) => {
         console.log(error);
+        queryAPIStatus();
       }
     );
 
     path = "/api/convert/rhs";
     url = host + path;
 
-    axios.post(url, data, config).then(
+    axios.post(url, data, axiosConfig).then(
       (response) => {
         // console.log(response);
 
@@ -190,6 +216,7 @@ function App() {
       },
       (error) => {
         console.log(error);
+        queryAPIStatus();
       }
     );
   }
@@ -212,21 +239,12 @@ function App() {
       return;
     }
 
-    const host = "http://localhost:8080";
     const path = "/api/submit";
     const url = host + path;
 
     const data = input;
 
-    var config: AxiosRequestConfig<string> = {
-      headers: {
-        // 'Content-Length': 0,
-        "Content-Type": "text/plain",
-      },
-      responseType: "json",
-    };
-
-    axios.post(url, data, config).then(
+    axios.post(url, data, axiosConfig).then(
       (response) => {
         // render results from response
         renderResults(response);
@@ -235,6 +253,7 @@ function App() {
       (error) => {
         console.log(error);
         setComputed(false);
+        queryAPIStatus();
       }
     );
   }

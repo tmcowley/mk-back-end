@@ -24,25 +24,31 @@ class API {
 
     init {}
 
-    @Cacheable()
+    @Cacheable
     @PostMapping(value = ["/submit"], consumes = ["text/plain"])
     fun submit(@RequestBody input: String): Array<String> {
         println("\n\n/submit endpoint called")
         return submitSentence(input)
     }
 
-    @Cacheable()
+    @Cacheable
     @PostMapping(value = ["/convert/rhs"])
     fun convertToRHS(@RequestBody input: String?): String {
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
         return convertFullToRHS(input)
     }
 
-    @Cacheable()
+    @Cacheable
     @PostMapping(value = ["/convert/lhs"])
     fun convertToLHS(@RequestBody input: String?): String {
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
         return convertFullToLHS(input)
+    }
+
+    @PostMapping(value = ["/status"])
+    fun status(): Boolean {
+        // return true when active
+        return true
     }
 
     fun submitSentence(input: String): Array<String> {
@@ -67,6 +73,17 @@ class API {
             }
         }
 
+        // syntax analysis enabled
+        if ((Singleton.prop.get("analyseSyntax") as String).toBoolean()) {
+            return analyseSyntax(resultingSentences)
+        }
+
+        // syntax analysis disabled
+        println("Notice: Syntax analysis disabled")
+        return resultingSentences.toTypedArray()
+    }
+
+    fun analyseSyntax(resultingSentences: MutableList<String>): Array<String> {
         // filter ungrammatical and rank viable
         run {
             resultingSentences.sortWith(SentenceComparator)
@@ -80,7 +97,7 @@ class API {
                 i++
             }
 
-            // pick top 5
+            // pick top 5, filter any lower ranking
             // ...
         }
 
