@@ -12,9 +12,27 @@ import java.io.File;
 // todo
 
 class DataStructures {
+
+    public fun getPhraseList(): List<String> {
+        val phraseSetFilePath = "./resources/phrases2.txt";
+
+        var phraseSet = mutableListOf<String>()
+
+        try{
+            File(phraseSetFilePath).forEachLine { 
+                phraseSet.add(it);
+            }
+        } catch (e: java.io.FileNotFoundException) {
+            // handler
+            println("Error: file: " + phraseSetFilePath + " not found.");
+        }
+
+        return phraseSet
+    }
+
     public fun getWordSet(): HashSet<String> {
 
-        val relativeFilePath = "resources/words.txt";
+        val relativeFilePath = "./resources/words.txt";
 
         var allWords = hashSetOf<String>();
 

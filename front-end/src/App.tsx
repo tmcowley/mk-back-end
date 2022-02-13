@@ -82,7 +82,7 @@ function App() {
 
   // when the API becomes active
   useEffect(() => {
-    // block inactive api state 
+    // block inactive api state
     if (!apiActive) {
       return;
     }
@@ -93,7 +93,6 @@ function App() {
     )! as HTMLInputElement;
     inputElement.focus();
     inputElement.select();
-
   }, [apiActive]);
 
   // when the API becomes active
@@ -103,7 +102,7 @@ function App() {
       return;
     }
 
-    // query API status every second 
+    // query API status every second
     const interval = setInterval(() => {
       queryAPIStatus();
     }, 1000);
@@ -132,6 +131,7 @@ function App() {
               type="text"
               value={input}
               onInput={(e) => handleOnInput(e)}
+              onFocus={(_) => queryAPIStatus()}
               disabled={!apiActive}
             />
           </label>
@@ -166,6 +166,8 @@ function App() {
   );
 
   function handleOnInput(event: React.FormEvent<HTMLInputElement>) {
+    queryAPIStatus();
+
     const oldValue = input;
     const inputElement = event.target as HTMLInputElement;
     const newValue = inputElement.value;

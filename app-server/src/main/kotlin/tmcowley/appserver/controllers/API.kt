@@ -3,6 +3,7 @@ package tmcowley.appserver.controllers
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -32,17 +33,23 @@ class API {
     }
 
     @Cacheable
+    @PostMapping(value = ["/convert/lhs"])
+    fun convertToLHS(@RequestBody input: String?): String {
+        // for each alphabetic char in string -> lookup keypair, get left key in keypair
+        return convertFullToLHS(input)
+    }
+
+    @Cacheable
     @PostMapping(value = ["/convert/rhs"])
     fun convertToRHS(@RequestBody input: String?): String {
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
         return convertFullToRHS(input)
     }
 
-    @Cacheable
-    @PostMapping(value = ["/convert/lhs"])
-    fun convertToLHS(@RequestBody input: String?): String {
-        // for each alphabetic char in string -> lookup keypair, get right key in keypair
-        return convertFullToLHS(input)
+    @GetMapping(value = ["/get/random-phrase"])
+    fun getRandomPhrase(): String {
+        // get a random phrase from the phrase list
+        return Singleton.getRandomPhrase()
     }
 
     @PostMapping(value = ["/status"])

@@ -1,0 +1,10 @@
+{
+    "phrase list": {
+        file: "phrases2.txt",
+        title: "Phrase Sets for Evaluating Text Entry Techniques",
+        author: "I. Scott MacKenzie and R. William Soukoreff",
+        url: "https://www.yorku.ca/mack/chi03b.html"
+    },
+
+    "word list": {}
+}

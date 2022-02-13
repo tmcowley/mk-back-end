@@ -27,6 +27,8 @@ object Singleton {
 
     private val propertiesFile = File("src/main/resources/application.properties");
     val prop = Properties()
+
+    val phraseList = structures.getPhraseList()
     
     init {
         println("Singleton initiated")
@@ -41,5 +43,9 @@ object Singleton {
 
     fun wordExists(word: String): Boolean {
         return wordSet.contains(word);
+    }
+
+    fun getRandomPhrase(): String {
+        return phraseList.random();
     }
 }
