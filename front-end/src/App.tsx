@@ -32,7 +32,7 @@ function App() {
   // stores text prompt
   const [prompt, setPrompt] = useState("");
 
-  const [resultIndex, setResultIndex] = useState(null);
+  // const [resultIndex, setResultIndex] = useState(null);
 
   // API & Axios config
   const axiosConfig: AxiosRequestConfig<string> = {
@@ -62,28 +62,6 @@ function App() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [input]);
-
-  useEffect(() => {
-    // // highlight sentence based algorithm box
-    // let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
-    // // highlight first sentence in list
-    // let resultsList: HTMLOListElement = (resultsDiv.querySelector("ol") as HTMLOListElement)!;
-    // let results: HTMLCollection = (resultsList?.children as HTMLCollection)!;
-    // // remove highlighting of previous list element
-    // for (let i = 0; i < results.length; i++) {
-    //   let resultListEl: HTMLLIElement = (results[i] as HTMLLIElement);
-    //   resultListEl.style.border = "";
-    //   alert(resultListEl.textContent);
-    // }
-    // let index = resultIndex
-    // // check if index exceeds results count
-    // if (index > results.length - 1) {
-    //   index %= (results.length - 1);
-    // }
-    // highlight new list element, or loop around ...
-    // (results[index] as HTMLLIElement)?.style?.border? = "1px solid black";
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [resultIndex]);
 
   // when the API becomes active
   useEffect(() => {
