@@ -256,7 +256,50 @@ function App() {
     );
   }
 
-  function handleElementSubmit() {}
+  function handleElementSubmit(e: KeyboardEvent) {
+    // listen for enter key
+    if (e.key === "Enter") {
+      // find current selected result
+      let activeResult: HTMLLIElement = document.activeElement as HTMLLIElement;
+
+      // let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
+      // // get results (list elements) collection
+      // let resultsList = resultsDiv.querySelector("ol");
+      // let results: HTMLCollection = resultsList?.children!
+
+      // let activeResult: (HTMLLIElement | null) = null;
+      // for (let i = 0; i < results.length; i++) {
+      //   let result: HTMLLIElement = results[i] as HTMLLIElement;
+      //   if (result.classList.contains('focus') || result.classList.contains('active')) {
+      //     // found the active result
+      //     activeResult = result;
+      //     break;
+      //   }
+      // }
+
+      // activeResult = (document.activeElement as HTMLLIElement);
+
+      // // no results selected by user
+      // if (activeResult === null) {
+      //   alert("active is null")
+      //   return;
+      // }
+
+      // alert("tc: " + activeResult.textContent)
+
+      // alert(activeResult.textContent)
+      // alert(prompt)
+      // alert(activeResult.textContent === prompt)
+
+      if (activeResult.textContent === prompt) {
+        console.log("success");
+        populatePrompt();
+      }
+
+      // listen for numeric entry
+      // ...
+    }
+  }
 
   function handleFormSubmit(event: React.FormEvent) {
     // prevent default form submission
@@ -289,51 +332,11 @@ function App() {
     }
 
     // add event (keydown) listener to parent div
-    resultsDiv.addEventListener("keydown", function (e) {
-      // listen for enter key
-      if (e.key === "Enter") {
-        // find current selected result
-        let activeResult: HTMLLIElement =
-          (document.activeElement as HTMLLIElement);
+    // resultsDiv.addEventListener("keydown", (e) => handleElementSubmit(e));
+    resultsDiv.addEventListener("keydown", handleElementSubmit);
 
-        // let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
-        // // get results (list elements) collection
-        // let resultsList = resultsDiv.querySelector("ol");
-        // let results: HTMLCollection = resultsList?.children!
-
-        // let activeResult: (HTMLLIElement | null) = null;
-        // for (let i = 0; i < results.length; i++) {
-        //   let result: HTMLLIElement = results[i] as HTMLLIElement;
-        //   if (result.classList.contains('focus') || result.classList.contains('active')) {
-        //     // found the active result
-        //     activeResult = result;
-        //     break;
-        //   }
-        // }
-
-        // activeResult = (document.activeElement as HTMLLIElement);
-
-        // // no results selected by user
-        // if (activeResult === null) {
-        //   alert("active is null")
-        //   return;
-        // }
-
-        // alert("tc: " + activeResult.textContent)
-
-        // alert(activeResult.textContent)
-        // alert(prompt)
-        // alert(activeResult.textContent === prompt)
-
-        if (activeResult.textContent === prompt) {
-          console.log("success");
-          populatePrompt();
-        }
-      }
-
-      // listen for numeric entry
-      // ...
-    });
+    // listen for numeric entry
+    // ...
 
     // highlight the first result
     const firstListEl: HTMLLIElement = results[0] as HTMLLIElement;
@@ -387,16 +390,25 @@ function App() {
     ReactDOM.render(results, document.getElementById("results"));
   }
 
-  function populatePrompt() {
-    // clear input box, reset input hook
+  function clearInputBox() {
     (document.getElementById("input") as HTMLInputElement).value = "";
     setInput("");
+  }
 
-    // remove highlighting from results div
+  function populatePrompt() {
+    // remove event listener from results div
     let resultsDiv: HTMLDivElement = (document.getElementById(
       "sentenceResults"
     ) as HTMLDivElement)!;
-    resultsDiv.style.background = "";
+    resultsDiv.removeEventListener("keydown", handleElementSubmit);
+
+    // clear input box, reset input
+    clearInputBox()
+
+    // remove highlighting from results div
+    unhighlightResultsDiv();
+
+    highlightInputBox();
 
     // get new prompt, populate
     const path = "/get/random-phrase";
@@ -415,9 +427,6 @@ function App() {
         queryAPIStatus();
       }
     );
-
-    unhighlightResultsDiv();
-    highlightInputBox();
   }
 
   function unhighlightResultsDiv() {
