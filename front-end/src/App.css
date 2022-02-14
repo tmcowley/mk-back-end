@@ -102,6 +102,8 @@ ul, ol {
   text-align: left;
 }
 
+li:active, li:focus {border: 5px solid orange}
+
 .boldText {
   font-weight: bold;
 }

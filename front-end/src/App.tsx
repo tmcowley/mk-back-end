@@ -32,7 +32,7 @@ function App() {
   // stores text prompt
   const [prompt, setPrompt] = useState("");
 
-  const [resultIndex, setResultIndex] = useState(0);
+  const [resultIndex, setResultIndex] = useState(null);
 
   // API & Axios config
   const axiosConfig: AxiosRequestConfig<string> = {
@@ -64,30 +64,24 @@ function App() {
   }, [input]);
 
   useEffect(() => {
-
-    // highlight sentence based algorithm box
-    let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
-
-    // highlight first sentence in list
-    let resultsList: HTMLOListElement = (resultsDiv.querySelector("ol") as HTMLOListElement)!;
-    let results: HTMLCollection = (resultsList?.children as HTMLCollection)!;
-    
-    // remove highlighting of previous list element
-    for (let i = 0; i < results.length; i++) {
-      let resultListEl: HTMLLIElement = (results[i] as HTMLLIElement);
-      resultListEl.style.border = "";
-    }
-
-    let index = resultIndex
-
-    // check if index exceeds results count
-    if (index > results.length - 1) {
-      index %= (results.length - 1);
-    }
-
+    // // highlight sentence based algorithm box
+    // let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
+    // // highlight first sentence in list
+    // let resultsList: HTMLOListElement = (resultsDiv.querySelector("ol") as HTMLOListElement)!;
+    // let results: HTMLCollection = (resultsList?.children as HTMLCollection)!;
+    // // remove highlighting of previous list element
+    // for (let i = 0; i < results.length; i++) {
+    //   let resultListEl: HTMLLIElement = (results[i] as HTMLLIElement);
+    //   resultListEl.style.border = "";
+    //   alert(resultListEl.textContent);
+    // }
+    // let index = resultIndex
+    // // check if index exceeds results count
+    // if (index > results.length - 1) {
+    //   index %= (results.length - 1);
+    // }
     // highlight new list element, or loop around ...
     // (results[index] as HTMLLIElement)?.style?.border? = "1px solid black";
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [resultIndex]);
 
@@ -133,10 +127,12 @@ function App() {
       <hr />
 
       <div id="promptText">
-        <p>{
-          (prompt === "") ? ("Prompt goes here") : (prompt)
-        }</p>
-        <button type="button" onClick={(_) => populatePrompt()}>Skip</button>
+        <p>
+          {prompt === "" ? "Prompt goes here" : prompt.replaceAll(" ", "_")}
+        </p>
+        <button type="button" onClick={(_) => populatePrompt()}>
+          Skip
+        </button>
       </div>
 
       <hr />
@@ -260,23 +256,29 @@ function App() {
     );
   }
 
+  function handleElementSubmit() {}
+
   function handleFormSubmit(event: React.FormEvent) {
     // prevent default form submission
     event.preventDefault();
 
     // remove highlight from text input box
-    unHighlightInputBox();
+    unhighlightInputBox();
 
     // highlight sentence based algorithm box
-    let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
-    resultsDiv.style.background = 'lightblue';
+    let resultsDiv: HTMLDivElement = (document.getElementById(
+      "sentenceResults"
+    ) as HTMLDivElement)!;
+    resultsDiv.style.background = "lightblue";
 
     // highlight first sentence in list
+
+    // get results (list elements) collection
     let resultsList = resultsDiv.querySelector("ol");
-    let results: HTMLCollection = resultsList?.children!
+    let results: HTMLCollection = resultsList?.children!;
 
     // ensure there are results
-    const noResults: boolean = (results.length === 0);
+    const noResults: boolean = results.length === 0;
     if (noResults) {
       // do nothing
 
@@ -286,13 +288,63 @@ function App() {
       return;
     }
 
-    for (let i = 0; i < results.length; i++) {
-      let result = results[i].textContent;
-      console.log(result)
-    }
+    // add event (keydown) listener to parent div
+    resultsDiv.addEventListener("keydown", function (e) {
+      // listen for enter key
+      if (e.key === "Enter") {
+        // find current selected result
+        let activeResult: HTMLLIElement =
+          (document.activeElement as HTMLLIElement);
 
-    setResultIndex(0);
+        // let resultsDiv: HTMLDivElement = (document.getElementById("sentenceResults") as HTMLDivElement)!;
+        // // get results (list elements) collection
+        // let resultsList = resultsDiv.querySelector("ol");
+        // let results: HTMLCollection = resultsList?.children!
 
+        // let activeResult: (HTMLLIElement | null) = null;
+        // for (let i = 0; i < results.length; i++) {
+        //   let result: HTMLLIElement = results[i] as HTMLLIElement;
+        //   if (result.classList.contains('focus') || result.classList.contains('active')) {
+        //     // found the active result
+        //     activeResult = result;
+        //     break;
+        //   }
+        // }
+
+        // activeResult = (document.activeElement as HTMLLIElement);
+
+        // // no results selected by user
+        // if (activeResult === null) {
+        //   alert("active is null")
+        //   return;
+        // }
+
+        // alert("tc: " + activeResult.textContent)
+
+        // alert(activeResult.textContent)
+        // alert(prompt)
+        // alert(activeResult.textContent === prompt)
+
+        if (activeResult.textContent === prompt) {
+          console.log("success");
+          populatePrompt();
+        }
+      }
+
+      // listen for numeric entry
+      // ...
+    });
+
+    // highlight the first result
+    const firstListEl: HTMLLIElement = results[0] as HTMLLIElement;
+    firstListEl.focus();
+
+    // for (let i = 0; i < results.length; i++) {
+    //   let result = results[i].textContent;
+    //   console.log(result)
+    // }
+
+    // setResultIndex(0);
   }
 
   function postInput(input: string) {
@@ -324,7 +376,11 @@ function App() {
     // generate the results list
     const resultsArray = response.data;
     let results = resultsArray.map((item: string, i: number) => {
-      return <li key={i}>{item}</li>;
+      return (
+        <li tabIndex={i + 200} id={"li" + i} key={i}>
+          {item}
+        </li>
+      );
     });
 
     // render the results list
@@ -332,6 +388,17 @@ function App() {
   }
 
   function populatePrompt() {
+    // clear input box, reset input hook
+    (document.getElementById("input") as HTMLInputElement).value = "";
+    setInput("");
+
+    // remove highlighting from results div
+    let resultsDiv: HTMLDivElement = (document.getElementById(
+      "sentenceResults"
+    ) as HTMLDivElement)!;
+    resultsDiv.style.background = "";
+
+    // get new prompt, populate
     const path = "/get/random-phrase";
     const url = host + path;
 
@@ -339,15 +406,26 @@ function App() {
       (response) => {
         // set prompt text
         let prompt: string = response.data;
-        prompt = prompt.replaceAll(" ", "_");
+        prompt = prompt.toLowerCase();
         setPrompt(prompt);
       },
       (error) => {
-        alert("error")
+        console.log("Error");
         console.log(error);
         queryAPIStatus();
       }
     );
+
+    unhighlightResultsDiv();
+    highlightInputBox();
+  }
+
+  function unhighlightResultsDiv() {
+    // remove highlighting from results div
+    let resultsDiv: HTMLDivElement = (document.getElementById(
+      "sentenceResults"
+    ) as HTMLDivElement)!;
+    resultsDiv.style.background = "";
   }
 
   function highlightInputBox() {
@@ -359,7 +437,7 @@ function App() {
     inputElement.select();
   }
 
-  function unHighlightInputBox() {
+  function unhighlightInputBox() {
     // focus-on and select input box
     const inputElement: HTMLInputElement = document.getElementById(
       "input"
