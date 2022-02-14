@@ -12,7 +12,7 @@ fun main(args: Array<String>) {
     runApplication<App>(*args)
 
     // init singleton
-    // Singleton
+    Singleton
 
     // val p: Key = Key('p');
     // val q: Key = Key('q');

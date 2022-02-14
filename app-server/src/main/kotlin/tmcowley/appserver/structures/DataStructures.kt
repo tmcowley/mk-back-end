@@ -36,13 +36,26 @@ class DataStructures {
 
         var allWords = hashSetOf<String>();
 
-        try{
-            File(relativeFilePath).forEachLine { 
-                allWords.add(it);
+        // add words from words.txt
+        run {
+            try{
+                File(relativeFilePath).forEachLine { 
+                    allWords.add(it);
+                }
+            } catch (e: java.io.FileNotFoundException) {
+                // handler
+                println("Error: file: " + relativeFilePath + " not found.");
             }
-        } catch (e: java.io.FileNotFoundException) {
-            // handler
-            println("Error: file: " + relativeFilePath + " not found.");
+        }
+
+        // add words from phrases2.txt
+        run {
+            val phraseList: List<String> = getPhraseList();
+            for (phrase: String in phraseList) {
+                for (word: String in phrase.split(" ")) {
+                    allWords.add(word);
+                }
+            }
         }
 
         return allWords;
