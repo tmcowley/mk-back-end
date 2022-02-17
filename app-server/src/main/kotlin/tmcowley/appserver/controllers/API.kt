@@ -15,7 +15,7 @@ import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.utils.FreqTool
-import tmcowley.appserver.utils.LangTool2
+import tmcowley.appserver.utils.LangTool
 
 import org.springframework.stereotype.Controller
 
@@ -304,7 +304,7 @@ class API {
 
 class SentenceSyntaxComparator {
     companion object : Comparator<String> {
-        val langtool: LangTool2 = Singleton.langTool
+        val langtool: LangTool = Singleton.langTool
         override fun compare(first: String, second: String): Int {
 
             // calculate syntax correctness scores

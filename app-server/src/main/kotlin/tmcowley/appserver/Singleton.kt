@@ -5,7 +5,7 @@ import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.structures.DataStructures
 
 import tmcowley.appserver.utils.FreqTool
-import tmcowley.appserver.utils.LangTool2
+import tmcowley.appserver.utils.LangTool
 
 import java.util.Collections
 import java.util.Properties
@@ -27,7 +27,7 @@ object Singleton {
 
     val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
 
-    val langTool: LangTool2 = LangTool2();
+    val langTool: LangTool = LangTool();
 
     val freqTool: FreqTool = FreqTool();
 
