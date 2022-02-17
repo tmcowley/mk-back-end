@@ -202,8 +202,6 @@ function App() {
     var path = "/get/convert/lhs";
     var url = host + path;
 
-    const data = input;
-
     let config: AxiosRequestConfig<string> = axiosConfig;
     config["params"] = {
       input: input
