@@ -199,12 +199,17 @@ function App() {
     }
 
     // calculate rhs interpretation
-    var path = "/post/convert/lhs";
+    var path = "/get/convert/lhs";
     var url = host + path;
 
     const data = input;
 
-    axios.post(url, data, axiosConfig).then(
+    let config: AxiosRequestConfig<string> = axiosConfig;
+    config["params"] = {
+      input: input
+    }
+
+    axios.get(url, config).then(
       (response) => {
         // console.log(response);
 
@@ -217,10 +222,10 @@ function App() {
       }
     );
 
-    path = "/post/convert/rhs";
+    path = "/get/convert/rhs";
     url = host + path;
 
-    axios.post(url, data, axiosConfig).then(
+    axios.get(url, config).then(
       (response) => {
         // console.log(response);
 
@@ -334,12 +339,17 @@ function App() {
       return;
     }
 
-    const path = "/post/submit";
+    const path = "/get/submit";
     const url = host + path;
 
-    const data = input;
+    // const data = input;
 
-    axios.post(url, data, axiosConfig).then(
+    let config: AxiosRequestConfig<string> = axiosConfig;
+    config["params"] = {
+      input: input
+    }
+
+    axios.get(url, config).then(
       (response) => {
         // render results from response
         renderResults(response);
@@ -356,6 +366,7 @@ function App() {
   function renderResults(response: AxiosResponse) {
     // generate the results list
     const resultsArray = response.data;
+    resultsArray.reverse();
     let results = resultsArray.map((item: string, i: number) => {
       return (
         <li tabIndex={i + 200} id={"li" + i} key={i}>

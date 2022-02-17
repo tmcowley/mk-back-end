@@ -3,7 +3,9 @@ package tmcowley.appserver
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.structures.DataStructures
-import tmcowley.appserver.utils.Langtool
+
+import tmcowley.appserver.utils.FreqTool
+import tmcowley.appserver.utils.LangTool2
 
 import java.util.Collections
 import java.util.Properties
@@ -21,9 +23,13 @@ object Singleton {
 
     var wordSet: HashSet<String> = structures.getWordSet()
 
+    val wordFreqLookup: HashMap<String, Int> = structures.getWordFrequencies()
+
     val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
 
-    val langtool: Langtool = Langtool();
+    val langTool: LangTool2 = LangTool2();
+
+    val freqTool: FreqTool = FreqTool();
 
     private val propertiesFile = File("src/main/resources/application.properties");
     val prop = Properties()
@@ -47,5 +53,16 @@ object Singleton {
 
     fun getRandomPhrase(): String {
         return phraseList.random();
+    }
+
+    fun getWordFrequency(word: String): Int {
+        val wordFreq: Int? = wordFreqLookup.get(word)
+
+        // case no frequency mapped to word
+        if (wordFreq == null) {
+            return 0;
+        }
+
+        return wordFreq;
     }
 }

@@ -9,47 +9,86 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+
+import org.springframework.web.bind.annotation.RequestParam
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.utils.Langtool
+import tmcowley.appserver.utils.FreqTool
+import tmcowley.appserver.utils.LangTool2
 
+import org.springframework.stereotype.Controller
 
-// https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
+// // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
-    origins = ["http://localhost:3000"],
-    methods = [RequestMethod.POST]
+    origins = arrayOf("http://localhost:3000"),
+    methods = arrayOf(RequestMethod.GET)
+)
+@RequestMapping(
+    value = arrayOf("/get"), 
+    produces = arrayOf("application/json")
 )
 @RestController
-@RequestMapping(
-    value = ["/post"],
-    consumes = ["text/plain"]
-    // consumes=["application/json"]
-    // headers = ["Access-Control-Allow-Origin=http://localhost:3000"]
-)
 class API {
 
     init {}
 
+    /**
+     * For converting any form to full form (main computation)
+     */
     @Cacheable
-    @PostMapping(value = ["/submit"])
-    fun submit(@RequestBody input: String): Array<String> {
-        println("\n\n/submit endpoint called")
+    @GetMapping(
+        value = arrayOf("/submit"),
+    )
+    fun submit(@RequestParam("input") input: String): Array<String> {
+        // println("\n\n/submit endpoint called")
         return submitSentence(input)
     }
 
+    /**
+     * For converting any form to left-hand form
+     */
     @Cacheable
-    @PostMapping(value = ["/convert/lhs"])
-    fun convertToLHS(@RequestBody input: String?): String {
+    @GetMapping(
+        value = arrayOf("/convert/lhs"),
+    )
+    fun convertToLHS(@RequestParam("input") input: String?): String {
+        // println("/post/convert/lhs convertToLHS called with input: ${input}")
+
         // for each alphabetic char in string -> lookup keypair, get left key in keypair
         return convertFullToLHS(input)
     }
 
+    /**
+     * For converting any form to rigth-hand form
+     */
     @Cacheable
-    @PostMapping(value = ["/convert/rhs"])
-    fun convertToRHS(@RequestBody input: String?): String {
+    @GetMapping(
+        value = arrayOf("/convert/rhs"),
+    )
+    fun convertToRHS(@RequestParam("input") input: String?): String {
+        // println("/post/convert/rhs convertToRHS called with input: ${input}")
+
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
         return convertFullToRHS(input)
+    }
+
+    /**
+     * API status query endpoint
+     */
+    @GetMapping(value = arrayOf("/status"))
+    fun status(): Boolean {
+        // return true when active
+        return true
+    }
+
+    /**
+     * Random phrase query endpoint
+     */
+    @GetMapping(value = arrayOf("/random-phrase"))
+    fun getRandomPhrase(): String {
+        // get a random phrase from the phrase list
+        return Singleton.getRandomPhrase()
     }
 
     fun submitSentence(input: String): Array<String> {
@@ -74,35 +113,57 @@ class API {
             }
         }
 
-        // syntax analysis enabled
-        if ((Singleton.prop.get("analyseSyntax") as String).toBoolean()) {
-            return analyseSyntax(resultingSentences)
+        val syntaxAnalysisEnabled: Boolean = (Singleton.prop.get("analyseSyntax") as String).toBoolean();
+        val frequencyAnalysisEnabled: Boolean = (Singleton.prop.get("analyseFrequency") as String).toBoolean();
+
+
+        // syntax analysis enabled -> perform analysis
+        if (syntaxAnalysisEnabled) {
+            // rank sentences based on syntax
+            resultingSentences.sortWith(SentenceSyntaxComparator)
+
+            // var i = 0
+            // for (sentence: String in resultingSentences) {
+            //     println("i: ${i}")
+            //     println("sentence: ${sentence}")
+            //     println("error count: ${Singleton.langtool.countErrors(sentence)}")
+            //     println()
+            //     i++
+            // }
+
+            // filtering: pick top 5, remove any lower ranking
+            // ...
+        } else {
+            // syntax analysis disabled
+            println("Notice: Syntax analysis disabled")
+        }     
+
+        // frequency analysis enabled -> perform analysis
+        if (frequencyAnalysisEnabled) {
+            resultingSentences.sortWith(SentenceFrequencyComparator)
+        } else {
+            // syntax analysis disabled
+            println("Notice: Frequency analysis disabled")
         }
 
-        // syntax analysis disabled
-        println("Notice: Syntax analysis disabled")
         return resultingSentences.toTypedArray()
     }
 
-    fun analyseSyntax(resultingSentences: MutableList<String>): Array<String> {
-        // filter ungrammatical and rank viable
-        run {
-            resultingSentences.sortWith(SentenceComparator)
+    fun analyseSyntax(resultingSentences: MutableList<String>): MutableList<String> {
 
-            var i = 0
-            for (sentence: String in resultingSentences) {
-                println("i: ${i}")
-                println("sentence: ${sentence}")
-                println("error count: ${Singleton.langtool.countErrors(sentence)}")
-                println()
-                i++
-            }
+        // var i = 0
+        // for (sentence: String in resultingSentences) {
+        //     println("i: ${i}")
+        //     println("sentence: ${sentence}")
+        //     println("error count: ${Singleton.langtool.countErrors(sentence)}")
+        //     println()
+        //     i++
+        // }
 
-            // pick top 5, filter any lower ranking
-            // ...
-        }
+        // filtering: pick top 5, remove any lower ranking
+        // ...
 
-        return resultingSentences.toTypedArray()
+        return resultingSentences
     }
 
     fun splitIntoWords(sentence: String): Array<String> {
@@ -241,9 +302,9 @@ class API {
     }
 }
 
-class SentenceComparator {
+class SentenceSyntaxComparator {
     companion object : Comparator<String> {
-        val langtool: Langtool = Singleton.langtool
+        val langtool: LangTool2 = Singleton.langTool
         override fun compare(first: String, second: String): Int {
 
             // calculate syntax correctness scores
@@ -253,6 +314,27 @@ class SentenceComparator {
             when {
                 // lower score is better
                 firstScore != secondScore -> return (secondScore - firstScore)
+                else -> return (0)
+            }
+        }
+    }
+}
+
+class SentenceFrequencyComparator {
+    companion object : Comparator<String> {
+        val freqTool: FreqTool = Singleton.freqTool
+        override fun compare(first: String, second: String): Int {
+
+            // calculate syntax correctness scores
+            val firstScore: Int = freqTool.sentence(first)
+            val secondScore: Int = freqTool.sentence(second)
+
+            println("{${first}} has frequency: ${firstScore}")
+            println("{${second}} has frequency: ${secondScore}")
+
+            when {
+                // higher score is better
+                firstScore != secondScore -> return (firstScore - secondScore)
                 else -> return (0)
             }
         }

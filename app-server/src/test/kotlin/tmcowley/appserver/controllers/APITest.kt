@@ -26,6 +26,6 @@ class APITest {
     @Test
     fun testSubmit(){
 
-        apiInstance.submit("this is a test");
+        // apiInstance.submit("this is a test");
     }
 }

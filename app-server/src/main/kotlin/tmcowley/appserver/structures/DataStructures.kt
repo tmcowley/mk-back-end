@@ -8,43 +8,68 @@ import tmcowley.appserver.structures.SentenceTree;
 
 import java.io.File;
 
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import kotlin.text.toIntOrNull
+
+
 
 // todo
 
 class DataStructures {
 
     public fun getPhraseList(): List<String> {
-        val phraseSetFilePath = "./resources/phrases2.txt";
+        val path = "./resources/phrases2.txt";
 
         var phraseSet = mutableListOf<String>()
 
         try{
-            File(phraseSetFilePath).forEachLine { 
+            File(path).forEachLine { 
                 phraseSet.add(it);
             }
         } catch (e: java.io.FileNotFoundException) {
             // handler
-            println("Error: file: " + phraseSetFilePath + " not found.");
+            println("Error: file: ${path} not found.");
         }
 
         return phraseSet
     }
 
+    public fun getWordFrequencies(): HashMap<String, Int> {
+        val path = "./resources/word-frequencies.csv";
+
+        var wordFreqLookup = HashMap<String, Int>()
+
+        try{
+            // parse csv
+            csvReader().open(path) {
+                readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
+                    // add word and frequency to lookup
+                    wordFreqLookup.put(row.get("Word")!!.lowercase(), row.get("FREQcount")!!.toInt())
+                }
+            }
+        } catch (e: java.io.FileNotFoundException) {
+            // handler
+            println("Error: file: ${path} not found.");
+        }
+
+        return wordFreqLookup
+    }
+
     public fun getWordSet(): HashSet<String> {
 
-        val relativeFilePath = "./resources/words.txt";
+        val path = "./resources/words.txt";
 
         var allWords = hashSetOf<String>();
 
         // add words from words.txt
         run {
             try{
-                File(relativeFilePath).forEachLine { 
+                File(path).forEachLine { 
                     allWords.add(it);
                 }
             } catch (e: java.io.FileNotFoundException) {
                 // handler
-                println("Error: file: " + relativeFilePath + " not found.");
+                println("Error: file: ${path} not found.");
             }
         }
 
