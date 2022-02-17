@@ -30,3 +30,7 @@ hs_err_pid*
 # nohup is used by ./make
 nohup.out
 .vercel
+
+./target/
+./target/*
+./target/**
