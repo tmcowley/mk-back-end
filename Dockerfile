@@ -36,13 +36,13 @@ ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
 # CMD [""]
 
 # copy back-end files to container
-ADD ./app-server/ app-server/
+ADD ./ /
 
 # package the back-end files
-RUN cd app-server; mvn package; cd ..;
+RUN mvn package; cd ..;
 
 # get the jar-file location
-ARG TARGET=app-server/target
+ARG TARGET=target
 ARG JAR_FILE=app-server-0.0.1-SNAPSHOT.jar
 ARG JAR_FILE=${TARGET}/${JAR_FILE}
 
