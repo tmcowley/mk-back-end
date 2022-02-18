@@ -155,7 +155,8 @@
 				<executions>
 					<execution>
 						<id>exec-jar</id>
-						<phase>install</phase>
+						<!-- <phase>install</phase> -->
+						<phase>deploy</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
