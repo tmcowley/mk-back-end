@@ -21,7 +21,15 @@ import org.springframework.stereotype.Controller
 
 // // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
-    origins = arrayOf("http://localhost:3000"),
+    origins = arrayOf(
+        // for local development
+        "http://localhost:3000", 
+
+        // for hosting
+        "https://www.tcowley.com/",
+        "https://tcowley.com/", 
+        "https://mirrored-keyboard.vercel.app/"
+    ),
     methods = arrayOf(RequestMethod.GET)
 )
 @RequestMapping(
