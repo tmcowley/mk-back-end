@@ -34,7 +34,7 @@ object Singleton {
     private val propertiesFile = File("src/main/resources/application.properties");
     val prop = Properties()
 
-    val phraseList = structures.getPhraseList()
+    val phraseList: List<String> = structures.getPhraseList()
     
     init {
         println("Singleton initiated")

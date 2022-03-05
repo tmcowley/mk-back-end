@@ -11,13 +11,9 @@ import java.io.File;
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import kotlin.text.toIntOrNull
 
-
-
-// todo
-
 class DataStructures {
 
-    public fun getPhraseList(): List<String> {
+    fun getPhraseList(): List<String> {
         val path = "./resources/phrases2.txt";
 
         var phraseSet = mutableListOf<String>()
@@ -34,7 +30,7 @@ class DataStructures {
         return phraseSet
     }
 
-    public fun getWordFrequencies(): HashMap<String, Int> {
+    fun getWordFrequencies(): HashMap<String, Int> {
         val path = "./resources/word-frequencies.csv";
 
         var wordFreqLookup = HashMap<String, Int>()
@@ -55,7 +51,7 @@ class DataStructures {
         return wordFreqLookup
     }
 
-    public fun getWordSet(): HashSet<String> {
+    fun getWordSet(): HashSet<String> {
 
         val path = "./resources/words.txt";
 
@@ -73,12 +69,15 @@ class DataStructures {
             }
         }
 
-        // add words from phrases2.txt
+        // TODO: debug (names, places not added to dictionary (e.g. "canada", "mary"))
+        // maybe the phrase list is empty? 
+
+        // add words from phrase list
         run {
             val phraseList: List<String> = getPhraseList();
             for (phrase: String in phraseList) {
                 for (word: String in phrase.split(" ")) {
-                    allWords.add(word);
+                    allWords.add(word.lowercase());
                 }
             }
         }
@@ -102,7 +101,7 @@ class DataStructures {
         return currentWordTree.findWords();
     }
 
-    public fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
+    fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
 
         // store in Binary Tree, traverse each as before
         var sentenceTree: SentenceTree = SentenceTree();
@@ -114,59 +113,68 @@ class DataStructures {
         return sentenceTree.findWords();
     }
 
-    public fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
+    fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
 
         // map keys
-        val a: Key = Key('a');
-        val b: Key = Key('b');
-        val c: Key = Key('c');
-        val d: Key = Key('d');
-        val e: Key = Key('e');
-        val f: Key = Key('f');
-        val g: Key = Key('g');
-        val h: Key = Key('h');
-        val i: Key = Key('i');
-        val j: Key = Key('j');
-        val k: Key = Key('k');
-        val l: Key = Key('l');
-        val m: Key = Key('m');
-        val n: Key = Key('n');
-        val o: Key = Key('o');
-        val p: Key = Key('p');
-        val q: Key = Key('q');
-        val r: Key = Key('r');
-        val s: Key = Key('s');
-        val t: Key = Key('t');
-        val u: Key = Key('u');
-        val v: Key = Key('v');
-        val w: Key = Key('w');
-        val x: Key = Key('x');
-        val y: Key = Key('y');
-        val z: Key = Key('z');
+
+        // var charToKeyLookup = HashMap<Char, Key> ();
+
+        // val alphabet = ('a'..'z').toMutableList()
+        // for (char in alphabet) {
+        //     charToKeyLookup.put(char, Key(char));
+        // }
+
+        // val a: Key = Key('a');
+        // val b: Key = Key('b');
+        // val c: Key = Key('c');
+        // val d: Key = Key('d');
+        // val e: Key = Key('e');
+        // val f: Key = Key('f');
+        // val g: Key = Key('g');
+        // val h: Key = Key('h');
+        // val i: Key = Key('i');
+        // val j: Key = Key('j');
+        // val k: Key = Key('k');
+        // val l: Key = Key('l');
+        // val m: Key = Key('m');
+        // val n: Key = Key('n');
+        // val o: Key = Key('o');
+        // val p: Key = Key('p');
+        // val q: Key = Key('q');
+        // val r: Key = Key('r');
+        // val s: Key = Key('s');
+        // val t: Key = Key('t');
+        // val u: Key = Key('u');
+        // val v: Key = Key('v');
+        // val w: Key = Key('w');
+        // val x: Key = Key('x');
+        // val y: Key = Key('y');
+        // val z: Key = Key('z');
 
         // map key-pairs
 
         // top row
-        val qp: KeyPair = KeyPair(q, p);
-        val wo: KeyPair = KeyPair(w, o);
-        val ei: KeyPair = KeyPair(e, i);
-        val ru: KeyPair = KeyPair(r, u);
-        val ty: KeyPair = KeyPair(t, y);
+        // val qp: KeyPair = KeyPair(charToKeyLookup.get('q')!!, charToKeyLookup.get('q')!!);
+        val qp: KeyPair = KeyPair('q', 'p');
+        val wo: KeyPair = KeyPair('w', 'o');
+        val ei: KeyPair = KeyPair('e', 'i');
+        val ru: KeyPair = KeyPair('r', 'u');
+        val ty: KeyPair = KeyPair('t', 'y');
 
         // middle row
         // sort out dual chars w/ shift
-        val a_colon: KeyPair = KeyPair(a, a);
-        val sl: KeyPair = KeyPair(s, l);
-        val dk: KeyPair = KeyPair(d, k);
-        val fj: KeyPair = KeyPair(f, j);
-        val gh: KeyPair = KeyPair(g, h);
+        val a_colon: KeyPair = KeyPair('a', 'a');
+        val sl: KeyPair = KeyPair('s', 'l');
+        val dk: KeyPair = KeyPair('d', 'k');
+        val fj: KeyPair = KeyPair('f', 'j');
+        val gh: KeyPair = KeyPair('g', 'h');
 
         // bottom row
-        val z_f_slash: KeyPair = KeyPair(z, z);
-        val x_dot: KeyPair = KeyPair(x, x);
-        val c_comma: KeyPair = KeyPair(c, c);
-        val vm: KeyPair = KeyPair(v, m);
-        val bn: KeyPair = KeyPair(b, n);
+        val z_f_slash: KeyPair = KeyPair('z', 'z');
+        val x_dot: KeyPair = KeyPair('x', 'x');
+        val c_comma: KeyPair = KeyPair('c', 'c');
+        val vm: KeyPair = KeyPair('v', 'm');
+        val bn: KeyPair = KeyPair('b', 'n');
 
         // define key -> key-pair HM
         var keyPairs: HashMap<Key, KeyPair> = hashMapOf<Key, KeyPair>();
@@ -174,54 +182,56 @@ class DataStructures {
         // top row
         run {
             // top row: left half
-            keyPairs.put(q, qp);
-            keyPairs.put(w, wo);
-            keyPairs.put(e, ei);
-            keyPairs.put(r, ru);
-            keyPairs.put(t, ty);
+            keyPairs.put(Key('q'), qp);
+            keyPairs.put(Key('w'), wo);
+            keyPairs.put(Key('e'), ei);
+            keyPairs.put(Key('r'), ru);
+            keyPairs.put(Key('t'), ty);
 
             // top row: right half
-            keyPairs.put(p, qp);
-            keyPairs.put(o, wo);
-            keyPairs.put(i, ei);
-            keyPairs.put(u, ru);
-            keyPairs.put(y, ty);
+            keyPairs.put(Key('p'), qp);
+            keyPairs.put(Key('o'), wo);
+            keyPairs.put(Key('i'), ei);
+            keyPairs.put(Key('u'), ru);
+            keyPairs.put(Key('y'), ty);
         }
 
         // middle row
         run {
             // middle row: left half
-            keyPairs.put(a, a_colon);
-            keyPairs.put(s, sl);
-            keyPairs.put(d, dk);
-            keyPairs.put(f, fj);
-            keyPairs.put(g, gh);
+            keyPairs.put(Key('a'), a_colon);
+            keyPairs.put(Key('s'), sl);
+            keyPairs.put(Key('d'), dk);
+            keyPairs.put(Key('f'), fj);
+            keyPairs.put(Key('g'), gh);
 
             // middle row: right half
-            keyPairs.put(a, a_colon);
-            keyPairs.put(l, sl);
-            keyPairs.put(k, dk);
-            keyPairs.put(j, fj);
-            keyPairs.put(h, gh);
+            keyPairs.put(Key('a'), a_colon);
+            keyPairs.put(Key('l'), sl);
+            keyPairs.put(Key('k'), dk);
+            keyPairs.put(Key('j'), fj);
+            keyPairs.put(Key('h'), gh);
         }
 
         // bottom row
         run {
             // bottom row: left half
-            keyPairs.put(z, z_f_slash);
-            keyPairs.put(x, x_dot);
-            keyPairs.put(c, c_comma);
-            keyPairs.put(v, vm);
-            keyPairs.put(b, bn);
+            keyPairs.put(Key('z'), z_f_slash);
+            keyPairs.put(Key('x'), x_dot);
+            keyPairs.put(Key('c'), c_comma);
+            keyPairs.put(Key('v'), vm);
+            keyPairs.put(Key('b'), bn);
 
             // bottom row: right half
-            keyPairs.put(z, z_f_slash);
-            keyPairs.put(x, x_dot);
-            keyPairs.put(c, c_comma);
-            keyPairs.put(m, vm);
-            keyPairs.put(n, bn);
+            keyPairs.put(Key('z'), z_f_slash);
+            keyPairs.put(Key('x'), x_dot);
+            keyPairs.put(Key('c'), c_comma);
+            keyPairs.put(Key('m'), vm);
+            keyPairs.put(Key('n'), bn);
         }
 
         return keyPairs;
     }
+
+
 }

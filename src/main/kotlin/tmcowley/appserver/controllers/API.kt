@@ -4,61 +4,63 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.MediaType.*
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RestController
-
 import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RestController
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
 
-import org.springframework.stereotype.Controller
-
 // // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
-    origins = arrayOf(
-        // for local development
-        "http://localhost:3000", 
+        origins =
+                arrayOf(
+                        // for local development
+                        "http://localhost:3000",
 
-        // for hosting
-        "https://www.tcowley.com/",
-        "https://tcowley.com/", 
-        "https://mirrored-keyboard.vercel.app/"
-    ),
-    methods = arrayOf(RequestMethod.GET)
+                        // for hosting
+                        "https://www.tcowley.com/",
+                        "https://tcowley.com/",
+                        "https://mirrored-keyboard.vercel.app/"
+                ),
+        methods = arrayOf(RequestMethod.GET)
 )
-@RequestMapping(
-    value = arrayOf("/get"), 
-    produces = arrayOf("application/json")
-)
+@RequestMapping(value = arrayOf("/get"), produces = arrayOf("application/json"))
 @RestController
 class API {
 
-    init {}
+    val syntaxAnalysisEnabled: Boolean = (Singleton.prop.get("analyseSyntax") as String).toBoolean()
+    val frequencyAnalysisEnabled: Boolean =
+            (Singleton.prop.get("analyseFrequency") as String).toBoolean()
 
-    /**
-     * For converting any form to full form (main computation)
-     */
+    init {
+
+        println()
+
+        if (syntaxAnalysisEnabled) println("Notice: Syntax analysis enabled")
+        else println("Notice: Syntax analysis disabled")
+
+        if (frequencyAnalysisEnabled) println("Notice: Frequency analysis enabled")
+        else println("Notice: Frequency analysis disabled")
+    }
+
+    /** For converting any form to full form (main computation) */
     @Cacheable
     @GetMapping(
-        value = arrayOf("/submit"),
+            value = arrayOf("/submit"),
     )
     fun submit(@RequestParam("input") input: String): Array<String> {
         // println("\n\n/submit endpoint called")
         return submitSentence(input)
     }
 
-    /**
-     * For converting any form to left-hand form
-     */
+    /** For converting any form to left-hand form */
     @Cacheable
     @GetMapping(
-        value = arrayOf("/convert/lhs"),
+            value = arrayOf("/convert/lhs"),
     )
     fun convertToLHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/lhs convertToLHS called with input: ${input}")
@@ -67,12 +69,10 @@ class API {
         return convertFullToLHS(input)
     }
 
-    /**
-     * For converting any form to rigth-hand form
-     */
+    /** For converting any form to rigth-hand form */
     @Cacheable
     @GetMapping(
-        value = arrayOf("/convert/rhs"),
+            value = arrayOf("/convert/rhs"),
     )
     fun convertToRHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/rhs convertToRHS called with input: ${input}")
@@ -81,18 +81,14 @@ class API {
         return convertFullToRHS(input)
     }
 
-    /**
-     * API status query endpoint
-     */
+    /** API status query endpoint */
     @GetMapping(value = arrayOf("/status"))
     fun status(): Boolean {
         // return true when active
         return true
     }
 
-    /**
-     * Random phrase query endpoint
-     */
+    /** Random phrase query endpoint */
     @GetMapping(value = arrayOf("/random-phrase"))
     fun getRandomPhrase(): String {
         // get a random phrase from the phrase list
@@ -105,25 +101,22 @@ class API {
         // create input word array
         val inputWords: Array<String> = splitIntoWords(lowercaseInput)
 
-        val resultingSentences: MutableList<String> = buildAndReadTrees(inputWords)
+        var resultingSentences: MutableList<String> = buildAndReadTrees(inputWords)
 
         // report input and output
         run {
-            System.out.println("\nInput: ${input}")
-            System.out.println("\nResults: ")
+            // System.out.println("\nInput: ${input}")
+            // System.out.println("\nResults: ")
 
             if (resultingSentences.isEmpty()) {
-                System.out.println("Notice: system found no resulting sentences")
+                System.out.println("Notice: no results found")
+
+                // return the input
+                resultingSentences = mutableListOf("\\{$lowercaseInput}")
             }
 
-            for (sentence: String in resultingSentences) {
-                System.out.println(sentence)
-            }
+            // resultingSentences.forEach { sentence -> println(sentence) }
         }
-
-        val syntaxAnalysisEnabled: Boolean = (Singleton.prop.get("analyseSyntax") as String).toBoolean();
-        val frequencyAnalysisEnabled: Boolean = (Singleton.prop.get("analyseFrequency") as String).toBoolean();
-
 
         // syntax analysis enabled -> perform analysis
         if (syntaxAnalysisEnabled) {
@@ -141,18 +134,15 @@ class API {
 
             // filtering: pick top 5, remove any lower ranking
             // ...
-        } else {
-            // syntax analysis disabled
-            println("Notice: Syntax analysis disabled")
-        }     
+        }
 
         // frequency analysis enabled -> perform analysis
         if (frequencyAnalysisEnabled) {
             resultingSentences.sortWith(SentenceFrequencyComparator)
-        } else {
-            // syntax analysis disabled
-            println("Notice: Frequency analysis disabled")
         }
+
+        // reverse results
+        resultingSentences.reverse()
 
         return resultingSentences.toTypedArray()
     }
@@ -337,8 +327,8 @@ class SentenceFrequencyComparator {
             val firstScore: Int = freqTool.sentence(first)
             val secondScore: Int = freqTool.sentence(second)
 
-            println("{${first}} has frequency: ${firstScore}")
-            println("{${second}} has frequency: ${secondScore}")
+            // println("{${first}} has frequency: ${firstScore}")
+            // println("{${second}} has frequency: ${secondScore}")
 
             when {
                 // higher score is better
