@@ -49,7 +49,9 @@ class WordTree() {
         }
     }
 
-    // formerly getLeaves()
+    /**
+     * find the leaf nodes of the tree
+     */
     fun findLeaves(): MutableList<Node> {
 
         // reset global leaf list
@@ -58,9 +60,7 @@ class WordTree() {
         // collect leaf nodes in leaves (globally)
         traverse(root);
 
-        // for (Node leaf : leaves) {
-        // System.out.println("leaf found: " + leaf.value.character);
-        // }
+        // leaves.forEach{ leaf -> println("leaf found: ${leaf.value.character}") }
 
         return leaves;
     }
@@ -83,14 +83,13 @@ class WordTree() {
     fun traverseInOrder(node: Node?) {
         if (node != null) {
             traverseInOrder(node.left);
-            System.out.print(" " + node.value.character);
+            print(" " + node.value.character);
             traverseInOrder(node.right);
         }
     }
 
     var words: MutableList<String> = mutableListOf();
 
-    // formerly getWords()
     fun findWords(): MutableList<String> {
 
         // reset global words list
@@ -115,8 +114,8 @@ class WordTree() {
                 potentialWord += currentNode.value;
 
                 currentNode = currentNode.parent!!;
-                // System.out.print(n.value);
-                // System.out.print(" ");
+                // print(n.value);
+                // print(" ");
             } while (currentNode != root);
 
 
@@ -143,6 +142,4 @@ class WordTree() {
         printPath(n.left);
         printPath(n.right);
     }
-
-
 }

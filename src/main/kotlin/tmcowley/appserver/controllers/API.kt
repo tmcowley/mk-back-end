@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
+import tmcowley.appserver.structures.getSentences
+import tmcowley.appserver.structures.getWords
 import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
 
@@ -37,7 +39,6 @@ class API {
             (Singleton.prop.get("analyseFrequency") as String).toBoolean()
 
     init {
-
         println()
 
         if (syntaxAnalysisEnabled) println("Notice: Syntax analysis enabled")
@@ -204,7 +205,7 @@ class API {
 
             // store current word
 
-            var matchedWords: MutableList<String> = Singleton.structures.getWords(wordKeyPairs)
+            var matchedWords: MutableList<String> = getWords(wordKeyPairs)
 
             if (matchedWords.isEmpty()) {
                 println("\nwordKeyPairs: ${wordKeyPairs}")
@@ -225,8 +226,7 @@ class API {
         }
 
         // compute viable sentences from text array
-        val resultingSentences: MutableList<String> =
-                Singleton.structures.getSentences(listOfMatchedWords)
+        val resultingSentences: MutableList<String> = getSentences(listOfMatchedWords)
 
         return resultingSentences
     }

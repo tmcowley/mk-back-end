@@ -36,17 +36,15 @@ class SentenceTree {
 
         for (leaf: Node in leaves) {
 
-            // System.out.println("\nleaf detected");
-
             for (word: String in words) {
-                // System.out.println("adding: " + word);
+                // println("adding: " + word);
                 val childNode: Node = Node(word);
                 childNode.parent = leaf;
                 leaf.children.add(childNode);
             }
         }
 
-        // System.out.println("added each word to each leaf");
+        // println("added each word to each leaf");
     }
 
     fun findLeaves(): MutableList<Node> {
@@ -54,23 +52,24 @@ class SentenceTree {
 
         traverse(this.root);
 
-        // for (Node leaf : leaves) {
-        // System.out.println("leaf found: " + leaf.value.character);
-        // }
+        // leaves.forEach{ leaf -> println("leaf found: ${leaf.value.character}") }
 
         return leaves;
     }
 
     fun traverse(node: Node?) {
-        if (node != null) {
-            if (node.isLeaf()) {
-                leaves.add(node);
-                return;
-            }
-            for (child: Node in node.children) {
-                traverse(child);
-            }
+        if (node == null) return
+
+        // node is not null
+
+        if (node.isLeaf()) {
+            leaves.add(node);
+            return;
         }
+        for (child: Node in node.children) {
+            traverse(child);
+        }
+
     }
 
     fun findWords(): MutableList<String> {
@@ -84,9 +83,7 @@ class SentenceTree {
 
     fun printPath(node: Node?) {
 
-        if (node == null) {
-            return;
-        }
+        if (node == null) return;
 
         // found leaf: traverse up to root
         if (node.isLeaf()) {
@@ -126,8 +123,6 @@ class SentenceTree {
             if (sentences.contains(sentence)) {
                 return;
             }
-
-            // TODO: assess sentence validity w/ ML
 
             // add unique sentence to resulting sentence list
             sentences.add(sentence);

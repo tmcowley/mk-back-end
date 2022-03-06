@@ -2,10 +2,18 @@ package tmcowley.appserver
 
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.structures.DataStructures
+import tmcowley.appserver.controllers.DatabaseController
+import tmcowley.appserver.structures.getWords
+import tmcowley.appserver.structures.getSentences
+import tmcowley.appserver.structures.getKeyPairHashMap
+
 
 import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
+import tmcowley.appserver.utils.parsePhraseList
+import tmcowley.appserver.utils.parseWordList
+import tmcowley.appserver.utils.parseWordFrequencies
+
 
 import java.util.Collections
 import java.util.Properties
@@ -17,13 +25,13 @@ import java.io.File
 
 object Singleton {
 
-    val structures: DataStructures = DataStructures()
+    val db = DatabaseController()
 
-    var keyPairs: HashMap<Key, KeyPair> = structures.getKeyPairHashMap()
+    var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
 
-    var wordSet: HashSet<String> = structures.getWordSet()
+    var wordSet: HashSet<String> = parseWordList()
 
-    val wordFreqLookup: HashMap<String, Int> = structures.getWordFrequencies()
+    val wordFreqLookup: HashMap<String, Int> = parseWordFrequencies()
 
     val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
 
@@ -34,7 +42,7 @@ object Singleton {
     private val propertiesFile = File("src/main/resources/application.properties");
     val prop = Properties()
 
-    val phraseList: List<String> = structures.getPhraseList()
+    val phraseList: List<String> = parsePhraseList()
     
     init {
         println("Singleton initiated")

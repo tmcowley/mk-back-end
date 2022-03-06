@@ -1,0 +1,15 @@
+# spring:
+#   datasource:
+#     url: ${JDBC_DATABASE_URL}
+#     username: ${JDBC_DATABASE_USERNAME}
+#     password: ${JDBC_DATABASE_PASSWORD}
+
+# note the below is local config: username/ pwd irrelevant
+# spring:
+#   datasource:
+#     url: "postgresql://"
+#     address: "localhost:5432"
+#     db-name: "test"
+#     username: "tom"
+#     password: "unknown"
+#     url-full: "postgresql://${address}/test?user=other&password=secret"
