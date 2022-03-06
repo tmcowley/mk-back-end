@@ -1,6 +1,7 @@
 {
     "phrase list": {
         file: "phrase-list.txt",
+        status: "modified from source", 
         title: "Phrase Sets for Evaluating Text Entry Techniques: phrases2.txt",
         author: "I. Scott MacKenzie and R. William Soukoreff",
         url: "https://www.yorku.ca/mack/chi03b.html"
