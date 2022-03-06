@@ -13,6 +13,8 @@ import tmcowley.appserver.utils.LangTool
 import tmcowley.appserver.utils.parsePhraseList
 import tmcowley.appserver.utils.parseWordList
 import tmcowley.appserver.utils.parseWordFrequencies
+import tmcowley.appserver.utils.parseFiveGrams
+
 
 
 import java.util.Collections
@@ -43,6 +45,8 @@ object Singleton {
     val prop = Properties()
 
     val phraseList: List<String> = parsePhraseList()
+
+    var fiveGrams = parseFiveGrams()
     
     init {
         println("Singleton initiated")
@@ -61,6 +65,14 @@ object Singleton {
 
     fun getRandomPhrase(): String {
         return phraseList.random();
+    }
+
+    private fun getRandomFiveGram(): String {
+        return fiveGrams.random();   
+    }
+
+    fun getRandomUserCode(): String {
+        return ("${getRandomFiveGram()}-${getRandomFiveGram()}-${getRandomFiveGram()}")
     }
 
     fun getWordFrequency(word: String): Int {
