@@ -94,39 +94,43 @@ class DatabaseController {
 
             SchemaUtils.create(Users, Sessions, Sessions_To_Users)
 
-            // val u1 = 
-            // User.new {
-            //     uid = "test-test-test"
-            //     age = 21
-            // }
-    
-            // val u1FirstSession = Session.new {
-            //     number = 1
-            //     speed = 60f
-            //     accuracy = 70f
-            // }
-
-            // Session_To_User.new {
-            //     user_id = u1.id
-            //     session_id = u1FirstSession.id
-            // }
-
-            // println("Users: ${User.all().joinToString{ user -> user.uid}}")
-            // println("Sessions: ${Session.all().joinToString{ session -> session.speed.toString()}}")
-
-            // val userCode = "test-test-test"
-            // val failingUserCode = "fail-fail-fail"
-
-            // println("Matches($userCode): ${userCodeExists(userCode)}")
-            // println("Matches(${failingUserCode}): ${userCodeExists(failingUserCode)}")
-
-            // println()
-            // println("test adding users")
-            // repeat(5) {
-            //     println(createNewUser(21))
-            // }
+            // addDummyData()
 
             commit()
+        }
+    }
+
+    fun addDummyData() {
+        val u1 = 
+        User.new {
+            uid = "test-test-test"
+            age = 21
+        }
+
+        val u1FirstSession = Session.new {
+            number = 1
+            speed = 60f
+            accuracy = 70f
+        }
+
+        Session_To_User.new {
+            user_id = u1.id
+            session_id = u1FirstSession.id
+        }
+
+        println("Users: ${User.all().joinToString{ user -> user.uid}}")
+        println("Sessions: ${Session.all().joinToString{ session -> session.speed.toString()}}")
+
+        val userCode = "test-test-test"
+        val failingUserCode = "fail-fail-fail"
+
+        println("Matches($userCode): ${userCodeTaken(userCode)}")
+        println("Matches(${failingUserCode}): ${userCodeTaken(failingUserCode)}")
+
+        println()
+        println("test adding users")
+        repeat(5) {
+            println(createNewUser(21, 60))
         }
     }
 

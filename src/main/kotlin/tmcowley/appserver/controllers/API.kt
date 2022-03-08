@@ -113,69 +113,69 @@ class API {
     // STATE-DEPENDENT APIs (to be moved to POST requests)
     // -----
 
-    // @GetMapping(value = arrayOf("/getNextPhrase"))
-    // fun getNextPhrase(request: HttpServletRequest): String? {
+    @GetMapping(value = arrayOf("/getNextPhrase"))
+    fun getNextPhrase(request: HttpServletRequest): String? {
 
-    //     // create new session, if needed
-    //     val session: HttpSession = request.getSession(false)
-    //     val sessionNumber = session.getAttribute("sessionNumber") as Int
-    //     val isFirstSession = (sessionNumber == 1)
+        // create new session, if needed
+        val session: HttpSession = request.getSession(false)
+        val sessionNumber = session.getAttribute("sessionNumber") as Int
+        val isFirstSession = (sessionNumber == 1)
 
-    //     // if first session -> init phrase count
-    //     if (isFirstSession) {
-    //         session.setAttribute("phraseNumber", 1)
-    //     }
+        // if first session -> init phrase count
+        if (isFirstSession) {
+            session.setAttribute("phraseNumber", 1)
+        }
 
-    //     // completed typing session
-    //     val phraseNumber = session.getAttribute("phraseNumber") as Int
-    //     val hasCompletedTypingSession = (phraseNumber >= Singleton.phrasesPerSession)
-    //     if (hasCompletedTypingSession) {
-    //         // need to collect metrics before progressing
-    //         return null
-    //     }
+        // completed typing session
+        val phraseNumber = session.getAttribute("phraseNumber") as Int
+        val hasCompletedTypingSession = (phraseNumber >= Singleton.phrasesPerSession)
+        if (hasCompletedTypingSession) {
+            // need to collect metrics before progressing
+            return null
+        }
 
-    //     // get next phrase from current session
-    //     val nextPhrase = Singleton.getNextPhrase(sessionNumber, phraseNumber) ?: return null
+        // get next phrase from current session
+        val nextPhrase = Singleton.getNextPhrase(sessionNumber, phraseNumber) ?: return null
 
-    //     session.setAttribute("phraseNumber", phraseNumber + 1)
+        session.setAttribute("phraseNumber", phraseNumber + 1)
 
-    //     return nextPhrase
-    // }
+        return nextPhrase
+    }
 
-    // @GetMapping(value = arrayOf("/phrasesPerSession"))
-    // fun phrasesPerSession(): Int {
-    //     return Singleton.phrasesPerSession
-    // }
+    @GetMapping(value = arrayOf("/phrasesPerSession"))
+    fun phrasesPerSession(): Int {
+        return Singleton.phrasesPerSession
+    }
 
-    // @GetMapping(value = arrayOf("/signup"))
-    // fun signup(@RequestParam("age") age: Int, @RequestParam("typingSpeed") typingSpeed: Int, request: HttpServletRequest): String? {
+    @GetMapping(value = arrayOf("/signup"))
+    fun signup(@RequestParam("age") age: Int, @RequestParam("typingSpeed") typingSpeed: Int, request: HttpServletRequest): String? {
 
-    //     if (age < 13) return null
+        if (age < 13) return null
 
-    //     val userCode = SingletonControllers.db.createNewUser(age, typingSpeed)
+        val userCode = SingletonControllers.db.createNewUser(age, typingSpeed)
 
-    //     userCode ?: return null
+        userCode ?: return null
 
-    //     // create new session, if needed
-    //     val session: HttpSession = request.getSession(true)
-    //     session.setAttribute("userCode", userCode)
-    //     session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
+        // create new session, if needed
+        val session: HttpSession = request.getSession(true)
+        session.setAttribute("userCode", userCode)
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
 
-    //     // get a random phrase from the phrase list
-    //     return userCode
-    // }
+        // get a random phrase from the phrase list
+        return userCode
+    }
 
-    // @GetMapping(value = arrayOf("/login"))
-    // fun login(@RequestParam("userCode") userCode: String, request: HttpServletRequest): Boolean {
-    //     val validUser = SingletonControllers.db.userCodeTaken(userCode);
+    @GetMapping(value = arrayOf("/login"))
+    fun login(@RequestParam("userCode") userCode: String, request: HttpServletRequest): Boolean {
+        val validUser = SingletonControllers.db.userCodeTaken(userCode);
 
-    //     if (!validUser) return false
+        if (!validUser) return false
 
-    //     // create new session, if needed
-    //     val session: HttpSession = request.getSession(true)
-    //     session.setAttribute("userCode", userCode)
-    //     session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
+        // create new session, if needed
+        val session: HttpSession = request.getSession(true)
+        session.setAttribute("userCode", userCode)
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
 
-    //     return true
-    // }
+        return true
+    }
 }
