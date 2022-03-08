@@ -3,7 +3,8 @@ package tmcowley.appserver
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
-import tmcowley.appserver.Singleton;
+import tmcowley.appserver.SingletonControllers
+import tmcowley.appserver.Singleton
 
 @SpringBootApplication
 class App {}
@@ -11,8 +12,9 @@ class App {}
 fun main(args: Array<String>) {
     runApplication<App>(*args)
 
-    // init singleton
-    Singleton
+    // init singletons
+    // Singleton
+    SingletonControllers
 
     // val p: Key = Key('p');
     // val q: Key = Key('q');

@@ -24,10 +24,10 @@ import java.io.FileOutputStream
 import java.io.FileInputStream
 import java.io.File
 
+import kotlin.random.Random
+
 
 object Singleton {
-
-    val db = DatabaseController()
 
     var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
 
@@ -46,13 +46,35 @@ object Singleton {
 
     val phraseList: List<String> = parsePhraseList()
 
+    val phraseListLength = phraseList.size
+
     var fiveGrams = parseFiveGrams()
+
+    val phrasesPerSession = 8
     
     init {
         println("Singleton initiated")
 
         // set prop using application.properties
-        FileInputStream(propertiesFile).use { prop.load(it) }
+        FileInputStream(propertiesFile).use { inStream -> prop.load(inStream) }
+    }
+
+    fun getNextPhrase(sessionNumber: Int, phraseNumber: Int): String? {
+
+        if (phraseNumber > Singleton.phrasesPerSession) return null
+
+        fun getRandomList(random: Random): List<Int> {
+            return List(Singleton.phrasesPerSession) { random.nextInt(0, Singleton.phraseListLength - 1) }
+        }
+
+        // generate the seed by session
+        val seed = sessionNumber
+
+        // find the corresponding phrase index
+        val sessionPhraseIndexes = getRandomList(Random(seed))
+        val phraseIndex = sessionPhraseIndexes.get(phraseNumber + 1)
+
+        return Singleton.phraseList.get(phraseIndex)
     }
 
     fun getKeyPair(key: Key): KeyPair? {

@@ -53,7 +53,7 @@ fun parseWordList(): HashSet<String> {
     // add words from words.txt
     run {
         try {
-            File(path).forEachLine { word -> allWords.add(word) }
+            File(path).forEachLine { word -> allWords.add(word.lowercase()) }
         } catch (e: java.io.FileNotFoundException) {
             // handler
             println("Error: file: ${path} not found.")
@@ -80,7 +80,7 @@ fun parseFiveGrams(): List<String> {
     var fiveGrams = mutableListOf<String>()
 
     try {
-        File(path).forEachLine { fiveGram -> fiveGrams.add(fiveGram) }
+        File(path).forEachLine { fiveGram -> fiveGrams.add(fiveGram.lowercase()) }
     } catch (e: java.io.FileNotFoundException) {
         // handler
         println("Error: file: ${path} not found.")

@@ -15,6 +15,19 @@ import tmcowley.appserver.structures.getSentences
 import tmcowley.appserver.structures.getWords
 import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
+import tmcowley.appserver.SingletonControllers
+
+import tmcowley.appserver.submitSentence
+import tmcowley.appserver.convertFullToLHS
+import tmcowley.appserver.convertFullToRHS
+
+
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpSession
+
+import org.springframework.session.*
+
+import kotlin.random.Random
 
 // // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
@@ -96,245 +109,73 @@ class API {
         return Singleton.getRandomPhrase()
     }
 
-    fun submitSentence(input: String): Array<String> {
-        val lowercaseInput = input.lowercase()
+    // -----
+    // STATE-DEPENDENT APIs (to be moved to POST requests)
+    // -----
 
-        // create input word array
-        val inputWords: Array<String> = splitIntoWords(lowercaseInput)
+    // @GetMapping(value = arrayOf("/getNextPhrase"))
+    // fun getNextPhrase(request: HttpServletRequest): String? {
 
-        var resultingSentences: MutableList<String> = buildAndReadTrees(inputWords)
+    //     // create new session, if needed
+    //     val session: HttpSession = request.getSession(false)
+    //     val sessionNumber = session.getAttribute("sessionNumber") as Int
+    //     val isFirstSession = (sessionNumber == 1)
 
-        // report input and output
-        run {
-            // System.out.println("\nInput: ${input}")
-            // System.out.println("\nResults: ")
+    //     // if first session -> init phrase count
+    //     if (isFirstSession) {
+    //         session.setAttribute("phraseNumber", 1)
+    //     }
 
-            if (resultingSentences.isEmpty()) {
-                System.out.println("Notice: no results found")
+    //     // completed typing session
+    //     val phraseNumber = session.getAttribute("phraseNumber") as Int
+    //     val hasCompletedTypingSession = (phraseNumber >= Singleton.phrasesPerSession)
+    //     if (hasCompletedTypingSession) {
+    //         // need to collect metrics before progressing
+    //         return null
+    //     }
 
-                // return the input
-                resultingSentences = mutableListOf("\\{$lowercaseInput}")
-            }
+    //     // get next phrase from current session
+    //     val nextPhrase = Singleton.getNextPhrase(sessionNumber, phraseNumber) ?: return null
 
-            // resultingSentences.forEach { sentence -> println(sentence) }
-        }
+    //     session.setAttribute("phraseNumber", phraseNumber + 1)
 
-        // syntax analysis enabled -> perform analysis
-        if (syntaxAnalysisEnabled) {
-            // rank sentences based on syntax
-            resultingSentences.sortWith(SentenceSyntaxComparator)
+    //     return nextPhrase
+    // }
 
-            // var i = 0
-            // for (sentence: String in resultingSentences) {
-            //     println("i: ${i}")
-            //     println("sentence: ${sentence}")
-            //     println("error count: ${Singleton.langtool.countErrors(sentence)}")
-            //     println()
-            //     i++
-            // }
+    // @GetMapping(value = arrayOf("/phrasesPerSession"))
+    // fun phrasesPerSession(): Int {
+    //     return Singleton.phrasesPerSession
+    // }
 
-            // filtering: pick top 5, remove any lower ranking
-            // ...
-        }
+    // @GetMapping(value = arrayOf("/signup"))
+    // fun signup(@RequestParam("age") age: Int, @RequestParam("typingSpeed") typingSpeed: Int, request: HttpServletRequest): String? {
 
-        // frequency analysis enabled -> perform analysis
-        if (frequencyAnalysisEnabled) {
-            resultingSentences.sortWith(SentenceFrequencyComparator)
-        }
+    //     if (age < 13) return null
 
-        // reverse results
-        resultingSentences.reverse()
+    //     val userCode = SingletonControllers.db.createNewUser(age, typingSpeed)
 
-        return resultingSentences.toTypedArray()
-    }
+    //     userCode ?: return null
 
-    fun analyseSyntax(resultingSentences: MutableList<String>): MutableList<String> {
+    //     // create new session, if needed
+    //     val session: HttpSession = request.getSession(true)
+    //     session.setAttribute("userCode", userCode)
+    //     session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
 
-        // var i = 0
-        // for (sentence: String in resultingSentences) {
-        //     println("i: ${i}")
-        //     println("sentence: ${sentence}")
-        //     println("error count: ${Singleton.langtool.countErrors(sentence)}")
-        //     println()
-        //     i++
-        // }
+    //     // get a random phrase from the phrase list
+    //     return userCode
+    // }
 
-        // filtering: pick top 5, remove any lower ranking
-        // ...
+    // @GetMapping(value = arrayOf("/login"))
+    // fun login(@RequestParam("userCode") userCode: String, request: HttpServletRequest): Boolean {
+    //     val validUser = SingletonControllers.db.userCodeTaken(userCode);
 
-        return resultingSentences
-    }
+    //     if (!validUser) return false
 
-    fun splitIntoWords(sentence: String): Array<String> {
-        return sentence.split(" ").toTypedArray()
-    }
+    //     // create new session, if needed
+    //     val session: HttpSession = request.getSession(true)
+    //     session.setAttribute("userCode", userCode)
+    //     session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
 
-    fun buildAndReadTrees(inputWords: Array<String>): MutableList<String> {
-
-        var listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
-
-        for (word: String in inputWords) {
-
-            var wordKeyPairs: MutableList<KeyPair> = mutableListOf()
-
-            for (char: Char in word) {
-
-                // char is alphabetic
-                if (isAlphabetic(char)) {
-
-                    // get key for char
-                    val key: Key = Key(char)
-
-                    // get key-pair for key
-                    val keyPair: KeyPair? = Singleton.getKeyPair(key)
-
-                    // key-pair lookup fails
-                    if (keyPair == null) {
-                        println("Error: getKeyPair(${key.toString()}) failed")
-                        continue
-                    }
-
-                    // add the key-pair to the current word
-                    wordKeyPairs.add(keyPair)
-                }
-
-                // char is non-alphabetic -> do nothing
-            }
-
-            // space bar computation (word transition)
-
-            // store current word
-
-            var matchedWords: MutableList<String> = getWords(wordKeyPairs)
-
-            if (matchedWords.isEmpty()) {
-                println("\nwordKeyPairs: ${wordKeyPairs}")
-                println("Notice: the word '${word}' was not matched")
-                continue
-            }
-
-            // add the viable words to the total list
-            listOfMatchedWords.add(matchedWords)
-        }
-
-        // trees have been built, calculate viable sentences
-
-        // no words have been computed
-        if (listOfMatchedWords.isEmpty()) {
-            System.out.println("Notice: listOfMatchedWords is empty")
-            return mutableListOf()
-        }
-
-        // compute viable sentences from text array
-        val resultingSentences: MutableList<String> = getSentences(listOfMatchedWords)
-
-        return resultingSentences
-    }
-
-    fun isAlphabetic(char: Char): Boolean {
-        return (char in 'a'..'z' || char in 'A'..'Z')
-    }
-
-    fun convertFullToRHS(input: String?): String {
-        if (input == null) {
-            return ""
-        }
-
-        var inputRHS: String = ""
-
-        for (char: Char in input) {
-            if (isAlphabetic(char)) {
-
-                val key: Key = Key(char)
-
-                val keyPair: KeyPair? = Singleton.getKeyPair(key)
-
-                if (keyPair == null) {
-                    inputRHS += char
-                    continue
-                }
-
-                val charRHS: Char = keyPair.rightKey.character
-
-                inputRHS += charRHS
-
-                continue
-            }
-
-            inputRHS += char
-        }
-
-        return inputRHS
-    }
-
-    fun convertFullToLHS(input: String?): String {
-        if (input == null) {
-            return ""
-        }
-
-        var inputLHS: String = ""
-
-        for (char: Char in input) {
-            if (isAlphabetic(char)) {
-
-                val key: Key = Key(char)
-
-                val keyPair: KeyPair? = Singleton.getKeyPair(key)
-
-                if (keyPair == null) {
-                    inputLHS += char
-                    continue
-                }
-
-                val charLHS: Char = keyPair.leftKey.character
-
-                inputLHS += charLHS
-
-                continue
-            }
-
-            inputLHS += char
-        }
-
-        return inputLHS
-    }
-}
-
-class SentenceSyntaxComparator {
-    companion object : Comparator<String> {
-        val langtool: LangTool = Singleton.langTool
-        override fun compare(first: String, second: String): Int {
-
-            // calculate syntax correctness scores
-            val firstScore: Int = langtool.countErrors(first)
-            val secondScore: Int = langtool.countErrors(second)
-
-            when {
-                // lower score is better
-                firstScore != secondScore -> return (secondScore - firstScore)
-                else -> return (0)
-            }
-        }
-    }
-}
-
-class SentenceFrequencyComparator {
-    companion object : Comparator<String> {
-        val freqTool: FreqTool = Singleton.freqTool
-        override fun compare(first: String, second: String): Int {
-
-            // calculate syntax correctness scores
-            val firstScore: Int = freqTool.sentence(first)
-            val secondScore: Int = freqTool.sentence(second)
-
-            // println("{${first}} has frequency: ${firstScore}")
-            // println("{${second}} has frequency: ${secondScore}")
-
-            when {
-                // higher score is better
-                firstScore != secondScore -> return (firstScore - secondScore)
-                else -> return (0)
-            }
-        }
-    }
+    //     return true
+    // }
 }

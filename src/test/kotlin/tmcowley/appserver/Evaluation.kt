@@ -2,7 +2,6 @@ package tmcowley.appserver
 
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.controllers.API
-import tmcowley.appserver.structures.DataStructures
 
 // https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
 import org.junit.Assert.assertEquals;
@@ -33,8 +32,15 @@ class Evaluation {
         var failedPhrases: HashMap<String, Array<String>> = hashMapOf();
 
         for (phrase in phraseList) {
+
             val results: Array<String> = apiInstance.submit(phrase)
             val phraseLowercase = phrase.lowercase()
+
+            // if (phrase.equals("tell a lie and your nose will grow")) {
+            //     println()
+            //     println(phraseLowercase)
+            //     results.forEach { result -> print("${result}, ") }
+            // }
 
             if (results.isEmpty()) {
                 failedPhrases.put(phraseLowercase, results);
@@ -55,10 +61,8 @@ class Evaluation {
             val phraseFound: Boolean = results.contains(phraseLowercase)
             if (phraseFound) {
                 phraseInResults++
-            }
-            else {
+            } else {
                 // have an unmatched phrase
-                println("ERROR: NON-MATCHING PHRASE FOUND")
                 failedPhrases.put(phraseLowercase, results);
 
                 continue
@@ -67,7 +71,7 @@ class Evaluation {
             val resultsList: List<String> = results.toList()
 
             if (results.size < 3) continue
-            val top3Match: Boolean = resultsList.subList(0, 3-1).contains(phraseLowercase)
+            val top3Match: Boolean = resultsList.subList(0, 3).contains(phraseLowercase)
             if (top3Match) {
                 phraseInTop3++
                 phraseInTop5++
@@ -76,7 +80,7 @@ class Evaluation {
             }
 
             if (results.size < 5) continue
-            val top5Match: Boolean = resultsList.subList(0, 5-1).contains(phraseLowercase)
+            val top5Match: Boolean = resultsList.subList(0, 5).contains(phraseLowercase)
             if (top5Match) {
                 phraseInTop5++
 

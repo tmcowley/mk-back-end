@@ -21,6 +21,20 @@
 		<!-- <exec.mainClass>tmcowley.appserver.App</exec.mainClass> -->
 		<!-- <kotlin.compiler.incremental>true</kotlin.compiler.incremental> -->
 	</properties>
+
+	<!-- https://spring.io/projects/spring-session -->
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.session</groupId>
+				<artifactId>spring-session-bom</artifactId>
+				<version>2021.1.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
 	<dependencies>
 		<!-- 
 			Starter for building web, including RESTful, 
@@ -128,6 +142,21 @@
 			<version>2.1.210</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session-data-redis</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.session</groupId>
+			<artifactId>spring-session</artifactId>
+			<version>1.2.2.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.5.0.RELEASE</version>
+		</dependency>
 
 	</dependencies>
 
