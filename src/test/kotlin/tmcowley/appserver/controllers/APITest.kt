@@ -10,9 +10,9 @@ import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
 
 @SpringBootTest
-class APITest {
+class APIsGetTest {
 
-    val apiInstance: API = API()
+    val apiInstance: APIsGet = APIsGet()
 
     val phrase: String = "The house at the end of the street is red."
     val phraseLHS: String = "Tge gwrse at tge ebd wf tge street es red."

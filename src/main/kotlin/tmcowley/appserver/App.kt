@@ -12,22 +12,20 @@ class App {}
 fun main(args: Array<String>) {
     runApplication<App>(*args)
 
-    // init singletons
-    // Singleton
-    SingletonControllers
+    // output algorithm configuration
+    run {
+        val syntaxAnalysisEnabled: Boolean = (Singleton.prop.get("analyseSyntax") as String).toBoolean()
+        val frequencyAnalysisEnabled: Boolean =
+                (Singleton.prop.get("analyseFrequency") as String).toBoolean()
 
-    // val p: Key = Key('p');
-    // val q: Key = Key('q');
+        println()
 
-    // val qp: KeyPair = KeyPair(q, p);
+        if (syntaxAnalysisEnabled) println("Notice: Syntax analysis enabled")
+        else println("Notice: Syntax analysis disabled")
 
-    // println(qp.toString());
-
-    // var structs = DataStructures();
-
-    // println(structs.getWordSet().toString());
-
-    for (arg in args) {
-        println(arg)
+        if (frequencyAnalysisEnabled) println("Notice: Frequency analysis enabled")
+        else println("Notice: Frequency analysis disabled")
     }
+
+    // args.forEach { arg -> println(arg)}
 }

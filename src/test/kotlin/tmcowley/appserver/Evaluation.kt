@@ -1,7 +1,7 @@
 package tmcowley.appserver
 
 import tmcowley.appserver.Singleton
-import tmcowley.appserver.controllers.API
+import tmcowley.appserver.controllers.APIsGet
 
 // https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
 import org.junit.Assert.assertEquals;
@@ -14,7 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 class Evaluation {
 
-    val apiInstance: API = API()
+    val getAPIs: APIsGet = APIsGet()
 
     val phraseList: List<String> = Singleton.phraseList
 
@@ -33,7 +33,7 @@ class Evaluation {
 
         for (phrase in phraseList) {
 
-            val results: Array<String> = apiInstance.submit(phrase)
+            val results: Array<String> = getAPIs.submit(phrase)
             val phraseLowercase = phrase.lowercase()
 
             // if (phrase.equals("tell a lie and your nose will grow")) {
