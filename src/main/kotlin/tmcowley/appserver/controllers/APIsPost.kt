@@ -93,6 +93,14 @@ class APIsPost {
     }
 
     /**
+     * check if a user code exists
+     */
+    @PostMapping(value = arrayOf("/userCodeExists"))
+    fun userCodeExists(@RequestParam("userCode") userCode: String): Boolean {
+        return SingletonControllers.db.userCodeTaken(userCode);
+    }
+
+    /**
      * signout a user; 
      * invalidates the user session
      */
