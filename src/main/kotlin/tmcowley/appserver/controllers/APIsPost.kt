@@ -1,33 +1,25 @@
 package tmcowley.appserver.controllers
 
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.http.MediaType.*
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-import tmcowley.appserver.Singleton
-import tmcowley.appserver.objects.Key
-import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.structures.getSentences
-import tmcowley.appserver.structures.getWords
-import tmcowley.appserver.utils.FreqTool
-import tmcowley.appserver.utils.LangTool
-import tmcowley.appserver.SingletonControllers
-
-import tmcowley.appserver.submitSentence
-import tmcowley.appserver.convertFullToLHS
-import tmcowley.appserver.convertFullToRHS
-
-
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
-
+import org.springframework.http.MediaType.*
 import org.springframework.session.*
+import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.RequestAttribute
+import org.springframework.web.bind.annotation.RequestMethod
+import org.springframework.web.bind.annotation.RestController
+import tmcowley.appserver.Singleton
+import tmcowley.appserver.SingletonControllers
 
-import kotlin.random.Random
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.SerializationException
 
 // // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
@@ -43,7 +35,7 @@ import kotlin.random.Random
                 ),
         methods = arrayOf(RequestMethod.POST)
 )
-@RequestMapping(value = arrayOf("/post"), produces = arrayOf("application/json"))
+@RequestMapping(value = arrayOf("/post"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
 @RestController
 class APIsPost {
 
@@ -52,16 +44,25 @@ class APIsPost {
     // -----
 
     /**
-     * signup a user;
-     * creates a user in the db storing their age and normal (full-board) typing speed
-     * returns the newly generated userCode
+     * signup a user; creates a user in the db storing their age and normal (full-board) typing
+     * speed returns the newly generated userCode
      */
     @PostMapping(value = arrayOf("/signup"))
-    fun signup(@RequestParam("age") age: Int, @RequestParam("typingSpeed") typingSpeed: Int, request: HttpServletRequest): String? {
+    fun signup(
+            @RequestBody signupForm: String,
+            request: HttpServletRequest
+    ): String? {
 
-        if (age < 13) return null
+        var form = try { 
+            Json.decodeFromString<SignupForm>(signupForm)
+        } catch (e: SerializationException) { 
+            println("Error: signup(): failed to deserialize form")
+            return null
+        }
 
-        val userCode = SingletonControllers.db.createNewUser(age, typingSpeed)
+        if (form.age < 13) return null
+
+        val userCode = SingletonControllers.db.createNewUser(form.age, form.speed)
 
         userCode ?: return null
 
@@ -74,47 +75,45 @@ class APIsPost {
         return userCode
     }
 
-    /**
-     * login a user; 
-     * creates a session storing their userCode and current sessionNumber
-     */
+    /** login a user; creates a session storing their userCode and current sessionNumber */
     @PostMapping(value = arrayOf("/login"))
-    fun login(@RequestParam("userCode") userCode: String, request: HttpServletRequest): Boolean {
-        val validUser = SingletonControllers.db.userCodeTaken(userCode);
+    fun login(@RequestBody loginForm: String, request: HttpServletRequest): Boolean {
 
+        var form = try { 
+            Json.decodeFromString<LoginForm>(loginForm) 
+        } catch (e: SerializationException) { 
+            println("Error: login(): failed to deserialize form")
+            return false 
+        }
+
+        println(form.userCode)
+
+        // ensure the user exists
+        val validUser = validateUserCode(form.userCode)
         if (!validUser) return false
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
-        session.setAttribute("userCode", userCode)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
+        session.setAttribute("userCode", form.userCode)
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(form.userCode))
 
         return true
     }
 
-    /**
-     * check if a user code exists
-     */
-    @PostMapping(value = arrayOf("/userCodeExists"))
-    fun userCodeExists(@RequestParam("userCode") userCode: String): Boolean {
-        return SingletonControllers.db.userCodeTaken(userCode);
+    private fun validateUserCode(userCode: String): Boolean {
+        println("validateUserCode() called with user-code: ${userCode}")
+        return SingletonControllers.db.userCodeTaken(userCode)
     }
 
-    /**
-     * signout a user; 
-     * invalidates the user session
-     */
+    /** signout a user; invalidates the user session */
     @PostMapping(value = arrayOf("/signout"))
     fun signout(request: HttpServletRequest) {
-        // get session
+        // get session, invalidate
         val session: HttpSession? = request.getSession(false)
-
         session?.invalidate()
     }
 
-    /**
-     * get the next phrase from the session's number and phrase number
-     */
+    /** get the next phrase from the session's number and phrase number */
     @PostMapping(value = arrayOf("/getNextPhrase"))
     fun getNextPhrase(request: HttpServletRequest): String? {
 
@@ -144,12 +143,15 @@ class APIsPost {
         return nextPhrase
     }
 
-    /**
-     * get the phrases per session count
-     */
+    /** get the phrases per session count */
     @PostMapping(value = arrayOf("/phrasesPerSession"))
     fun phrasesPerSession(): Int {
         return Singleton.phrasesPerSession
     }
-
 }
+
+@Serializable
+final data class LoginForm(val userCode: String)
+
+@Serializable
+final data class SignupForm(val age: Int, val speed: Int)

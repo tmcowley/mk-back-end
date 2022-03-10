@@ -94,7 +94,7 @@ class DatabaseController {
 
             SchemaUtils.create(Users, Sessions, Sessions_To_Users)
 
-            // addDummyData()
+            addDummyData()
 
             commit()
         }
@@ -105,6 +105,7 @@ class DatabaseController {
         User.new {
             uid = "test-test-test"
             age = 21
+            speed = 60
         }
 
         val u1FirstSession = Session.new {
