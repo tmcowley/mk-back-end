@@ -6,8 +6,11 @@ package tmcowley.appserver.controllers
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
+import tmcowley.appserver.objects.SessionData
+
 import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
+
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.beans.factory.annotation.Value;
@@ -228,5 +231,20 @@ class DatabaseController {
             commit()
         }
         return isFree
+    }
+
+    /* TODO */
+    fun storeCompletedSession(userCode: String, data: SessionData): Boolean {
+
+        // create session in database
+        // ...
+
+        // create session to user link
+        // ...
+
+        // check session is linked to user
+
+        // report success/ failure
+        return false;
     }
 }

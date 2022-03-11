@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
+import tmcowley.appserver.objects.SessionData
 
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -117,8 +118,10 @@ class APIsPost {
     @PostMapping(value = arrayOf("/getNextPhrase"))
     fun getNextPhrase(request: HttpServletRequest): String? {
 
-        // create new session, if needed
-        val session: HttpSession = request.getSession(false)
+        // get the user session
+        val session: HttpSession? = request.getSession(false)
+        if (session == null) return null
+
         val sessionNumber = session.getAttribute("sessionNumber") as Int
         val isFirstSession = (sessionNumber == 1)
 
@@ -148,6 +151,49 @@ class APIsPost {
     fun phrasesPerSession(): Int {
         return Singleton.phrasesPerSession
     }
+
+    /** get the user code attached to the session */
+    @PostMapping(value = arrayOf("/getUserCode"))
+    fun getUserCode(request: HttpServletRequest): String? {
+
+        // get the user session
+        val session: HttpSession? = request.getSession(false)
+        if (session == null) return null
+
+        return session.getAttribute("userCode") as String
+    }
+
+    /** get the user code attached to the session */
+    @PostMapping(value = arrayOf("/reportCompletedSession"))
+    fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
+
+        // get the user session
+        val session: HttpSession? = request.getSession(false)
+        if (session == null) return null
+
+        // collect metrics
+        var metrics = try { 
+            Json.decodeFromString<MetricsData>(metricsObj) 
+        } catch (e: SerializationException) { 
+            println("Error: login(): failed to deserialize form")
+            return false 
+        }
+
+        // get training session number from session
+        val sessionNumber = session.getAttribute("sessionNumber") as Int
+
+        // store metrics in session obj
+        var sessionData = SessionData(sessionNumber, metrics.speed, metrics.accuracy)
+
+        // store completed session in database
+        // ...
+
+        // incrememnt session number (if exists next session)
+
+        // report success
+        return true
+    }
+
 }
 
 @Serializable
@@ -155,3 +201,7 @@ final data class LoginForm(val userCode: String)
 
 @Serializable
 final data class SignupForm(val age: Int, val speed: Int)
+
+@Serializable
+final data class MetricsData(val speed: Float, val accuracy: Float)
+
