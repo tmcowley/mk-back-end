@@ -43,7 +43,7 @@ import kotlin.random.Random
                 ),
         methods = arrayOf(RequestMethod.GET)
 )
-@RequestMapping(value = arrayOf("/get"), produces = arrayOf("application/json"))
+@RequestMapping(value = arrayOf("/api/v0"), produces = arrayOf("application/json"))
 @RestController
 class APIsGet {
 
@@ -60,7 +60,7 @@ class APIsGet {
     /** For converting any form to left-hand form */
     @Cacheable
     @GetMapping(
-            value = arrayOf("/convert/lhs"),
+            value = arrayOf("/convert-lhs"),
     )
     fun convertToLHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/lhs convertToLHS called with input: ${input}")
@@ -72,7 +72,7 @@ class APIsGet {
     /** For converting any form to rigth-hand form */
     @Cacheable
     @GetMapping(
-            value = arrayOf("/convert/rhs"),
+            value = arrayOf("/convert-rhs"),
     )
     fun convertToRHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/rhs convertToRHS called with input: ${input}")
@@ -82,14 +82,14 @@ class APIsGet {
     }
 
     /** API status query endpoint */
-    @GetMapping(value = arrayOf("/status"))
+    @GetMapping(value = arrayOf("/get-status"))
     fun status(): Boolean {
         // return true when active
         return true
     }
 
     /** Random phrase query endpoint */
-    @GetMapping(value = arrayOf("/random-phrase"))
+    @GetMapping(value = arrayOf("/get-random-phrase"))
     fun getRandomPhrase(): String {
         // get a random phrase from the phrase list
         return Singleton.getRandomPhrase()

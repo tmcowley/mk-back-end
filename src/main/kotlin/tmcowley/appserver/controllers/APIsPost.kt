@@ -36,7 +36,7 @@ import kotlinx.serialization.SerializationException
                 ),
         methods = arrayOf(RequestMethod.POST)
 )
-@RequestMapping(value = arrayOf("/post"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
+@RequestMapping(value = arrayOf("/api/v0"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
 @RestController
 class APIsPost {
 
@@ -48,7 +48,7 @@ class APIsPost {
      * signup a user; creates a user in the db storing their age and normal (full-board) typing
      * speed returns the newly generated userCode
      */
-    @PostMapping(value = arrayOf("/signup"))
+    @PostMapping(value = arrayOf("/sign-up"))
     fun signup(
             @RequestBody signupForm: String,
             request: HttpServletRequest
@@ -77,8 +77,8 @@ class APIsPost {
     }
 
     /** login a user; creates a session storing their userCode and current sessionNumber */
-    @PostMapping(value = arrayOf("/login"))
-    fun login(@RequestBody loginForm: String, request: HttpServletRequest): Boolean {
+    @PostMapping(value = arrayOf("/sign-in"))
+    fun signin(@RequestBody loginForm: String, request: HttpServletRequest): Boolean {
 
         var form = try { 
             Json.decodeFromString<LoginForm>(loginForm) 
@@ -107,15 +107,24 @@ class APIsPost {
     }
 
     /** signout a user; invalidates the user session */
-    @PostMapping(value = arrayOf("/signout"))
+    @PostMapping(value = arrayOf("/sign-out"))
     fun signout(request: HttpServletRequest) {
         // get session, invalidate
         val session: HttpSession? = request.getSession(false)
         session?.invalidate()
     }
 
+    @PostMapping(value = arrayOf("/is-logged-in"))
+    fun isLoggedIn(request: HttpServletRequest): Boolean {
+        // get session
+        val session: HttpSession? = request.getSession(false)
+        if (session == null) return false
+
+        return true
+    }
+
     /** get the next phrase from the session's number and phrase number */
-    @PostMapping(value = arrayOf("/getNextPhrase"))
+    @PostMapping(value = arrayOf("/get-next-phrase"))
     fun getNextPhrase(request: HttpServletRequest): String? {
 
         // get the user session
@@ -147,13 +156,13 @@ class APIsPost {
     }
 
     /** get the phrases per session count */
-    @PostMapping(value = arrayOf("/phrasesPerSession"))
+    @PostMapping(value = arrayOf("/get-phrases-per-session"))
     fun phrasesPerSession(): Int {
         return Singleton.phrasesPerSession
     }
 
     /** get the user code attached to the session */
-    @PostMapping(value = arrayOf("/getUserCode"))
+    @PostMapping(value = arrayOf("/get-user-code"))
     fun getUserCode(request: HttpServletRequest): String? {
 
         // get the user session
@@ -164,7 +173,7 @@ class APIsPost {
     }
 
     /** get the user code attached to the session */
-    @PostMapping(value = arrayOf("/reportCompletedSession"))
+    @PostMapping(value = arrayOf("/report-completed-session"))
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
 
         // get the user session
