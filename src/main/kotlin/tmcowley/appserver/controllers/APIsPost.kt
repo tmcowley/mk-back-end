@@ -90,7 +90,7 @@ class APIsPost {
         println(form.userCode)
 
         // ensure the user exists
-        val validUser = validateUserCode(form.userCode)
+        val validUser = userCodeTaken(form.userCode)
         if (!validUser) return false
 
         // create new session, if needed
@@ -101,7 +101,10 @@ class APIsPost {
         return true
     }
 
-    private fun validateUserCode(userCode: String): Boolean {
+    /**
+     * check if a user-code is assigned to a user
+     */
+    private fun userCodeTaken(userCode: String): Boolean {
         println("validateUserCode() called with user-code: ${userCode}")
         return SingletonControllers.db.userCodeTaken(userCode)
     }
@@ -179,6 +182,7 @@ class APIsPost {
         // get the user session
         val session: HttpSession? = request.getSession(false)
         if (session == null) return null
+        val userCode = session.getAttribute("userCode") as String
 
         // collect metrics
         var metrics = try { 
@@ -195,14 +199,14 @@ class APIsPost {
         var sessionData = SessionData(sessionNumber, metrics.speed, metrics.accuracy)
 
         // store completed session in database
-        // ...
+        SingletonControllers.db.storeCompletedSession(userCode, sessionData)
 
-        // incrememnt session number (if exists next session)
+        // increment session number (if exists next session)
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
 
         // report success
         return true
     }
-
 }
 
 @Serializable
@@ -213,4 +217,3 @@ final data class SignupForm(val age: Int, val speed: Int)
 
 @Serializable
 final data class MetricsData(val speed: Float, val accuracy: Float)
-

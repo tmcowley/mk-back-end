@@ -1,10 +1,8 @@
 package tmcowley.appserver.controllers
 
-// https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
-import org.junit.Assert.assertEquals;
-import org.junit.Ignore;
-
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.springframework.boot.test.context.SpringBootTest
 
 import tmcowley.appserver.Singleton
@@ -18,9 +16,10 @@ class APIsGetTest {
     val phraseLHS: String = "Tge gwrse at tge ebd wf tge street es red."
     val phraseRHS: String = "Thi houli ay yhi ink oj yhi lyuiiy il uik."
 
+    @Disabled
 	@Test
+    /** for general debugging */
 	fun `for debugging`(){
-        // for general debugging (for the time being)
         println(Singleton.maxLengthInDictionary)
     }
 

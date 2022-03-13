@@ -7,15 +7,10 @@ class SentenceTree {
     class Node (
         val value: String
     ) {
-
         var parent: Node? = null;
         var children: MutableList<Node> = mutableListOf();
 
-        /**
-         * check if this node is a leaf (has no children)
-         * 
-         * @return node leaf state
-         */
+        /** check if this node is a leaf (has no children) */
         fun isLeaf(): Boolean {
             return (this.children.isEmpty());
         }

@@ -2,111 +2,98 @@ package tmcowley.appserver
 
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.controllers.APIsGet
-
-// https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
-import org.junit.Assert.assertEquals;
-import org.junit.Ignore;
+import tmcowley.appserver.getMatchedWords
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
+// import org.junit.jupiter.api.Assertions
 import org.springframework.boot.test.context.SpringBootTest
 
+@Disabled
 @SpringBootTest
 class Evaluation {
 
     val getAPIs: APIsGet = APIsGet()
-
     val phraseList: List<String> = Singleton.phraseList
+    val words = Singleton.wordSet.toMutableList()
+
+    // word to word-matches lookup
+    val matchLookup: HashMap<String, MutableList<String>>
+
+    init{
+        // create word to word-matches hash-map
+        println("Creating word to word-matches hash-map")
+        matchLookup = HashMap<String, MutableList<String>>()
+        Singleton.wordSet.forEach {
+            word -> matchLookup.put(word, getMatchedWords(word))
+        }
+    }
+
+    @Test
+    fun `rank words by match count`() {
+
+        println("\nTesting: evaluation of words by match count started")
+
+        // generate list of words sorted by match count
+        words.sortBy { word -> - word.length }
+        words.sortBy { word -> matchLookup.get(word)?.size }
+        words.reverse()
+
+        // get top 20 words by match count
+        println("Top 20 words by match count: ")
+        words.take(20).forEachIndexed { index, word -> 
+            val matchedWords = matchLookup.get(word) ?: return@forEachIndexed
+            println("Position ${index + 1}: ${word} matching ${matchedWords.size}: ${matchedWords.toString()}")
+        }
+        println()
+    }
+
+    @Test
+    fun `find proportion of single-matching words`(){
+
+        println("\nTesting: evaluation: finding proportion of single-matching words")
+
+        // find proportion of words with a single match
+        val singleMatchingWords = words.count {
+            word -> (matchLookup.get(word)?.size == 1)
+        }
+        val proportionOfSingleMatchingWords = ((singleMatchingWords * 100) / Singleton.wordSet.size)
+        println("Proportion of single-matching words: ${proportionOfSingleMatchingWords}%")
+        println()
+    }
 
     @Test
     fun `eval algorithm with phrase set`(){
 
-        println("\nTesting: auto evaluation started")
-        
-        var phraseAtTop = 0
-        var phraseInTop3 = 0
-        var phraseInTop5 = 0
-        var phraseInResults = 0
+        println("\nTesting: evaluation of algorithm accuracy started")
+
         val phraseCount = phraseList.size
-
-        var failedPhrases: HashMap<String, Array<String>> = hashMapOf();
-
-        for (phrase in phraseList) {
-
-            val results: Array<String> = getAPIs.submit(phrase)
-            val phraseLowercase = phrase.lowercase()
-
-            // if (phrase.equals("tell a lie and your nose will grow")) {
-            //     println()
-            //     println(phraseLowercase)
-            //     results.forEach { result -> print("${result}, ") }
-            // }
-
-            if (results.isEmpty()) {
-                failedPhrases.put(phraseLowercase, results);
-
-                continue
-            }
-
-            val topMatch: Boolean = phraseLowercase.equals(results[0])
-            if (topMatch) {
-                phraseAtTop++
-                phraseInTop3++
-                phraseInTop5++
-                phraseInResults++
-
-                continue
-            }
-
-            val phraseFound: Boolean = results.contains(phraseLowercase)
-            if (phraseFound) {
-                phraseInResults++
-            } else {
-                // have an unmatched phrase
-                failedPhrases.put(phraseLowercase, results);
-
-                continue
-            }
-
-            val resultsList: List<String> = results.toList()
-
-            if (results.size < 3) continue
-            val top3Match: Boolean = resultsList.subList(0, 3).contains(phraseLowercase)
-            if (top3Match) {
-                phraseInTop3++
-                phraseInTop5++
-
-                continue
-            }
-
-            if (results.size < 5) continue
-            val top5Match: Boolean = resultsList.subList(0, 5).contains(phraseLowercase)
-            if (top5Match) {
-                phraseInTop5++
-
-                continue
-            }
+        val matchedAsTop = phraseList.count {
+            phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) == 0)
+        }
+        val matchedInTop3 = phraseList.count {
+            phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 3)
+        }
+        val matchedInTop5 = phraseList.count {
+            phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 5)
+        }
+        val matched = phraseList.count {
+            phrase -> (getAPIs.submit(phrase).contains(phrase.lowercase()))
         }
 
         println()
         println("Notice: Automatic evaluation complete: ")
-        println("Phrase found in the top 1 results: ${(phraseAtTop * 100)/phraseCount}% [$phraseAtTop/$phraseCount]")
-        println("Phrase found in the top 3 results: ${(phraseInTop3 * 100)/phraseCount}% [$phraseInTop3/$phraseCount]")
-        println("Phrase found in the top 5 results: ${(phraseInTop5 * 100)/phraseCount}% [$phraseInTop5/$phraseCount]")
-        println("Phrase found: ${(phraseInResults * 100)/phraseCount}% [$phraseInResults/$phraseCount]")
+        println("Matched in the top 1 results: ${(matchedAsTop * 100)/phraseCount}% [$matchedAsTop/$phraseCount]")
+        println("Matched in the top 3 results: ${(matchedInTop3 * 100)/phraseCount}% [$matchedInTop3/$phraseCount]")
+        println("Matched in the top 5 results: ${(matchedInTop5 * 100)/phraseCount}% [$matchedInTop5/$phraseCount]")
+        println("Matched: ${(matched * 100)/phraseCount}% [$matched/$phraseCount]")
         println()
 
-        val failedMatches = (phraseCount - phraseInResults)
-        val warnFailedMatches = (failedMatches != 0)
-        if (warnFailedMatches) {
-            println("Error: some phrases unmatched: ${(failedMatches * 100)/phraseCount}% [$failedMatches/$phraseCount]")
-
-            // list the failed phrases and the algos results
-            for ((phrase, results) in failedPhrases) {
-                println("Unmatched phrase found: \n${phrase}")
-                println("results: \n${results}")
-                println()
-            }
+        val nonMatched = phraseList.filter {
+            phrase -> (!getAPIs.submit(phrase).contains(phrase.lowercase()))
+        }
+        nonMatched.forEach { phrase -> 
+            println("Non-matched phrase found: ${phrase}")
         }
     }
 

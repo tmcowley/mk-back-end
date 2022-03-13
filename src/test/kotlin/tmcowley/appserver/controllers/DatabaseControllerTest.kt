@@ -1,12 +1,8 @@
 package tmcowley.appserver.controllers
 
-
-// https://junit.org/junit4/javadoc/4.8/org/junit/Assert.html
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Ignore
-
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.springframework.boot.test.context.SpringBootTest
 
 import tmcowley.appserver.Singleton

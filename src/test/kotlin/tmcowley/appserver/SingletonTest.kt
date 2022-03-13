@@ -17,4 +17,10 @@ class SingletonTest {
 
 		assert(!userCode.isEmpty())
 	}
+
+	@Test
+	fun `find longest phrase length`() {
+		val longestPhrase = Singleton.phraseList.maxByOrNull { phrase -> phrase.length } ?: ""
+		println("\nLongest phrase length: ${longestPhrase.length}\n")
+	}
 }

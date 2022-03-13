@@ -9,18 +9,16 @@ import tmcowley.appserver.structures.SentenceTree;
 class StructureUtils
 
 fun getWords(currentWord: MutableList<KeyPair>): MutableList<String> {
-    if (currentWord.isEmpty()) {
-        return mutableListOf<String>()
-    }
+    if (currentWord.isEmpty()) return mutableListOf()
 
-    // transform into tree
+    // generate tree representing key-pair list
     val currentWordTree: WordTree = WordTree();
-
-    for (keyPair: KeyPair in currentWord) {
+    currentWord.forEach { keyPair -> 
         // println("adding keypair: ${keyPair}")
-        currentWordTree.insert(keyPair);
+        currentWordTree.insert(keyPair)
     }
 
+    // traverse the tree paths
     return currentWordTree.findWords();
 }
 
@@ -28,9 +26,8 @@ fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableL
 
     // store in Binary Tree, traverse each as before
     var sentenceTree: SentenceTree = SentenceTree();
-
-    for (words: MutableList<String> in listOfMatchedWords) {
-        sentenceTree.insert(words);
+    listOfMatchedWords.forEach {
+        words -> sentenceTree.insert(words)
     }
 
     return sentenceTree.findWords();

@@ -12,9 +12,8 @@ class Logic
 
 fun submitSentence(input: String): Array<String> {
 
-    val syntaxAnalysisEnabled: Boolean = (Singleton.prop.get("analyseSyntax") as String).toBoolean()
-    val frequencyAnalysisEnabled: Boolean =
-            (Singleton.prop.get("analyseFrequency") as String).toBoolean()
+    val syntaxAnalysisEnabled = Singleton.syntaxAnalysisEnabled
+    val frequencyAnalysisEnabled = Singleton.frequencyAnalysisEnabled
 
     val lowercaseInput = input.lowercase()
 
@@ -88,49 +87,44 @@ fun splitIntoWords(sentence: String): Array<String> {
     return sentence.split(" ").toTypedArray()
 }
 
+fun getMatchedWords(word: String): MutableList<String> {
+
+    // create key-pair list for word
+    var wordKeyPairs: MutableList<KeyPair> = mutableListOf()
+    for (char: Char in word) {
+
+        // char is non-alphabetic -> do nothing
+        if (isNotAlphabetic(char)) continue
+
+        // char is alphabetic
+
+        // get key-pair for key with char
+        val key: Key = Key(char)
+        val keyPair: KeyPair? = Singleton.getKeyPair(key)
+
+        // key-pair lookup fails
+        if (keyPair == null) {
+            println("Error: getKeyPair(${key.toString()}) failed")
+            continue
+        }
+
+        // add the key-pair to the current word
+        wordKeyPairs.add(keyPair)
+    }
+
+    return getWords(wordKeyPairs)
+}
+
 fun buildAndReadTrees(inputWords: Array<String>): MutableList<String> {
 
     var listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
-
-    for (word: String in inputWords) {
-
-        var wordKeyPairs: MutableList<KeyPair> = mutableListOf()
-
-        for (char: Char in word) {
-
-            if (isNotAlphabetic(char)) {
-                // char is non-alphabetic -> do nothing
-                continue
-            }
-
-            // char is alphabetic
-
-            // get key for char
-            val key: Key = Key(char)
-
-            // get key-pair for key
-            val keyPair: KeyPair? = Singleton.getKeyPair(key)
-
-            // key-pair lookup fails
-            if (keyPair == null) {
-                println("Error: getKeyPair(${key.toString()}) failed")
-                continue
-            }
-
-            // add the key-pair to the current word
-            wordKeyPairs.add(keyPair)
-        }
-
-        // space bar computation (word transition)
-
-        // store current word
-
-        var matchedWords: MutableList<String> = getWords(wordKeyPairs)
-
+    inputWords.forEach { word -> 
+        var matchedWords: MutableList<String> = getMatchedWords(word)
         if (matchedWords.isEmpty()) {
-            println("\nwordKeyPairs: ${wordKeyPairs}")
+            // println("\nwordKeyPairs: ${wordKeyPairs}")
             println("Notice: the word '${word}' was not matched")
-            continue
+            matchedWords = mutableListOf("{${word}}")
+            // return@forEach
         }
 
         // add the viable words to the total list
