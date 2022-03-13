@@ -8,6 +8,7 @@ import tmcowley.appserver.structures.SentenceTree;
 
 class StructureUtils
 
+/** get the matching words from a word in key-pair list form */
 fun getWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     if (currentWord.isEmpty()) return mutableListOf()
 
@@ -22,6 +23,7 @@ fun getWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     return currentWordTree.findWords();
 }
 
+/** get the matching sentences against a list of matching words */
 fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
 
     // store in Binary Tree, traverse each as before
@@ -33,6 +35,7 @@ fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableL
     return sentenceTree.findWords();
 }
 
+/** get the hash-map linking keys to key-pairs */
 fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
 
     // map keys
