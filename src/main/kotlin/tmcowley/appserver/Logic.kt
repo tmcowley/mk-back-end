@@ -82,22 +82,19 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
         word -> word == ""
     }
 
+    // create the list of matched words
     var listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
     nonEmptyWords.forEach { word -> 
 
         var matchedWords: MutableList<String> = getMatchedWords(word)
         if (matchedWords.isEmpty()) {
-            // println("\nwordKeyPairs: ${wordKeyPairs}")
-            println("Notice: the word '${word}' was not matched")
+            // println("Notice: the word '${word}' was not matched")
             matchedWords = mutableListOf("{${word}}")
-            // return@forEach
         }
 
         // add the viable words to the total list
         listOfMatchedWords.add(matchedWords)
     }
-
-    // trees have been built, calculate viable sentences
 
     // no words have been computed
     if (listOfMatchedWords.isEmpty()) {
