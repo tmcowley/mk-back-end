@@ -82,6 +82,12 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
         word -> word == ""
     }
 
+    // ensure word length is not exceeded
+    val wordLengthExceeded = nonEmptyWords.any {
+        word -> (word.length >= 25)
+    }
+    if (wordLengthExceeded) return mutableListOf()
+
     // create the list of matched words
     var listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
     nonEmptyWords.forEach { word -> 

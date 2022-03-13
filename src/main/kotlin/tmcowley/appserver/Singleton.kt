@@ -22,7 +22,7 @@ object Singleton {
 
     val wordFreqLookup: HashMap<String, Int> = parseWordFrequencies()
 
-    val maxLengthInDictionary: Int = wordSet.maxOfOrNull { it.length }!!
+    val maxLengthInDictionary: Int = wordSet.maxOfOrNull { word -> word.length } ?: 0
 
     val langTool: LangTool = LangTool()
 
