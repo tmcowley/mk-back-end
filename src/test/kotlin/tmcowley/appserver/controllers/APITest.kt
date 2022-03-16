@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 import tmcowley.appserver.Singleton
 
+@Disabled
 @SpringBootTest
 class APIsGetTest {
 
@@ -30,7 +31,13 @@ class APIsGetTest {
 
     @Test
     fun `submission`(){
-        apiInstance.submit("this is a test");
+        val phrase = "this is a test"
+        val matches = listOf( "tges es a test", "this is a test" )
+        val results = apiInstance.submit(phrase)
+
+        // results.forEach { result -> println(result) }
+
+        matches.forEach { match -> assert(results.contains(match)) }
     }
 
     @Test

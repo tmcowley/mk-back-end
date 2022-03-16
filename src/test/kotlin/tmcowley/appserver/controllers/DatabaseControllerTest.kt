@@ -7,6 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest
 
 import tmcowley.appserver.Singleton
 
+@Disabled
 @SpringBootTest
 class DatabaseControllerTest {
 

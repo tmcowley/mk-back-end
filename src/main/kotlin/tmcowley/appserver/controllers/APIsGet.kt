@@ -9,18 +9,10 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import tmcowley.appserver.Singleton
-import tmcowley.appserver.objects.Key
-import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.structures.getSentences
-import tmcowley.appserver.structures.getWords
-import tmcowley.appserver.utils.FreqTool
-import tmcowley.appserver.utils.LangTool
-import tmcowley.appserver.SingletonControllers
 
 import tmcowley.appserver.submitSentence
-import tmcowley.appserver.convertFullToLHS
-import tmcowley.appserver.convertFullToRHS
-
+import tmcowley.appserver.convertToLeft
+import tmcowley.appserver.convertToRight
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
@@ -66,7 +58,7 @@ class APIsGet {
         // println("/post/convert/lhs convertToLHS called with input: ${input}")
 
         // for each alphabetic char in string -> lookup keypair, get left key in keypair
-        return convertFullToLHS(input)
+        return convertToLeft(input)
     }
 
     /** For converting any form to rigth-hand form */
@@ -78,7 +70,7 @@ class APIsGet {
         // println("/post/convert/rhs convertToRHS called with input: ${input}")
 
         // for each alphabetic char in string -> lookup keypair, get right key in keypair
-        return convertFullToRHS(input)
+        return convertToRight(input)
     }
 
     /** API status query endpoint */

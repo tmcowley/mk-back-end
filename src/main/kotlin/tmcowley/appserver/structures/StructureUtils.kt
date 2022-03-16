@@ -1,78 +1,45 @@
 package tmcowley.appserver.structures;
 
-import tmcowley.appserver.objects.Key;
-import tmcowley.appserver.objects.KeyPair;
+import tmcowley.appserver.Singleton
 
-import tmcowley.appserver.structures.WordTree;
-import tmcowley.appserver.structures.SentenceTree;
+import tmcowley.appserver.objects.Key
+import tmcowley.appserver.objects.KeyPair
+
+import tmcowley.appserver.structures.WordTree
+import tmcowley.appserver.structures.SentenceTree
 
 class StructureUtils
 
 /** get the matching words from a word in key-pair list form */
-fun getWords(currentWord: MutableList<KeyPair>): MutableList<String> {
+fun getMatchedWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     if (currentWord.isEmpty()) return mutableListOf()
 
-    // generate tree representing key-pair list
-    val currentWordTree: WordTree = WordTree();
-    currentWord.forEach { keyPair -> 
-        // println("adding keypair: ${keyPair}")
-        currentWordTree.insert(keyPair)
-    }
+    // generate word permutation tree (representing key-pair form)
+    val currentWordTree: WordTree = WordTree()
+    currentWord.forEach { keyPair -> currentWordTree.insertKeyPair(keyPair) }
 
-    // traverse the tree paths
-    return currentWordTree.findWords();
+    // find matched words by traversing the tree paths
+    var wordMatches = currentWordTree.getWords()
+
+    // filter words not in the dictionary
+    wordMatches = (wordMatches.filter { word -> Singleton.wordExists(word) }.toMutableList())
+
+    return wordMatches
 }
 
 /** get the matching sentences against a list of matching words */
 fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
+    if (listOfMatchedWords.isEmpty()) return mutableListOf()
 
-    // store in Binary Tree, traverse each as before
-    var sentenceTree: SentenceTree = SentenceTree();
-    listOfMatchedWords.forEach {
-        words -> sentenceTree.insert(words)
-    }
+    // generate sentence permutation tree
+    var sentenceTree: SentenceTree = SentenceTree()
+    listOfMatchedWords.forEach { words -> sentenceTree.insert(words) }
 
-    return sentenceTree.findWords();
+    return sentenceTree.getSentences()
 }
 
 /** get the hash-map linking keys to key-pairs */
 fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
-
-    // map keys
-
-    // var charToKeyLookup = HashMap<Char, Key> ();
-
-    // val alphabet = ('a'..'z').toMutableList()
-    // for (char in alphabet) {
-    //     charToKeyLookup.put(char, Key(char));
-    // }
-
-    // val a: Key = Key('a');
-    // val b: Key = Key('b');
-    // val c: Key = Key('c');
-    // val d: Key = Key('d');
-    // val e: Key = Key('e');
-    // val f: Key = Key('f');
-    // val g: Key = Key('g');
-    // val h: Key = Key('h');
-    // val i: Key = Key('i');
-    // val j: Key = Key('j');
-    // val k: Key = Key('k');
-    // val l: Key = Key('l');
-    // val m: Key = Key('m');
-    // val n: Key = Key('n');
-    // val o: Key = Key('o');
-    // val p: Key = Key('p');
-    // val q: Key = Key('q');
-    // val r: Key = Key('r');
-    // val s: Key = Key('s');
-    // val t: Key = Key('t');
-    // val u: Key = Key('u');
-    // val v: Key = Key('v');
-    // val w: Key = Key('w');
-    // val x: Key = Key('x');
-    // val y: Key = Key('y');
-    // val z: Key = Key('z');
 
     // map key-pairs
 
@@ -102,7 +69,7 @@ fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
     // define key -> key-pair HM
     var keyPairs: HashMap<Key, KeyPair> = hashMapOf<Key, KeyPair>();
     
-    // top row
+    // map top row
     run {
         // top row: left half
         keyPairs.put(Key('q'), qp);
@@ -119,7 +86,7 @@ fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
         keyPairs.put(Key('y'), ty);
     }
 
-    // middle row
+    // map middle row
     run {
         // middle row: left half
         keyPairs.put(Key('a'), a_colon);
@@ -136,7 +103,7 @@ fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
         keyPairs.put(Key('h'), gh);
     }
 
-    // bottom row
+    // map bottom row
     run {
         // bottom row: left half
         keyPairs.put(Key('z'), z_f_slash);
@@ -155,10 +122,3 @@ fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
 
     return keyPairs;
 }
-
-// private fun 
-
-// fun getRandomUserCode() {
-
-// }
-

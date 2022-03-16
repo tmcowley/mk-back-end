@@ -4,13 +4,9 @@ data class KeyPair(val leftKey: Key, val rightKey: Key) {
 
     constructor(leftChar: Char, rightChar: Char) : this(Key(leftChar), Key(rightChar)) {}
 
-    // equals, hashCode, toString all defined
-
     fun getOtherKey(key: Key?): Key? {
 
-        if (key == null) {
-            return null
-        }
+        if (key == null) return null
 
         if (key.equals(this.leftKey)) {
             return this.rightKey
@@ -22,6 +18,8 @@ data class KeyPair(val leftKey: Key, val rightKey: Key) {
 
         return null
     }
+
+    // equals, hashCode, toString all defined
 
     override fun toString(): String {
         return ("(" + this.leftKey.toString() + ", " + this.rightKey.toString() + ")")

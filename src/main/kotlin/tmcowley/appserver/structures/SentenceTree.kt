@@ -1,131 +1,72 @@
-package tmcowley.appserver.structures;
+package tmcowley.appserver.structures
 
-import java.util.ArrayList;
-import java.util.Collections;
+class SentenceTree : PermutationTree<String>(Node("ε")) {
 
-class SentenceTree {
-    class Node (
-        val value: String
-    ) {
-        var parent: Node? = null;
-        var children: MutableList<Node> = mutableListOf();
+    fun getSentences(): MutableList<String> {
+        val paths: MutableList<MutableList<Node<String>>> = this.getPaths()
 
-        /** check if this node is a leaf (has no children) */
-        fun isLeaf(): Boolean {
-            return (this.children.isEmpty());
-        }
-    }
-
-    // root node
-    val root: Node = Node("*");
-
-    // leaf storing list
-    var leaves: MutableList<Node> = mutableListOf();
-
-    var sentences: MutableList<String> = mutableListOf();
-
-
-    fun insert(words: MutableList<String> ) {
-
-        val leaves: MutableList<Node> = findLeaves();
-
-        for (leaf: Node in leaves) {
-
-            for (word: String in words) {
-                // println("adding: " + word);
-                val childNode: Node = Node(word);
-                childNode.parent = leaf;
-                leaf.children.add(childNode);
-            }
+        // generate the sentence array
+        var sentences: MutableList<String> = mutableListOf()
+        paths.forEach { path ->
+            val sentence = path.map { node -> node.value }.joinToString(separator = " ")
+            sentences.add(sentence)
         }
 
-        // println("added each word to each leaf");
+        // remove non-unique sentences
+        sentences = sentences.distinct().toMutableList()
+
+        return sentences
     }
 
-    fun findLeaves(): MutableList<Node> {
-        leaves = mutableListOf();
+    // -----
 
-        traverse(this.root);
+    /** find the paths down the tree (traversing down from node) */
+    // private fun findPathsOld(node: Node<String>?) {
+    //     if (node == null) return
 
-        // leaves.forEach{ leaf -> println("leaf found: ${leaf.value.character}") }
+    //     // found leaf: traverse up to root
+    //     if (node.isLeaf()) {
 
-        return leaves;
-    }
+    //         // stores each word in the sentence (initially order reversed)
+    //         var wordArray: MutableList<String> = mutableListOf()
 
-    fun traverse(node: Node?) {
-        if (node == null) return
+    //         var currentNode: Node<String> = node
 
-        // node is not null
+    //         do {
+    //             // add word (node) to word array
+    //             val thisWord: String = currentNode.value
+    //             wordArray.add(thisWord)
 
-        if (node.isLeaf()) {
-            leaves.add(node);
-            return;
-        }
-        for (child: Node in node.children) {
-            traverse(child);
-        }
+    //             // traverse to the parent - as this is never root the parent is never null
+    //             currentNode = currentNode.getParent() ?: break
+    //         } while (currentNode != root)
 
-    }
+    //         // reverse word order since we've traversed up the tree (leaf -> root)
+    //         Collections.reverse(wordArray)
 
-    fun findWords(): MutableList<String> {
+    //         // form sentence String from array of words
+    //         var sb: StringBuilder = StringBuilder()
+    //         var first: Boolean = true
+    //         for (word in wordArray) {
+    //             if (first) {
+    //                 sb.append(word)
+    //                 first = false
+    //                 continue
+    //             }
+    //             sb.append(" ")
+    //             sb.append(word)
+    //         }
+    //         val sentence: String = sb.toString()
 
-        sentences = mutableListOf();
+    //         // ensure path (in results) is unique
+    //         if (paths.contains(sentence)) return
 
-        printPath(this.root);
+    //         // add unique sentence to resulting sentence list
+    //         paths.add(sentence)
+    //         return
+    //     }
 
-        return sentences;
-    }
-
-    fun printPath(node: Node?) {
-
-        if (node == null) return;
-
-        // found leaf: traverse up to root
-        if (node.isLeaf()) {
-
-            // stores each word in the sentence (initially order reversed)
-            var wordArray: MutableList<String> = mutableListOf();
-
-            var currentNode: Node = node;
-
-            do {
-                // add word (node) to word array
-                val thisWord: String = currentNode.value;
-                wordArray.add(thisWord);
-
-                currentNode = currentNode.parent!!;
-
-            } while (currentNode != root);
-
-            // reverse word order since we've traversed up the tree (leaf -> root)
-            Collections.reverse(wordArray);
-
-            // form sentence String from array of words
-            var sb: StringBuilder = StringBuilder();
-            var first: Boolean = true;
-            for (word: String in wordArray) {
-                if (first) {
-                    sb.append(word);
-                    first = false;
-                    continue;
-                }
-                sb.append(" ");
-                sb.append(word);
-            }
-            val sentence: String = sb.toString();
-
-            // ensure sentence is unique (in results)
-            if (sentences.contains(sentence)) {
-                return;
-            }
-
-            // add unique sentence to resulting sentence list
-            sentences.add(sentence);
-            return;
-        }
-
-        for (child: Node in node.children) {
-            printPath(child);
-        }
-    }
+    //     // run on each child
+    //     node.getChildren().forEach { child -> findPaths(child) }
+    // }
 }

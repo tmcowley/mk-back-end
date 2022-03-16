@@ -18,12 +18,11 @@ class Evaluation {
     val words = Singleton.wordSet.toMutableList()
 
     // word to word-matches lookup
-    val matchLookup: HashMap<String, MutableList<String>>
+    val matchLookup = HashMap<String, MutableList<String>>()
 
     init{
         // create word to word-matches hash-map
         println("Creating word to word-matches hash-map")
-        matchLookup = HashMap<String, MutableList<String>>()
         Singleton.wordSet.forEach {
             word -> matchLookup.put(word, getMatchedWords(word))
         }
@@ -96,5 +95,4 @@ class Evaluation {
             println("Non-matched phrase found: ${phrase}")
         }
     }
-
 }
