@@ -52,7 +52,6 @@ class Session_To_User(id: EntityID<Int>) : IntEntity(id) {
 
     var user_id by Sessions_To_Users.user_id
     var session_id by Sessions_To_Users.session_id
-
 }
 
 object Sessions: IntIdTable() {
@@ -68,11 +67,6 @@ class Session(id: EntityID<Int>) : IntEntity(id) {
     var speed by Sessions.speed
     var accuracy by Sessions.accuracy
 }
-
-// object Metrics: IntIdTable() {
-//     val speed = float("speed")
-//     val accuracy = float("accuracy")
-// }
 
 class DatabaseController {
 
@@ -92,159 +86,146 @@ class DatabaseController {
         // "jdbc:h2:~/test"
         val dbLocal = Database.connect(url = "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", driver = "org.h2.Driver")
 
-        transaction(db = dbLocal ) {
-            addLogger(StdOutSqlLogger)
+        transaction(db = dbLocal) {
+            // addLogger(StdOutSqlLogger)
 
             SchemaUtils.create(Users, Sessions, Sessions_To_Users)
-
-            addDummyData()
 
             commit()
         }
     }
 
-    fun addDummyData() {
-        val u1 = 
-        User.new {
-            uid = "test-test-test"
-            age = 21
-            speed = 60
-        }
-
-        val u1FirstSession = Session.new {
-            number = 1
-            speed = 60f
-            accuracy = 70f
-        }
-
-        Session_To_User.new {
-            user_id = u1.id
-            session_id = u1FirstSession.id
-        }
-
-        println("Users: ${User.all().joinToString{ user -> user.uid}}")
-        println("Sessions: ${Session.all().joinToString{ session -> session.speed.toString()}}")
-
-        val userCode = "test-test-test"
-        val failingUserCode = "fail-fail-fail"
-
-        println("Matches($userCode): ${userCodeTaken(userCode)}")
-        println("Matches(${failingUserCode}): ${userCodeTaken(failingUserCode)}")
-
-        println()
-        println("test adding users")
-        repeat(5) {
-            println(createNewUser(21, 60))
-        }
-    }
-
+    /** create a new user by age and typing speed */
     fun createNewUser(userAge: Int, typingSpeed: Int): String? {
 
-        var userCode: String?
-
+        // get a free user-code
+        var userCode: String
         do {
             userCode = Singleton.getRandomUserCode()
-        } while (userCodeTaken(userCode as String))
+        } while (userCodeTaken(userCode))
 
+        // create the new user
         transaction {
-            User.new { 
-                uid = userCode
-                age = userAge
-                speed = typingSpeed
-            }
-
+            User.new { uid = userCode; age = userAge; speed = typingSpeed }
             commit()
         }
 
         // verify user by code exists
         val userAdded = userCodeTaken(userCode)
-
         if (!userAdded){ 
             println("Error: User-creation failed")
             return null
         }
 
+        // create empty session (as session 0)
+        fun createSessionZero(): Boolean? {
+            return createNewSession(userCode, SessionData(number = 0, speed = 0f, accuracy = 0f))
+        }
+        val createdNewSession = createSessionZero() ?: return null
+        if (!createdNewSession) return null
+
         // return user code
         return userCode
     }
 
-    fun getNextSession(userCode: String): Int {
-        // get the last completed session number (0 if none completed)
-        val lastSessionNumb = getLastSessionNumber(userCode) ?: 0
+    /** get the next session number for a user (by user-code) */
+    fun getNextSessionNumber(userCode: String): Int? {
 
-        return (lastSessionNumb + 1)
+        // ensure the user code is taken
+        if (!userCodeTaken(userCode)) return null
+
+        // get userId of user
+        val userId = getUserId(userCode) ?: return null
+
+        return (getLastSessionNumber(userId) + 1)
     }
 
-    private fun getLastSessionNumber(userCode: String): Int? {
-        return getTopCompletedSession(userCode)?.number
+    /** 
+     * get the last session number completed by a user (by user-code)
+     * assumes the user by user-code exists 
+     */
+    private fun getLastSessionNumber(userId: Int): Int {
+        val topCompletedSession = getTopCompletedSession(userId)
+        return topCompletedSession.number
     }
 
-    private fun getTopCompletedSession(userCode: String): Session? {
+    /** 
+     * get the last session completed by a user (by user-id)
+     * assumes the user by user-code exists 
+     * 
+     * @return null indicates failure
+     */
+    @Throws(Exception::class)
+    private fun getTopCompletedSession(userId: Int): Session {
 
-        var topSession: Session? = null
-
-        transaction {
-            // get userId of user
-            val id = getUserId(userCode)
-
-            // get all sessions by user
-            // join users with sessions via sessions_to_users
+        // get the highest numbered session
+        var topSession: Session? = transaction {
+            // get all sessions by user; join users with sessions via sessions_to_users
             val sessionsQuery = Users.rightJoin(Sessions_To_Users).rightJoin(Sessions).select {
-                Users.id eq id
+
+                // TODO - this may need to be compared to an EntityId<Int> not just an int
+                Users.id eq userId
             }
-
             val sessions = Session.wrapRows(sessionsQuery).toMutableList()
-            sessions.sortBy{ session: Session -> session.number }
 
-            topSession = sessions.firstOrNull()
-
-            commit()
+            sessions.maxByOrNull { session: Session -> session.number }
         }
 
-        return topSession
+        return topSession ?: throw Exception("getTopCompletedSession() failed -> user addition failed to add session zero")
     }
 
+    /** get the user-id of a user by user-code */
     private fun getUserId(userCode: String): Int? {
-        var id: Int? = null
-        transaction {
-            // get userId of user
-            val user: User? = User.find{ Users.uid eq userCode }.firstOrNull()
-            id = user?.id?.value
-
-            commit()
-        }
-
-        return id
+        return getUserEntityId(userCode)?.value
     }
 
+    /** get the entity-id of a user by user-code */
+    private fun getUserEntityId(userCode: String): EntityID<Int>? {
+        var entityId: EntityID<Int>? = transaction {
+            User.find{ Users.uid eq userCode }.firstOrNull()?.id
+        }
+        return entityId
+    }
+
+    /** check if a user-code is taken */
     fun userCodeTaken(userCode: String): Boolean {
         return (!userCodeFree(userCode))
     }
 
+    /** check if a user-code is free */
     private fun userCodeFree(userCode: String): Boolean {
-        var isFree = true;
-        transaction {
-            // matches = User.find{ Users.uid eq userCode }.joinToString() { user -> user.uid } == ""
+        var isFree: Boolean = transaction { User.find{ Users.uid eq userCode }.empty() }
+        return isFree 
+    }
 
-            isFree = User.find{ Users.uid eq userCode }.empty()
+    /** add a completed session to the database under user by user-code */
+    fun storeCompletedSession(userCode: String, data: SessionData): Boolean? {
+        return createNewSession(userCode, data)
+    }
+
+    /** add a new session to the database under user by user-code */
+    private fun createNewSession(userCode: String, sessionData: SessionData): Boolean? {
+
+        // get userId of user
+        val userEntityId = getUserEntityId(userCode) ?: return null
+
+        transaction {
+            val session = Session.new {
+                number = sessionData.number
+                speed = sessionData.speed
+                accuracy = sessionData.accuracy
+            }
+
+            Session_To_User.new { 
+                user_id = userEntityId
+                session_id = session.id 
+            }
 
             commit()
         }
-        return isFree
-    }
 
-    /* TODO */
-    fun storeCompletedSession(userCode: String, data: SessionData): Boolean {
+        // TODO: validate session and session_to_user were added
 
-        // create session in database
-        // ...
-
-        // create session to user link
-        // ...
-
-        // check session is linked to user
-
-        // report success/ failure
-        return false;
+        return true
     }
 }

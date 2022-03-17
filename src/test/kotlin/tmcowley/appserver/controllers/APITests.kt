@@ -9,7 +9,7 @@ import tmcowley.appserver.Singleton
 
 @Disabled
 @SpringBootTest
-class APIsGetTest {
+class APIsGetTests {
 
     val apiInstance: APIsGet = APIsGet()
 

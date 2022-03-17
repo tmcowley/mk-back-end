@@ -63,14 +63,12 @@ class APIsPost {
 
         if (form.age < 13) return null
 
-        val userCode = SingletonControllers.db.createNewUser(form.age, form.speed)
-
-        userCode ?: return null
+        val userCode = SingletonControllers.db.createNewUser(form.age, form.speed) ?: return null
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
         session.setAttribute("userCode", userCode)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(userCode))
 
         // get a random phrase from the phrase list
         return userCode
@@ -87,24 +85,22 @@ class APIsPost {
             return false 
         }
 
-        println(form.userCode)
+        println("Notice: sign in attempt with user-code:${form.userCode}")
 
         // ensure the user exists
-        val validUser = userCodeTaken(form.userCode)
+        val validUser = userCodeTaken(form.userCode) ?: return false
         if (!validUser) return false
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
         session.setAttribute("userCode", form.userCode)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(form.userCode))
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(form.userCode))
 
         return true
     }
 
-    /**
-     * check if a user-code is assigned to a user
-     */
-    private fun userCodeTaken(userCode: String): Boolean {
+    /** check if a user-code is assigned to a user */
+    private fun userCodeTaken(userCode: String): Boolean? {
         println("validateUserCode() called with user-code: ${userCode}")
         return SingletonControllers.db.userCodeTaken(userCode)
     }
@@ -117,12 +113,11 @@ class APIsPost {
         session?.invalidate()
     }
 
+    /** check if a user is signed-in using their request */
     @PostMapping(value = arrayOf("/is-logged-in"))
     fun isLoggedIn(request: HttpServletRequest): Boolean {
         // get session
-        val session: HttpSession? = request.getSession(false)
-        if (session == null) return false
-
+        request.getSession(false) ?: return false
         return true
     }
 
@@ -131,16 +126,13 @@ class APIsPost {
     fun getNextPhrase(request: HttpServletRequest): String? {
 
         // get the user session
-        val session: HttpSession? = request.getSession(false)
-        if (session == null) return null
+        val session: HttpSession = request.getSession(false) ?: return null
 
         val sessionNumber = session.getAttribute("sessionNumber") as Int
-        val isFirstSession = (sessionNumber == 1)
 
         // if first session -> init phrase count
-        if (isFirstSession) {
-            session.setAttribute("phraseNumber", 1)
-        }
+        val isFirstSession = (sessionNumber == 1)
+        if (isFirstSession) session.setAttribute("phraseNumber", 1)
 
         // completed typing session
         val phraseNumber = session.getAttribute("phraseNumber") as Int
@@ -153,6 +145,7 @@ class APIsPost {
         // get next phrase from current session
         val nextPhrase = Singleton.getNextPhrase(sessionNumber, phraseNumber) ?: return null
 
+        // update phrase number
         session.setAttribute("phraseNumber", phraseNumber + 1)
 
         return nextPhrase
@@ -167,11 +160,7 @@ class APIsPost {
     /** get the user code attached to the session */
     @PostMapping(value = arrayOf("/get-user-code"))
     fun getUserCode(request: HttpServletRequest): String? {
-
-        // get the user session
-        val session: HttpSession? = request.getSession(false)
-        if (session == null) return null
-
+        val session: HttpSession = request.getSession(false) ?: return null
         return session.getAttribute("userCode") as String
     }
 
@@ -179,9 +168,7 @@ class APIsPost {
     @PostMapping(value = arrayOf("/report-completed-session"))
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
 
-        // get the user session
-        val session: HttpSession? = request.getSession(false)
-        if (session == null) return null
+        val session: HttpSession = request.getSession(false) ?: return null
         val userCode = session.getAttribute("userCode") as String
 
         // collect metrics
@@ -202,7 +189,7 @@ class APIsPost {
         SingletonControllers.db.storeCompletedSession(userCode, sessionData)
 
         // increment session number (if exists next session)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSession(userCode))
+        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(userCode))
 
         // report success
         return true
