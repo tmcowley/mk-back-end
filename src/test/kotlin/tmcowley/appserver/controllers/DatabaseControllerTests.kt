@@ -17,7 +17,7 @@ class DatabaseControllerTests {
     val db = DatabaseController()
 
     @Test
-    fun `test userCodeTaken` () {
+    fun `user-code taken` () {
         val nonMappingStrings = listOf( "", " ", "test", "test-test", "test-test-test" )
         nonMappingStrings.forEach { code -> assert(!(db.userCodeTaken(code))) }
     }
@@ -64,4 +64,20 @@ class DatabaseControllerTests {
             assert(Session_To_User.all().contains(session_to_user))
         }
     }
+
+    // TODO
+    @Test
+    fun `get top complteed session`() {}
+
+    // TODO
+    @Test
+    fun `get next session number`() {}
+
+    // TODO
+    @Test
+    fun `get user-id from user-code`() {}
+
+    // TODO
+    @Test
+    fun `create new session under user by user-code`() {}
 }

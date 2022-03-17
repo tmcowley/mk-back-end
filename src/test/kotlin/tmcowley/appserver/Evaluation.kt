@@ -14,8 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest
 class Evaluation {
 
     val getAPIs: APIsGet = APIsGet()
-    val phraseList: List<String> = Singleton.phraseList
-    val words = Singleton.wordSet.toMutableList()
+    val phrases: List<String> = Singleton.phrases
+    val words = Singleton.words.toMutableList()
 
     // word to word-matches lookup
     val matchLookup = HashMap<String, MutableList<String>>()
@@ -23,7 +23,7 @@ class Evaluation {
     init{
         // create word to word-matches hash-map
         println("Creating word to word-matches hash-map")
-        Singleton.wordSet.forEach {
+        Singleton.words.forEach {
             word -> matchLookup.put(word, getMatchedWords(word))
         }
     }
@@ -56,7 +56,7 @@ class Evaluation {
         val singleMatchingWords = words.count {
             word -> (matchLookup.get(word)?.size == 1)
         }
-        val proportionOfSingleMatchingWords = ((singleMatchingWords * 100) / Singleton.wordSet.size)
+        val proportionOfSingleMatchingWords = ((singleMatchingWords * 100) / words.size)
         println("Proportion of single-matching words: ${proportionOfSingleMatchingWords}%")
         println()
     }
@@ -66,17 +66,17 @@ class Evaluation {
 
         println("\nTesting: evaluation of algorithm accuracy started")
 
-        val phraseCount = phraseList.size
-        val matchedAsTop = phraseList.count {
+        val phraseCount = phrases.size
+        val matchedAsTop = phrases.count {
             phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) == 0)
         }
-        val matchedInTop3 = phraseList.count {
+        val matchedInTop3 = phrases.count {
             phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 3)
         }
-        val matchedInTop5 = phraseList.count {
+        val matchedInTop5 = phrases.count {
             phrase -> (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 5)
         }
-        val matched = phraseList.count {
+        val matched = phrases.count {
             phrase -> (getAPIs.submit(phrase).contains(phrase.lowercase()))
         }
 
@@ -88,7 +88,7 @@ class Evaluation {
         println("Matched: ${(matched * 100)/phraseCount}% [$matched/$phraseCount]")
         println()
 
-        val nonMatched = phraseList.filter {
+        val nonMatched = phrases.filter {
             phrase -> (!getAPIs.submit(phrase).contains(phrase.lowercase()))
         }
         nonMatched.forEach { phrase -> 

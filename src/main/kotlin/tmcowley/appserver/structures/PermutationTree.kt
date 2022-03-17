@@ -1,7 +1,5 @@
 package tmcowley.appserver.structures
 
-import java.util.Collections
-
 // generic tree
 abstract class PermutationTree<T>(val root: Node<T>) {
 

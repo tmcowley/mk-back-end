@@ -1,21 +1,16 @@
 package tmcowley.appserver
 
-import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
+import tmcowley.appserver.utils.LangTool
+import tmcowley.appserver.utils.getFrequencyScore
 import tmcowley.appserver.structures.getSentences
 import tmcowley.appserver.structures.getMatchedWords
-import tmcowley.appserver.utils.FreqTool
-import tmcowley.appserver.utils.LangTool
 
-import tmcowley.appserver.utils.getFrequencyScore
-
-enum class Form {
+private final enum class Form {
     LEFT,
     RIGHT
 }
-
-class Logic
 
 /** submit a sentence to turn an input phrase into an array of matched phrases */
 fun submitSentence(sentence: String): Array<String> {
@@ -27,16 +22,16 @@ fun submitSentence(sentence: String): Array<String> {
     // println("input: ${sentence}, output: ${resultingSentences.toString()}")
     if (resultingSentences.isEmpty()) System.out.println("Notice: no results found")
 
-    // syntax analysis enabled -> rank according to syntax correctness
-    if (Singleton.syntaxAnalysisEnabled) resultingSentences.sortWith(SentenceSyntaxComparator)
+    // syntax analysis enabled -> rank according to syntax correctness (lower better)
+    if (Singleton.syntaxAnalysisEnabled) resultingSentences.sortBy {
+        resultingSentence ->  Singleton.langTool.countErrors(resultingSentence)
+    }
 
-    // frequency analysis enabled -> rank according to frequency
-    if (Singleton.frequencyAnalysisEnabled) resultingSentences.sortBy{ 
+    // frequency analysis enabled -> rank according to frequency (higher better)
+    if (Singleton.frequencyAnalysisEnabled) resultingSentences.sortByDescending { 
         resultingSentence -> getFrequencyScore(resultingSentence) 
     }
 
-    // reverse results
-    resultingSentences.reverse()
     return resultingSentences.toTypedArray()
 }
 
@@ -145,45 +140,3 @@ private fun convertToForm(form: Form, input: String?): String {
 
     return inputForm
 }
-
-class SentenceSyntaxComparator {
-companion object : Comparator<String> {
-    val langtool: LangTool = Singleton.langTool
-    override fun compare(first: String, second: String): Int {
-
-        // calculate syntax correctness scores
-        val firstScore: Int = langtool.countErrors(first)
-        val secondScore: Int = langtool.countErrors(second)
-
-        // println("{${first}} has syntax correctness score: ${firstScore}")
-        // println("{${second}} has syntax correctness score: ${secondScore}")
-
-        when {
-            // lower score is better
-            firstScore != secondScore -> return (secondScore - firstScore)
-            else -> return (0)
-        }
-    }
-}
-}
-
-// class SentenceFrequencyComparator {
-// companion object : Comparator<String> {
-//     val freqTool: FreqTool = Singleton.freqTool
-//     override fun compare(first: String, second: String): Int {
-
-//         // calculate syntax correctness scores
-//         val firstScore: Int = getFrequencyScore(first)
-//         val secondScore: Int = getFrequencyScore(second)
-
-//         // println("{${first}} has frequency: ${firstScore}")
-//         // println("{${second}} has frequency: ${secondScore}")
-
-//         when {
-//             // higher score is better
-//             firstScore != secondScore -> return (firstScore - secondScore)
-//             else -> return (0)
-//         }
-//     }
-// }
-// }

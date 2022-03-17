@@ -5,7 +5,7 @@ import org.languagetool.language.BritishEnglish
 import org.languagetool.rules.RuleMatch
 import org.springframework.cache.annotation.Cacheable
 
-class LangTool {
+final class LangTool {
 
     val langTool: JLanguageTool = JLanguageTool(BritishEnglish())
 

@@ -1,7 +1,7 @@
 package tmcowley.appserver.structures
 
 /** generic, varadic node */
-class Node<V>(val value: V) {
+final class Node<V>(val value: V) {
     private var parent: Node<V>? = null
     private var children: MutableList<Node<V>> = mutableListOf()
 
@@ -40,6 +40,8 @@ class Node<V>(val value: V) {
         return this.parent
     }
 
+    // componentN() for supporting destructuring 
+    
     operator fun component1(): V {
         return this.value
     }

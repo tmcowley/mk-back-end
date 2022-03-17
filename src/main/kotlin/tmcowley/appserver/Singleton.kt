@@ -7,40 +7,40 @@ import kotlin.random.Random
 import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.structures.getKeyPairHashMap
-import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
 import tmcowley.appserver.utils.parseFiveGrams
-import tmcowley.appserver.utils.parsePhraseList
+import tmcowley.appserver.utils.parsePhrases
 import tmcowley.appserver.utils.parseWordFrequencies
-import tmcowley.appserver.utils.parseWordList
+import tmcowley.appserver.utils.parseWords
 
-object Singleton {
+final object Singleton {
 
-    var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
+    // word and phrase lists
 
-    var wordSet: HashSet<String> = parseWordList()
+    var words: HashSet<String> = parseWords()
+    val phrases: List<String> = parsePhrases()
+    var fiveGrams = parseFiveGrams()
 
-    val wordFreqLookup: HashMap<String, Int> = parseWordFrequencies()
-
-    val maxLengthInDictionary: Int = wordSet.maxOfOrNull { word -> word.length } ?: 0
-
-    val langTool: LangTool = LangTool()
-
-    val freqTool: FreqTool = FreqTool()
+    // properties and constants
 
     private val propertiesFile = File("src/main/resources/application.properties")
     val prop = Properties()
 
     val syntaxAnalysisEnabled: Boolean
     val frequencyAnalysisEnabled: Boolean
-
-    val phraseList: List<String> = parsePhraseList()
-
-    val phraseListLength = phraseList.size
-
-    var fiveGrams = parseFiveGrams()
-
     val phrasesPerSession = 8
+    val maxWord = words.maxByOrNull { word -> word.length }
+
+    // maps
+
+    var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
+    val wordFreqLookup: HashMap<String, Int> = parseWordFrequencies()
+
+
+    // tools/ util-classes
+
+    val langTool: LangTool = LangTool()
+
 
     init {
         println("Singleton initiated")
@@ -48,6 +48,7 @@ object Singleton {
         // set prop using application.properties
         FileInputStream(propertiesFile).use { inStream -> prop.load(inStream) }
 
+        // set constants from system properties
         syntaxAnalysisEnabled = (this.prop.get("analyseSyntax") as String).toBoolean()
         frequencyAnalysisEnabled = (this.prop.get("analyseFrequency") as String).toBoolean()
     }
@@ -60,7 +61,7 @@ object Singleton {
 
         fun getRandomList(random: Random): List<Int> {
             return List(Singleton.phrasesPerSession) {
-                random.nextInt(0, Singleton.phraseListLength - 1)
+                random.nextInt(0, Singleton.phrases.size - 1)
             }
         }
 
@@ -71,7 +72,7 @@ object Singleton {
         val sessionPhraseIndexes = getRandomList(Random(seed))
         val phraseIndex = sessionPhraseIndexes.get(phraseNumber + 1)
 
-        return Singleton.phraseList.get(phraseIndex)
+        return Singleton.phrases.get(phraseIndex)
     }
 
     /** get the key-pair stored against a key */
@@ -81,12 +82,12 @@ object Singleton {
 
     /** check if a word exists in the word-set */
     fun wordExists(word: String): Boolean {
-        return wordSet.contains(word)
+        return words.contains(word)
     }
 
     /** get a random phrase */
     fun getRandomPhrase(): String {
-        return phraseList.random()
+        return phrases.random()
     }
 
     /** get a random five-length word */

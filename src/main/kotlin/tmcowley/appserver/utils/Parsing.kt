@@ -4,7 +4,7 @@ import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import java.io.File
 
 /** create a List containing phrases */
-fun parsePhraseList(): List<String> {
+fun parsePhrases(): List<String> {
     val path = "./resources/phrase-list.txt"
 
     var phraseSet = mutableListOf<String>()
@@ -44,7 +44,7 @@ fun parseWordFrequencies(): HashMap<String, Int> {
 /**
  * create a hashset of words from our dictionary (word-list.txt) and phrase list (phrase-list.txt)
  */
-fun parseWordList(): HashSet<String> {
+fun parseWords(): HashSet<String> {
 
     val path = "./resources/word-list.txt"
 
@@ -62,7 +62,7 @@ fun parseWordList(): HashSet<String> {
 
     // add words from phrase list
     run {
-        val phraseList: List<String> = parsePhraseList()
+        val phraseList: List<String> = parsePhrases()
         for (phrase: String in phraseList) {
             for (word: String in phrase.split(" ")) {
                 allWords.add(word.lowercase())

@@ -20,17 +20,15 @@ class APIsGetTests {
     @Disabled
 	@Test
     /** for general debugging */
-	fun `for debugging`(){
-        println(Singleton.maxLengthInDictionary)
-    }
+	fun `for debugging`() {}
 
     // -----
 
     @Test
-	fun `loads`(){}
+	fun `loads`() {}
 
     @Test
-    fun `submission`(){
+    fun `submission`() {
         val phrase = "this is a test"
         val matches = listOf( "tges es a test", "this is a test" )
         val results = apiInstance.submit(phrase)
@@ -41,13 +39,13 @@ class APIsGetTests {
     }
 
     @Test
-    fun `conversions`(){
+    fun `conversions`() {
         assertEquals(phraseLHS, apiInstance.convertToLHS(phrase))
         assertEquals(phraseRHS, apiInstance.convertToRHS(phrase))
     }
 
     @Test
-    fun `get random phrase`(){
+    fun `get random phrase`() {
         assert(!apiInstance.getRandomPhrase().isEmpty())
     }
 }

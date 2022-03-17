@@ -4,8 +4,6 @@ import tmcowley.appserver.Singleton
 
 import org.springframework.cache.annotation.Cacheable
 
-class FreqTool 
-
 @Cacheable
 fun getFrequencyScore(sentence: String): Int {
 

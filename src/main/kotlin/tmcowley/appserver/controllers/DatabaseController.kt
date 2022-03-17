@@ -8,7 +8,6 @@ import tmcowley.appserver.objects.Key
 import tmcowley.appserver.objects.KeyPair
 import tmcowley.appserver.objects.SessionData
 
-import tmcowley.appserver.utils.FreqTool
 import tmcowley.appserver.utils.LangTool
 
 
@@ -227,5 +226,27 @@ class DatabaseController {
         // TODO: validate session and session_to_user were added
 
         return true
+    }
+
+    /** get all sessions of a user by user-code */
+    fun getAllSessions(userCode: String): MutableList<Session>? {
+
+        // ensure the user code is taken
+        if (!userCodeTaken(userCode)) return null
+
+        // get user entity-id
+        val userEntityId = getUserEntityId(userCode) ?: return null
+
+        // get all sessions by userId
+        return getAllSessions(userEntityId)
+    }
+
+    // TODO
+    /** get all sessions of a user by user-entity-id */
+    fun getAllSessions(userEntityId: EntityID<Int>): MutableList<Session>? {
+
+        // ...
+
+        return mutableListOf()
     }
 }

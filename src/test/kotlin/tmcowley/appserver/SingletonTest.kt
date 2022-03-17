@@ -22,12 +22,12 @@ class SingletonTest {
 
 	@Test
 	fun `find longest phrase length`() {
-		val longestPhrase = Singleton.phraseList.maxByOrNull { phrase -> phrase.length } ?: ""
+		val longestPhrase = Singleton.phrases.maxByOrNull { phrase -> phrase.length } ?: ""
 		println("\nLongest phrase length: ${longestPhrase.length}\n")
 	}
 
 	@Test
 	fun `get longest word in word list`() {
-		println("\nLongest word length: ${Singleton.maxLengthInDictionary}\n")
+		println("\nLongest word length: ${Singleton.maxWord?.length}\n")
 	}
 }
