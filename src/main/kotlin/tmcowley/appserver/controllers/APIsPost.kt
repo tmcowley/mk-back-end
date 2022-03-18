@@ -63,7 +63,7 @@ class APIsPost {
 
         if (form.age < 13) return null
 
-        val userCode = SingletonControllers.db.createNewUser(form.age, form.speed) ?: return null
+        val userCode = SingletonControllers.db.createNewUserGettingCode(form.age, form.speed) ?: return null
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
@@ -179,11 +179,8 @@ class APIsPost {
             return false 
         }
 
-        // get training session number from session
-        val sessionNumber = session.getAttribute("sessionNumber") as Int
-
         // store metrics in session obj
-        var sessionData = SessionData(sessionNumber, metrics.speed, metrics.accuracy)
+        var sessionData = SessionData(metrics.speed, metrics.accuracy)
 
         // store completed session in database
         SingletonControllers.db.storeCompletedSession(userCode, sessionData)

@@ -94,8 +94,20 @@ class DatabaseController {
         }
     }
 
+    /** create a new user by age and typing speed, returning user-id */
+    fun createNewUserGettingId(userAge: Int, typingSpeed: Int): Int? {
+        val user = createNewUser(userAge, typingSpeed) ?: return null
+        return user.id.value
+    }
+
+    /** create a new user by age and typing speed, returning user-code */
+    fun createNewUserGettingCode(userAge: Int, typingSpeed: Int): String? {
+        val user = createNewUser(userAge, typingSpeed) ?: return null
+        return user.uid
+    } 
+
     /** create a new user by age and typing speed */
-    fun createNewUser(userAge: Int, typingSpeed: Int): String? {
+    fun createNewUser(userAge: Int, typingSpeed: Int): User? {
 
         // get a free user-code
         var userCode: String
@@ -104,9 +116,8 @@ class DatabaseController {
         } while (userCodeTaken(userCode))
 
         // create the new user
-        transaction {
+        val user = transaction {
             User.new { uid = userCode; age = userAge; speed = typingSpeed }
-            commit()
         }
 
         // verify user by code exists
@@ -117,14 +128,11 @@ class DatabaseController {
         }
 
         // create empty session (as session 0)
-        fun createSessionZero(): Boolean? {
-            return createNewSession(userCode, SessionData(number = 0, speed = 0f, accuracy = 0f))
-        }
-        val createdNewSession = createSessionZero() ?: return null
+        val createdNewSession = createSessionZero(userCode) ?: return null
         if (!createdNewSession) return null
 
-        // return user code
-        return userCode
+        // return full user object
+        return user
     }
 
     /** get the next session number for a user (by user-code) */
@@ -151,30 +159,21 @@ class DatabaseController {
     /** 
      * get the last session completed by a user (by user-id)
      * assumes the user by user-code exists 
-     * 
-     * @return null indicates failure
      */
     @Throws(Exception::class)
     private fun getTopCompletedSession(userId: Int): Session {
 
         // get the highest numbered session
-        var topSession: Session? = transaction {
-            // get all sessions by user; join users with sessions via sessions_to_users
-            val sessionsQuery = Users.rightJoin(Sessions_To_Users).rightJoin(Sessions).select {
+        var topSession: Session? = getAllSessions(userId)?.maxByOrNull { session -> session.number }
 
-                // TODO - this may need to be compared to an EntityId<Int> not just an int
-                Users.id eq userId
-            }
-            val sessions = Session.wrapRows(sessionsQuery).toMutableList()
+        // null top session indicates error
+        topSession ?: throw Exception("getTopCompletedSession() failed -> user addition failed to add session zero")
 
-            sessions.maxByOrNull { session: Session -> session.number }
-        }
-
-        return topSession ?: throw Exception("getTopCompletedSession() failed -> user addition failed to add session zero")
+        return topSession
     }
 
     /** get the user-id of a user by user-code */
-    private fun getUserId(userCode: String): Int? {
+    fun getUserId(userCode: String): Int? {
         return getUserEntityId(userCode)?.value
     }
 
@@ -197,20 +196,27 @@ class DatabaseController {
         return isFree 
     }
 
-    /** add a completed session to the database under user by user-code */
-    fun storeCompletedSession(userCode: String, data: SessionData): Boolean? {
-        return createNewSession(userCode, data)
+    /** 
+     * add a completed session to the database under user by user-code
+     * stores it as the next available session number
+     */
+    fun storeCompletedSession(userCode: String, data: SessionData): Boolean {
+
+        // get next session number to be completed
+        val sessionNumber = getNextSessionNumber(userCode) ?: return false
+
+        return createNewSession(userCode, sessionNumber, data)
     }
 
     /** add a new session to the database under user by user-code */
-    private fun createNewSession(userCode: String, sessionData: SessionData): Boolean? {
+    private fun createNewSession(userCode: String, sessionNumber: Int, sessionData: SessionData): Boolean {
 
         // get userId of user
-        val userEntityId = getUserEntityId(userCode) ?: return null
+        val userEntityId = getUserEntityId(userCode) ?: return false
 
         transaction {
             val session = Session.new {
-                number = sessionData.number
+                number = sessionNumber
                 speed = sessionData.speed
                 accuracy = sessionData.accuracy
             }
@@ -228,6 +234,10 @@ class DatabaseController {
         return true
     }
 
+    fun createSessionZero(userCode: String): Boolean? {
+        return createNewSession(userCode, sessionNumber=0, SessionData(speed = 0f, accuracy = 0f))
+    }
+
     /** get all sessions of a user by user-code */
     fun getAllSessions(userCode: String): MutableList<Session>? {
 
@@ -235,18 +245,27 @@ class DatabaseController {
         if (!userCodeTaken(userCode)) return null
 
         // get user entity-id
-        val userEntityId = getUserEntityId(userCode) ?: return null
+        val userId = getUserId(userCode) ?: return null
 
         // get all sessions by userId
-        return getAllSessions(userEntityId)
+        return getAllSessions(userId)
     }
 
-    // TODO
-    /** get all sessions of a user by user-entity-id */
-    fun getAllSessions(userEntityId: EntityID<Int>): MutableList<Session>? {
+    /** 
+     * get all sessions of a user by user-entity-id; 
+     * join users with sessions via sessions_to_users 
+     */
+    fun getAllSessions(userId: Int): MutableList<Session>? {
 
-        // ...
+        // get all sessions of a user, by joins
+        var sessions: MutableList<Session> = transaction {
+            // get all sessions by user; join users with sessions via sessions_to_users
+            val sessionsQuery = Users.rightJoin(Sessions_To_Users).rightJoin(Sessions).select {
+                Users.id eq userId
+            }
+            Session.wrapRows(sessionsQuery).toMutableList()
+        }
 
-        return mutableListOf()
+        return sessions
     }
 }
