@@ -36,6 +36,9 @@ import kotlinx.serialization.SerializationException
                 ),
         methods = arrayOf(RequestMethod.POST), 
 
+        // TODO filter down from wildcard to allowCredentials
+        allowedHeaders = arrayOf("*"), 
+
         // allow client cookies
         // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
         allowCredentials = "true"
