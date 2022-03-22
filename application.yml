@@ -13,3 +13,10 @@
 #     username: "tom"
 #     password: "unknown"
 #     url-full: "postgresql://${address}/test?user=other&password=secret"
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: "none"
+        secure: true

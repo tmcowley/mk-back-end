@@ -37,6 +37,7 @@ import kotlinx.serialization.SerializationException
         methods = arrayOf(RequestMethod.POST), 
 
         // TODO filter down from wildcard to allowCredentials
+        // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
         allowedHeaders = arrayOf("*"), 
 
         // allow client cookies
