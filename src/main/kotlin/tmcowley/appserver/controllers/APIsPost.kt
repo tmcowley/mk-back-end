@@ -34,7 +34,11 @@ import kotlinx.serialization.SerializationException
                         "https://tcowley.com/",
                         "https://mirrored-keyboard.vercel.app/"
                 ),
-        methods = arrayOf(RequestMethod.POST)
+        methods = arrayOf(RequestMethod.POST), 
+
+        // allow client cookies
+        // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+        allowCredentials = "true"
 )
 @RequestMapping(value = arrayOf("/api/v0"), consumes = arrayOf("application/json"), produces = arrayOf("application/json"))
 @RestController
@@ -101,7 +105,7 @@ class APIsPost {
 
     /** check if a user-code is assigned to a user */
     private fun userCodeTaken(userCode: String): Boolean? {
-        println("validateUserCode() called with user-code: ${userCode}")
+        // println("userCodeTaken() called with user-code: ${userCode}")
         return SingletonControllers.db.userCodeTaken(userCode)
     }
 
