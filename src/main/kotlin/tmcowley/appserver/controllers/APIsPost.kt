@@ -28,6 +28,7 @@ import kotlinx.serialization.SerializationException
                 arrayOf(
                         // for local development
                         "http://localhost:3000",
+                        "https://localhost:3000",
 
                         // for hosting
                         "https://www.tcowley.com/",
@@ -39,6 +40,9 @@ import kotlinx.serialization.SerializationException
         // TODO filter down from wildcard to allowCredentials
         // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
         allowedHeaders = arrayOf("*"), 
+
+        exposedHeaders = arrayOf("*"),
+        // exposedHeaders = arrayOf("set-cookie"),
 
         // allow client cookies
         // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
@@ -116,9 +120,13 @@ class APIsPost {
     /** signout a user; invalidates the user session */
     @PostMapping(value = arrayOf("/sign-out"))
     fun signout(request: HttpServletRequest) {
+
+        // ensure user is logged in
+        if (!isLoggedIn(request)) return
+
         // get session, invalidate
-        val session: HttpSession? = request.getSession(false)
-        session?.invalidate()
+        val session = request.getSession(false)
+        session.invalidate()
     }
 
     /** check if a user is signed-in using their request */
@@ -133,9 +141,11 @@ class APIsPost {
     @PostMapping(value = arrayOf("/get-next-phrase"))
     fun getNextPhrase(request: HttpServletRequest): String? {
 
-        // get the user session
-        val session: HttpSession = request.getSession(false) ?: return null
+        // ensure user is logged in
+        if (!isLoggedIn(request)) return null
 
+        // get the user session, session number
+        val session: HttpSession = request.getSession(false)
         val sessionNumber = session.getAttribute("sessionNumber") as Int
 
         // if first session -> init phrase count
@@ -168,7 +178,11 @@ class APIsPost {
     /** get the user code attached to the session */
     @PostMapping(value = arrayOf("/get-user-code"))
     fun getUserCode(request: HttpServletRequest): String? {
-        val session: HttpSession = request.getSession(false) ?: return null
+
+        // ensure user is logged in
+        if (!isLoggedIn(request)) return null
+
+        val session: HttpSession = request.getSession(false)
         return session.getAttribute("userCode") as String
     }
 
@@ -176,7 +190,10 @@ class APIsPost {
     @PostMapping(value = arrayOf("/report-completed-session"))
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
 
-        val session: HttpSession = request.getSession(false) ?: return null
+        // ensure user is logged in
+        if (!isLoggedIn(request)) return null
+
+        val session: HttpSession = request.getSession(false)
         val userCode = session.getAttribute("userCode") as String
 
         // collect metrics
