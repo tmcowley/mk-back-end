@@ -29,7 +29,7 @@ lsof -i -P -n | grep LISTEN; # list open ports
 ```
 
 ```
-curl -d "asdfasdfasdfa" -X POST http://localhost:8080/test
+curl -d "test" -X POST http://localhost:8080/test
 ```
 
 ## launching post requests with Postman
