@@ -160,14 +160,14 @@ class DatabaseController {
      * get the last session completed by a user (by user-id)
      * assumes the user by user-code exists 
      */
-    @Throws(Exception::class)
+    @Throws(RuntimeException::class)
     private fun getTopCompletedSession(userId: Int): Session {
 
         // get the highest numbered session
         var topSession: Session? = getAllSessions(userId)?.maxByOrNull { session -> session.number }
 
         // null top session indicates error
-        topSession ?: throw Exception("getTopCompletedSession() failed -> user addition failed to add session zero")
+        topSession ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
 
         return topSession
     }

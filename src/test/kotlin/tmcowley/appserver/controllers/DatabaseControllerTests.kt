@@ -8,8 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest
 
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import java.lang.Exception
-
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.objects.SessionData
 

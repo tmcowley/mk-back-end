@@ -17,12 +17,12 @@ The core logic underpinning our sentence processing can be found in `./src/main/
 
 To test: <br />
 ```
-./mvnw clean test
+./mvnw clean install test
 ```
 
 To run: <br />
 ```
-./mvnw clean package exec:exec
+./mvnw clean install package exec:exec
 ```
 
 ## Technical Configuration 
