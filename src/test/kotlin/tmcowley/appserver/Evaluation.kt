@@ -6,7 +6,6 @@ import tmcowley.appserver.getMatchedWords
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Disabled
-// import org.junit.jupiter.api.Assertions
 import org.springframework.boot.test.context.SpringBootTest
 
 @Disabled
@@ -88,11 +87,12 @@ class Evaluation {
         println("Matched: ${(matched * 100)/phraseCount}% [$matched/$phraseCount]")
         println()
 
-        val nonMatched = phrases.filter {
-            phrase -> (!getAPIs.submit(phrase).contains(phrase.lowercase()))
-        }
-        nonMatched.forEach { phrase -> 
-            println("Non-matched phrase found: ${phrase}")
-        }
+        val nonMatched = phrases
+            .filter {
+                phrase -> (!getAPIs.submit(phrase).contains(phrase.lowercase()))
+            }
+            .forEach { 
+                phrase -> println("Non-matched phrase found: ${phrase}")
+            }
     }
 }

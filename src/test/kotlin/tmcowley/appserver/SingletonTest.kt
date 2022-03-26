@@ -14,9 +14,10 @@ class SingletonTest {
 
 	@Test
 	fun `user code generation`() {
+		// given, when
 		val userCode = Singleton.getRandomUserCode()
-		// println(userCode)
 
+		// then
 		assert(!userCode.isEmpty())
 	}
 
