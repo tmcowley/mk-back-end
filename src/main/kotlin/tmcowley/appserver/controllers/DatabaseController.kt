@@ -3,29 +3,19 @@ package tmcowley.appserver.controllers
 // using:
 // https://github.com/JetBrains/Exposed
 
-import tmcowley.appserver.Singleton
-import tmcowley.appserver.objects.Key
-import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.objects.SessionData
-
-import tmcowley.appserver.utils.LangTool
-
-
-import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.beans.factory.annotation.Value;
-
-import org.jetbrains.exposed.*
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
-
 // for DAO (Data Access Object) model
-import org.jetbrains.exposed.dao.*
-import org.jetbrains.exposed.dao.id.*
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.transactions.transaction
+import tmcowley.appserver.Singleton
+import tmcowley.appserver.models.SessionData
 
-object Users: IntIdTable() {
+object Users : IntIdTable() {
     val uid = varchar("uid", 120).uniqueIndex()
     val speed = integer("speed")
     val age = integer("age")
@@ -34,27 +24,29 @@ object Users: IntIdTable() {
 
 class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
+
     var uid by Users.uid
     var speed by Users.speed
     var age by Users.age
 }
 
-object Sessions_To_Users: IntIdTable() {
+object SessionsToUsers : IntIdTable() {
     val user_id = reference("user_id", Users)
     val session_id = reference("session_id", Sessions)
 
     // override val primaryKey = PrimaryKey(user, session)
 }
 
-class Session_To_User(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<Session_To_User>(Sessions_To_Users)
+class SessionToUser(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<SessionToUser>(SessionsToUsers)
 
-    var user_id by Sessions_To_Users.user_id
-    var session_id by Sessions_To_Users.session_id
+    var userId by SessionsToUsers.user_id
+    var sessionId by SessionsToUsers.session_id
 }
 
-object Sessions: IntIdTable() {
+object Sessions : IntIdTable() {
     val number = integer("number")
+
     // val metrics = reference("metrics", Metrics)
     val speed = float("speed")
     val accuracy = float("accuracy")
@@ -62,6 +54,7 @@ object Sessions: IntIdTable() {
 
 class Session(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<Session>(Sessions)
+
     var number by Sessions.number
     var speed by Sessions.speed
     var accuracy by Sessions.accuracy
@@ -88,7 +81,7 @@ class DatabaseController {
         transaction(db = dbLocal) {
             // addLogger(StdOutSqlLogger)
 
-            SchemaUtils.create(Users, Sessions, Sessions_To_Users)
+            SchemaUtils.create(Users, Sessions, SessionsToUsers)
 
             commit()
         }
@@ -104,7 +97,7 @@ class DatabaseController {
     fun createNewUserGettingCode(userAge: Int, typingSpeed: Int): String? {
         val user = createNewUser(userAge, typingSpeed) ?: return null
         return user.uid
-    } 
+    }
 
     /** create a new user by age and typing speed */
     fun createNewUser(userAge: Int, typingSpeed: Int): User? {
@@ -122,13 +115,13 @@ class DatabaseController {
 
         // verify user by code exists
         val userAdded = userCodeTaken(userCode)
-        if (!userAdded){ 
+        if (!userAdded) {
             println("Error: User-creation failed")
             return null
         }
 
         // create empty session (as session 0)
-        val createdNewSession = createSessionZero(userCode) ?: return null
+        val createdNewSession = createSessionZero(userCode)
         if (!createdNewSession) return null
 
         // return full user object
@@ -147,27 +140,28 @@ class DatabaseController {
         return (getLastSessionNumber(userId) + 1)
     }
 
-    /** 
+    /**
      * get the last session number completed by a user (by user-code)
-     * assumes the user by user-code exists 
+     * assumes the user by user-code exists
      */
     private fun getLastSessionNumber(userId: Int): Int {
         val topCompletedSession = getTopCompletedSession(userId)
         return topCompletedSession.number
     }
 
-    /** 
+    /**
      * get the last session completed by a user (by user-id)
-     * assumes the user by user-code exists 
+     * assumes the user by user-code exists
      */
     @Throws(RuntimeException::class)
     private fun getTopCompletedSession(userId: Int): Session {
 
         // get the highest numbered session
-        var topSession: Session? = getAllSessions(userId)?.maxByOrNull { session -> session.number }
+        val topSession: Session? = getAllSessions(userId).maxByOrNull { session -> session.number }
 
         // null top session indicates error
-        topSession ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
+        topSession
+            ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
 
         return topSession
     }
@@ -179,8 +173,8 @@ class DatabaseController {
 
     /** get the entity-id of a user by user-code */
     private fun getUserEntityId(userCode: String): EntityID<Int>? {
-        var entityId: EntityID<Int>? = transaction {
-            User.find{ Users.uid eq userCode }.firstOrNull()?.id
+        val entityId: EntityID<Int>? = transaction {
+            User.find { Users.uid eq userCode }.firstOrNull()?.id
         }
         return entityId
     }
@@ -192,11 +186,11 @@ class DatabaseController {
 
     /** check if a user-code is free */
     private fun userCodeFree(userCode: String): Boolean {
-        var isFree: Boolean = transaction { User.find{ Users.uid eq userCode }.empty() }
-        return isFree 
+        val isFree: Boolean = transaction { User.find { Users.uid eq userCode }.empty() }
+        return isFree
     }
 
-    /** 
+    /**
      * add a completed session to the database under user by user-code
      * stores it as the next available session number
      */
@@ -221,9 +215,9 @@ class DatabaseController {
                 accuracy = sessionData.accuracy
             }
 
-            Session_To_User.new { 
-                user_id = userEntityId
-                session_id = session.id 
+            SessionToUser.new {
+                userId = userEntityId
+                sessionId = session.id
             }
 
             commit()
@@ -234,8 +228,8 @@ class DatabaseController {
         return true
     }
 
-    fun createSessionZero(userCode: String): Boolean? {
-        return createNewSession(userCode, sessionNumber=0, SessionData(speed = 0f, accuracy = 0f))
+    private fun createSessionZero(userCode: String): Boolean {
+        return createNewSession(userCode, sessionNumber = 0, SessionData(speed = 0f, accuracy = 0f))
     }
 
     /** get all sessions of a user by user-code */
@@ -251,16 +245,16 @@ class DatabaseController {
         return getAllSessions(userId)
     }
 
-    /** 
-     * get all sessions of a user by user-entity-id; 
-     * join users with sessions via sessions_to_users 
+    /**
+     * get all sessions of a user by user-entity-id;
+     * join users with sessions via sessions_to_users
      */
-    fun getAllSessions(userId: Int): MutableList<Session>? {
+    fun getAllSessions(userId: Int): MutableList<Session> {
 
         // get all sessions of a user, by joins
-        var sessions: MutableList<Session> = transaction {
+        val sessions: MutableList<Session> = transaction {
             // get all sessions by user; join users with sessions via sessions_to_users
-            val sessionsQuery = Users.rightJoin(Sessions_To_Users).rightJoin(Sessions).select {
+            val sessionsQuery = Users.rightJoin(SessionsToUsers).rightJoin(Sessions).select {
                 Users.id eq userId
             }
             Session.wrapRows(sessionsQuery).toMutableList()

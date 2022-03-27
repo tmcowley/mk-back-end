@@ -7,13 +7,13 @@ import java.io.File
 fun parsePhrases(): List<String> {
     val path = "./resources/phrase-list.txt"
 
-    var phraseSet = mutableListOf<String>()
+    val phraseSet = mutableListOf<String>()
 
     try {
         File(path).forEachLine { phrase -> phraseSet.add(phrase) }
     } catch (e: java.io.FileNotFoundException) {
         // handler
-        println("Error: file: ${path} not found.")
+        println("Error: file: $path not found.")
     }
 
     return phraseSet
@@ -23,19 +23,19 @@ fun parsePhrases(): List<String> {
 fun parseWordFrequencies(): HashMap<String, Int> {
     val path = "./resources/word-frequencies.csv"
 
-    var wordFreqLookup = HashMap<String, Int>()
+    val wordFreqLookup = HashMap<String, Int>()
 
     // parse frequency csv
     try {
         csvReader().open(path) {
             readAllWithHeaderAsSequence().forEach { row: Map<String, String> ->
                 // add word and frequency to lookup
-                wordFreqLookup.put(row.get("Word")!!.lowercase(), row.get("FREQcount")!!.toInt())
+                wordFreqLookup[row["Word"]!!.lowercase()] = row["FREQcount"]!!.toInt()
             }
         }
     } catch (e: java.io.FileNotFoundException) {
         // handler
-        println("Error: file: ${path} not found.")
+        println("Error: file: $path not found.")
     }
 
     return wordFreqLookup
@@ -48,7 +48,7 @@ fun parseWords(): HashSet<String> {
 
     val path = "./resources/word-list.txt"
 
-    var allWords = hashSetOf<String>()
+    val allWords = hashSetOf<String>()
 
     // add words from words.txt
     run {
@@ -56,7 +56,7 @@ fun parseWords(): HashSet<String> {
             File(path).forEachLine { word -> allWords.add(word.lowercase()) }
         } catch (e: java.io.FileNotFoundException) {
             // handler
-            println("Error: file: ${path} not found.")
+            println("Error: file: $path not found.")
         }
     }
 
@@ -77,13 +77,13 @@ fun parseWords(): HashSet<String> {
 fun parseFiveGrams(): List<String> {
     val path = "./resources/word-list-5-grams.txt"
 
-    var fiveGrams = mutableListOf<String>()
+    val fiveGrams = mutableListOf<String>()
 
     try {
         File(path).forEachLine { fiveGram -> fiveGrams.add(fiveGram.lowercase()) }
     } catch (e: java.io.FileNotFoundException) {
         // handler
-        println("Error: file: ${path} not found.")
+        println("Error: file: $path not found.")
     }
 
     return fiveGrams

@@ -1,15 +1,17 @@
 package tmcowley.appserver.controllers
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Disabled
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+
+import org.assertj.core.api.Assertions.assertThat
+
+// for assertions with smart-casts (nullability inferred)
+import kotlin.test.assertNotNull
+
 import org.springframework.boot.test.context.SpringBootTest
 
 import org.jetbrains.exposed.sql.transactions.transaction
 
-import tmcowley.appserver.Singleton
-import tmcowley.appserver.objects.SessionData
+import tmcowley.appserver.models.SessionData
 
 @SpringBootTest
 class DatabaseControllerTests {
@@ -17,37 +19,42 @@ class DatabaseControllerTests {
     val db = DatabaseController()
 
     fun createUserGettingCode(): String? {
-        return db.createNewUserGettingCode(userAge=23, typingSpeed=23)
+        return db.createNewUserGettingCode(
+            userAge = 23,
+            typingSpeed = 23
+        )
     }
 
     fun createUser(): User? {
-        return db.createNewUser(userAge=23, typingSpeed=23)
+        return db.createNewUser(
+            userAge = 23,
+            typingSpeed = 23
+        )
     }
 
     @Test
-    fun `user-code taken` () {
-        val nonMappingStrings = listOf( "", " ", "test", "test-test", "test-test-test" )
-        nonMappingStrings.forEach { code -> assert(!(db.userCodeTaken(code))) }
+    fun `user-code taken`() {
+        val nonMappingStrings = listOf("", " ", "test", "test-test", "test-test-test")
+        nonMappingStrings.forEach { code -> assertThat(db.userCodeTaken(code)).isFalse() }
     }
 
     @Test
-	fun `user creation`() {
+    fun `user creation`() {
         repeat(10) {
             val userCode = db.createNewUserGettingCode(21, 60)
             // println(userCode)
 
             // ensure userCode is not null -> indicates unsuccessful addition
             assertNotNull(userCode)
-            userCode ?: return
 
             // ensure addition worked correctly
-            assert(db.userCodeTaken(userCode))
+            assertThat(db.userCodeTaken(userCode)).isTrue()
         }
     }
 
     @Test
     fun `adding users, sessions, sessions_to_users`() {
-        transaction{
+        transaction {
             val user = User.new {
                 uid = "admin-admin-admin"
                 age = 21
@@ -60,59 +67,61 @@ class DatabaseControllerTests {
                 accuracy = 70f
             }
 
-            val session_to_user = Session_To_User.new {
-                user_id = user.id
-                session_id = session.id
+            val sessionToUser = SessionToUser.new {
+                userId = user.id
+                sessionId = session.id
             }
 
             commit()
 
-            assert(User.all().contains(user))
-            assert(Session.all().contains(session))
-            assert(Session_To_User.all().contains(session_to_user))
+            assertThat(User.all()).contains(user)
+            assertThat(Session.all()).contains(session)
+            assertThat(SessionToUser.all()).contains(sessionToUser)
         }
     }
 
     @Test
     fun `get top completed session of new user`() {
-        // for new user, next should be one
         val userCode: String? = createUserGettingCode()
-        assertNotNull(userCode)
-        val userInitCorrectly = (userCode != null && db.getNextSessionNumber(userCode) == 1)
-        assert(userInitCorrectly)
+
+        assertThat(userCode).isNotNull
+        userCode ?: return
+
+        // for new user, next session number should be one
+        assertThat(db.getNextSessionNumber(userCode)).isEqualTo(1)
     }
 
     @Test
     fun `create new session under user by user-code`() {
         // create new user
-        val userCode: String = createUserGettingCode() ?: return 
+        val userCode: String = createUserGettingCode() ?: return
 
         // get next available session number
         val nextSessionNumber = db.getNextSessionNumber(userCode) ?: return
 
         // add a session under the user
-        val sessionAdded = db.storeCompletedSession(userCode, SessionData(speed=23f, accuracy=23f))
-        assert(sessionAdded)
+        val sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        assertThat(sessionAdded)
 
         // check next session number is incremented
         val newNextSessionNumber = db.getNextSessionNumber(userCode) ?: return
-        assert(newNextSessionNumber == nextSessionNumber + 1)
+        assertThat(newNextSessionNumber).isEqualTo(nextSessionNumber + 1)
     }
 
     @Test
     fun `get top completed session of (non-initial) user`() {
         // create new user
-        val userCode: String = createUserGettingCode() ?: return 
+        val userCode: String = createUserGettingCode() ?: return
 
         // add two sessions under the user
-        var sessionAdded = db.storeCompletedSession(userCode, SessionData(speed=23f, accuracy=23f))
-        assert(sessionAdded)
-        sessionAdded = db.storeCompletedSession(userCode, SessionData(speed=23f, accuracy=23f))
-        assert(sessionAdded)
+        var sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        assertThat(sessionAdded)
+        sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        assertThat(sessionAdded)
 
         // check next session number is incremented
         val nextSessionNumber = db.getNextSessionNumber(userCode) ?: return
-        assert(nextSessionNumber == 3)
+        assertThat(nextSessionNumber).isEqualTo(3)
     }
 
     @Test
@@ -121,7 +130,7 @@ class DatabaseControllerTests {
         val userCode: String = createUserGettingCode() ?: return
 
         val nextSessionNumber = db.getNextSessionNumber(userCode)
-        assert(nextSessionNumber == 1)
+        assertThat(nextSessionNumber).isEqualTo(1)
     }
 
     @Test
@@ -135,6 +144,6 @@ class DatabaseControllerTests {
         val mappedUserId = db.getUserId(userCode)
 
         // ensure mapped id is correct
-        assertEquals(correctUserId, mappedUserId)
+        assertThat(mappedUserId).isEqualTo(correctUserId)
     }
 }

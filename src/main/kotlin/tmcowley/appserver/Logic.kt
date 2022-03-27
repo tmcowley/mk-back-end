@@ -1,13 +1,12 @@
 package tmcowley.appserver
 
-import tmcowley.appserver.objects.Key
-import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.utils.LangTool
+import tmcowley.appserver.models.Key
+import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.utils.getFrequencyScore
 import tmcowley.appserver.structures.getSentences
 import tmcowley.appserver.structures.getMatchedWords
 
-private final enum class Form {
+private enum class Form {
     LEFT,
     RIGHT
 }
@@ -18,18 +17,18 @@ fun submitSentence(sentence: String): Array<String> {
     val lowercaseInput = sentence.lowercase()
 
     // compute the matching sentences
-    var resultingSentences: MutableList<String> = getMatchingSentences(lowercaseInput)
+    val resultingSentences: MutableList<String> = getMatchingSentences(lowercaseInput)
     // println("input: ${sentence}, output: ${resultingSentences.toString()}")
-    if (resultingSentences.isEmpty()) System.out.println("Notice: no results found")
+    if (resultingSentences.isEmpty()) println("Notice: no results found")
 
     // syntax analysis enabled -> rank according to syntax correctness (lower better)
-    if (Singleton.syntaxAnalysisEnabled) resultingSentences.sortBy {
-        resultingSentence ->  Singleton.langTool.countErrors(resultingSentence)
+    if (Singleton.syntaxAnalysisEnabled) resultingSentences.sortBy { resultingSentence ->
+        Singleton.langTool.countErrors(resultingSentence)
     }
 
     // frequency analysis enabled -> rank according to frequency (higher better)
-    if (Singleton.frequencyAnalysisEnabled) resultingSentences.sortByDescending { 
-        resultingSentence -> getFrequencyScore(resultingSentence) 
+    if (Singleton.frequencyAnalysisEnabled) resultingSentences.sortByDescending { resultingSentence ->
+        getFrequencyScore(resultingSentence)
     }
 
     return resultingSentences.toTypedArray()
@@ -42,7 +41,7 @@ fun splitIntoWords(sentence: String): Array<String> {
 
 fun getWordInKeyPairForm(word: String): MutableList<KeyPair> {
     // create key-pair list for word
-    var wordKeyPairs: MutableList<KeyPair> = mutableListOf()
+    val wordKeyPairs: MutableList<KeyPair> = mutableListOf()
     for (char: Char in word) {
 
         // char is non-alphabetic -> do nothing
@@ -51,12 +50,7 @@ fun getWordInKeyPairForm(word: String): MutableList<KeyPair> {
         // char is alphabetic
 
         // get key-pair for key with char
-        val key: Key = Key(char)
-        val keyPair: KeyPair? = Singleton.getKeyPair(key)
-
-        // key-pair lookup fails
-        keyPair ?: println("Error: getKeyPair(${key}) failed")
-        if (keyPair == null) continue
+        val keyPair = Singleton.getKeyPairOrNull(char) ?: continue
 
         // add the key-pair to the current word
         wordKeyPairs.add(keyPair)
@@ -75,18 +69,25 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
 
     // create word array
     val words: Array<String> = splitIntoWords(sentence)
-    val nonEmptyWords = words.filterNot{ word -> word == "" }
+    val nonEmptyWords = words.filterNot { word -> word == "" }
 
     // ensure word length is not exceeded
     val wordLengthExceeded = nonEmptyWords.any { word -> (word.length >= 25) }
     if (wordLengthExceeded) return mutableListOf()
 
     // create the list of matched words
-    var listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
-    nonEmptyWords.forEach { word -> 
+    val listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
+    nonEmptyWords.forEach { word ->
 
         var matchedWords: MutableList<String> = getMatchedWords(word)
-        if (matchedWords.isEmpty()) matchedWords = mutableListOf("{${word}}")
+
+        if (matchedWords.isEmpty()) {
+            val isNumber = (word.toDoubleOrNull() != null)
+
+            // numbers should not be in non-matched form
+            // non-numbers should be in non-matched form (e.g. {<word>})
+            matchedWords = if (isNumber) mutableListOf(word) else mutableListOf("{${word}}")
+        }
 
         // println("word: ${word}, matchedWords: ${matchedWords.toString()}")
 
@@ -99,7 +100,7 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
     if (listOfMatchedWords.isEmpty()) return mutableListOf()
 
     // compute viable sentences from text array
-    val resultingSentences: MutableList<String> = getSentences(listOfMatchedWords)
+    val resultingSentences = getSentences(listOfMatchedWords)
 
     return resultingSentences
 }
@@ -126,16 +127,16 @@ fun convertToLeft(input: String?): String {
 
 /** convert from any form to side forms */
 private fun convertToForm(form: Form, input: String?): String {
-    if (input == null) return ""
+    input ?: return ""
 
-    var inputForm = (input.map { char ->
-        if (isNotAlphabetic(char) || Singleton.getKeyPair(Key(char)) == null) 
-            char
+    val inputForm = (input.map { char ->
+        if (isNotAlphabetic(char)) char
         else (
-            if (form == Form.LEFT) (Singleton.getKeyPair(Key(char))?.leftKey?.character) 
-            else if (form == Form.RIGHT) (Singleton.getKeyPair(Key(char))?.rightKey?.character) 
-            else char
-        )
+                when (form) {
+                    Form.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
+                    Form.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
+                }
+                )
     }.joinToString(separator = ""))
 
     return inputForm

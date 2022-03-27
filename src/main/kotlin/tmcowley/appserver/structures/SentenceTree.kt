@@ -1,6 +1,6 @@
 package tmcowley.appserver.structures
 
-final class SentenceTree : PermutationTree<String>(Node("ε")) {
+class SentenceTree : PermutationTree<String>(Node("ε")) {
 
     fun getSentences(): MutableList<String> {
         val paths: MutableList<MutableList<Node<String>>> = this.getPaths()
@@ -8,7 +8,7 @@ final class SentenceTree : PermutationTree<String>(Node("ε")) {
         // generate the sentence array
         var sentences: MutableList<String> = mutableListOf()
         paths.forEach { path ->
-            val sentence = path.map { node -> node.value }.joinToString(separator = " ")
+            val sentence = path.joinToString(separator = " ") { node -> node.value }
             sentences.add(sentence)
         }
 

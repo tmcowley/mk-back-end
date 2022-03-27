@@ -1,61 +1,37 @@
 package tmcowley.appserver.controllers
 
 import org.springframework.cache.annotation.Cacheable
-import org.springframework.http.MediaType.*
-import org.springframework.web.bind.annotation.CrossOrigin
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
-
+import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.Singleton
-
-import tmcowley.appserver.submitSentence
 import tmcowley.appserver.convertToLeft
 import tmcowley.appserver.convertToRight
-
-import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpSession
-
-import org.springframework.session.*
-
-import kotlin.random.Random
+import tmcowley.appserver.submitSentence
 
 // // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
-        origins =
-                arrayOf(
-                        // for local development
-                        "http://localhost:3000",
-                        "https://localhost:3000",
+    origins =
+    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com/", "https://tcowley.com/", "https://mirrored-keyboard.vercel.app/"],
+    methods = [RequestMethod.GET],
 
-                        // for hosting
-                        "https://www.tcowley.com/",
-                        "https://tcowley.com/",
-                        "https://mirrored-keyboard.vercel.app/"
-                ),
-        methods = arrayOf(RequestMethod.GET), 
+    // TODO filter down from wildcard to allowCredentials
+    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
+    allowedHeaders = ["*"],
 
-        // TODO filter down from wildcard to allowCredentials
-        // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
-        allowedHeaders = arrayOf("*"), 
+    exposedHeaders = ["*"],
+    // exposedHeaders = arrayOf("set-cookie"),
 
-        exposedHeaders = arrayOf("*"),
-        // exposedHeaders = arrayOf("set-cookie"),
-
-        // allow client cookies
-        // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-        allowCredentials = "true"
+    // allow client cookies
+    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+    allowCredentials = "true"
 )
-@RequestMapping(value = arrayOf("/api/v0"), produces = arrayOf("application/json"))
+@RequestMapping(value = ["/api/v0"], produces = ["application/json"])
 @RestController
 class APIsGet {
 
     /** For converting any form to full form (main computation) */
-    @Cacheable
+    @Cacheable(value = ["results"])
     @GetMapping(
-            value = arrayOf("/submit"),
+        value = ["/submit"],
     )
     fun submit(@RequestParam("input") input: String): Array<String> {
         // println("\n\n/submit endpoint called")
@@ -63,9 +39,9 @@ class APIsGet {
     }
 
     /** For converting any form to left-hand form */
-    @Cacheable
+    @Cacheable(value = ["left-forms"])
     @GetMapping(
-            value = arrayOf("/convert-lhs"),
+        value = ["/convert-lhs"],
     )
     fun convertToLHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/lhs convertToLHS called with input: ${input}")
@@ -74,10 +50,10 @@ class APIsGet {
         return convertToLeft(input)
     }
 
-    /** For converting any form to rigth-hand form */
-    @Cacheable
+    /** For converting any form to right-hand form */
+    @Cacheable(value = ["right-forms"])
     @GetMapping(
-            value = arrayOf("/convert-rhs"),
+        value = ["/convert-rhs"],
     )
     fun convertToRHS(@RequestParam("input") input: String?): String {
         // println("/post/convert/rhs convertToRHS called with input: ${input}")
@@ -87,14 +63,14 @@ class APIsGet {
     }
 
     /** API status query endpoint */
-    @GetMapping(value = arrayOf("/get-status"))
+    @GetMapping(value = ["/get-status"])
     fun status(): Boolean {
         // return true when active
         return true
     }
 
     /** Random phrase query endpoint */
-    @GetMapping(value = arrayOf("/get-random-phrase"))
+    @GetMapping(value = ["/get-random-phrase"])
     fun getRandomPhrase(): String {
         // get a random phrase from the phrase list
         return Singleton.getRandomPhrase()

@@ -18,7 +18,7 @@ abstract class PermutationTree<T>(val root: Node<T>) {
 
     /** add a child underneath a parent node */
     private fun insert(childValue: T, parent: Node<T>) {
-        val child = Node<T>(childValue)
+        val child = Node(childValue)
         child.setParent(parent)
         parent.addChild(child)
     }
@@ -83,7 +83,7 @@ abstract class PermutationTree<T>(val root: Node<T>) {
 
                 // break (if currentNode is root)
                 currentNode = currentNode.getParent() ?: break
-            } while (!currentNode.equals(root))
+            } while (currentNode != root)
 
             // reverse path order since we've traversed up the tree (leaf -> root)
             path.reverse()

@@ -2,10 +2,10 @@ package tmcowley.appserver
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-
-import tmcowley.appserver.Singleton
+import org.springframework.cache.annotation.EnableCaching
 
 @SpringBootApplication
+@EnableCaching
 class App
 
 fun main(args: Array<String>) {

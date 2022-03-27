@@ -1,12 +1,9 @@
-package tmcowley.appserver.structures;
+package tmcowley.appserver.structures
 
 import tmcowley.appserver.Singleton
 
-import tmcowley.appserver.objects.Key
-import tmcowley.appserver.objects.KeyPair
-
-import tmcowley.appserver.structures.WordTree
-import tmcowley.appserver.structures.SentenceTree
+import tmcowley.appserver.models.Key
+import tmcowley.appserver.models.KeyPair
 
 class StructureUtils
 
@@ -15,7 +12,7 @@ fun getMatchedWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     if (currentWord.isEmpty()) return mutableListOf()
 
     // generate word permutation tree (representing key-pair form)
-    val currentWordTree: WordTree = WordTree()
+    val currentWordTree = WordTree()
     currentWord.forEach { keyPair -> currentWordTree.insertKeyPair(keyPair) }
 
     // find matched words by traversing the tree paths
@@ -32,7 +29,7 @@ fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableL
     if (listOfMatchedWords.isEmpty()) return mutableListOf()
 
     // generate sentence permutation tree
-    var sentenceTree: SentenceTree = SentenceTree()
+    val sentenceTree = SentenceTree()
     listOfMatchedWords.forEach { words -> sentenceTree.insert(words) }
 
     return sentenceTree.getSentences()
@@ -44,81 +41,79 @@ fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
     // map key-pairs
 
     // top row
-    // val qp: KeyPair = KeyPair(charToKeyLookup.get('q')!!, charToKeyLookup.get('q')!!);
-    val qp: KeyPair = KeyPair('q', 'p');
-    val wo: KeyPair = KeyPair('w', 'o');
-    val ei: KeyPair = KeyPair('e', 'i');
-    val ru: KeyPair = KeyPair('r', 'u');
-    val ty: KeyPair = KeyPair('t', 'y');
+    val qp = KeyPair('q', 'p')
+    val wo = KeyPair('w', 'o')
+    val ei = KeyPair('e', 'i')
+    val ru = KeyPair('r', 'u')
+    val ty = KeyPair('t', 'y')
 
     // middle row
-    // sort out dual chars w/ shift
-    val a_colon: KeyPair = KeyPair('a', 'a');
-    val sl: KeyPair = KeyPair('s', 'l');
-    val dk: KeyPair = KeyPair('d', 'k');
-    val fj: KeyPair = KeyPair('f', 'j');
-    val gh: KeyPair = KeyPair('g', 'h');
+    val aAndColon = KeyPair('a', 'a')
+    val sl = KeyPair('s', 'l')
+    val dk = KeyPair('d', 'k')
+    val fj = KeyPair('f', 'j')
+    val gh = KeyPair('g', 'h')
 
     // bottom row
-    val z_f_slash: KeyPair = KeyPair('z', 'z');
-    val x_dot: KeyPair = KeyPair('x', 'x');
-    val c_comma: KeyPair = KeyPair('c', 'c');
-    val vm: KeyPair = KeyPair('v', 'm');
-    val bn: KeyPair = KeyPair('b', 'n');
+    val zAndForwardSlash = KeyPair('z', 'z')
+    val xAndDot = KeyPair('x', 'x')
+    val cAndComma = KeyPair('c', 'c')
+    val vm = KeyPair('v', 'm')
+    val bn = KeyPair('b', 'n')
 
     // define key -> key-pair HM
-    var keyPairs: HashMap<Key, KeyPair> = hashMapOf<Key, KeyPair>();
-    
+    val keyPairs = hashMapOf<Key, KeyPair>()
+
     // map top row
     run {
         // top row: left half
-        keyPairs.put(Key('q'), qp);
-        keyPairs.put(Key('w'), wo);
-        keyPairs.put(Key('e'), ei);
-        keyPairs.put(Key('r'), ru);
-        keyPairs.put(Key('t'), ty);
+        keyPairs[Key('q')] = qp
+        keyPairs[Key('w')] = wo
+        keyPairs[Key('e')] = ei
+        keyPairs[Key('r')] = ru
+        keyPairs[Key('t')] = ty
 
         // top row: right half
-        keyPairs.put(Key('p'), qp);
-        keyPairs.put(Key('o'), wo);
-        keyPairs.put(Key('i'), ei);
-        keyPairs.put(Key('u'), ru);
-        keyPairs.put(Key('y'), ty);
+        keyPairs[Key('p')] = qp
+        keyPairs[Key('o')] = wo
+        keyPairs[Key('i')] = ei
+        keyPairs[Key('u')] = ru
+        keyPairs[Key('y')] = ty
     }
 
     // map middle row
     run {
         // middle row: left half
-        keyPairs.put(Key('a'), a_colon);
-        keyPairs.put(Key('s'), sl);
-        keyPairs.put(Key('d'), dk);
-        keyPairs.put(Key('f'), fj);
-        keyPairs.put(Key('g'), gh);
+        keyPairs[Key('a')] = aAndColon
+        keyPairs[Key('s')] = sl
+        keyPairs[Key('d')] = dk
+        keyPairs[Key('f')] = fj
+        keyPairs[Key('g')] = gh
 
         // middle row: right half
-        keyPairs.put(Key('a'), a_colon);
-        keyPairs.put(Key('l'), sl);
-        keyPairs.put(Key('k'), dk);
-        keyPairs.put(Key('j'), fj);
-        keyPairs.put(Key('h'), gh);
+        keyPairs[Key('a')] = aAndColon
+        keyPairs[Key('l')] = sl
+        keyPairs[Key('k')] = dk
+        keyPairs[Key('j')] = fj
+        keyPairs[Key('h')] = gh
     }
 
     // map bottom row
     run {
         // bottom row: left half
-        keyPairs.put(Key('z'), z_f_slash);
-        keyPairs.put(Key('x'), x_dot);
-        keyPairs.put(Key('c'), c_comma);
-        keyPairs.put(Key('v'), vm);
-        keyPairs.put(Key('b'), bn);
+        keyPairs[Key('z')] = zAndForwardSlash
+        keyPairs[Key('x')] = xAndDot
+        keyPairs[Key('c')] = cAndComma
+        keyPairs[Key('v')] = vm
+        keyPairs[Key('b')] = bn
 
         // bottom row: right half
-        keyPairs.put(Key('z'), z_f_slash);
-        keyPairs.put(Key('x'), x_dot);
-        keyPairs.put(Key('c'), c_comma);
-        keyPairs.put(Key('m'), vm);
-        keyPairs.put(Key('n'), bn);
+        keyPairs[Key('z')] = zAndForwardSlash
+        keyPairs[Key('x')] = xAndDot
+        keyPairs[Key('c')] = cAndComma
+        keyPairs[Key('m')] = vm
+        keyPairs[Key('n')] = bn
     }
 
-    return keyPairs;
+    return keyPairs
 }

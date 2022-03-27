@@ -2,14 +2,11 @@ package tmcowley.appserver.utils
 
 import tmcowley.appserver.Singleton
 
-import org.springframework.cache.annotation.Cacheable
-
-@Cacheable
 fun getFrequencyScore(sentence: String): Int {
 
     // split sentence into list of words
-    val words: List<String> = sentence.split("\\s+".toRegex()).map { 
-        word -> word.replace("""^[,\.]|[,\.]$""".toRegex(), "")
+    val words: List<String> = sentence.split("\\s+".toRegex()).map { word ->
+        word.replace("""^[,.]|[,.]$""".toRegex(), "")
     }
 
     // calculate the sentence frequency score

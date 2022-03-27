@@ -1,10 +1,19 @@
 package tmcowley.appserver.structures
 
 import kotlin.math.pow
+
+// junit5
 import org.junit.jupiter.api.Test
+
+// for fluent assertions
+import org.assertj.core.api.Assertions.assertThat
+
+// for assertions with smart-casts (nullability inferred)
+import kotlin.test.assertNotNull
+
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
-import tmcowley.appserver.objects.Key
+import tmcowley.appserver.models.Key
 
 @SpringBootTest
 class PermutationTreeTests {
@@ -23,13 +32,19 @@ class PermutationTreeTests {
     fun `test insertion and leaf collection`() {
 
         repeat(10) { index ->
+
             this.resetTree()
 
-            repeat(index) { this.tree.insertKeyPair(Singleton.getKeyPair(Key('q'))!!) }
-            assert(this.tree.getLeaves().size == 2.pow(index))
+            // insert an arbitrary key index times
+            repeat(index) {
+                val keyPair = Singleton.getKeyPairOrNull(Key('q'))
+                assertNotNull(keyPair)
 
-            // debugging
-            // if (index == 2) (this.tree.getLeaves().forEach{ leaf -> println(leaf.value.toString()) })
+                this.tree.insertKeyPair(keyPair)
+            }
+
+            // ensure tree leaf count is 2^index
+            assertThat(this.tree.getLeaves().size).isEqualTo(2.pow(index))
         }
 
         this.resetTree()

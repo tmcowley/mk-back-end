@@ -1,18 +1,18 @@
 package tmcowley.appserver.structures
 
-import tmcowley.appserver.objects.KeyPair
-import tmcowley.appserver.objects.Key
+import tmcowley.appserver.models.KeyPair
+import tmcowley.appserver.models.Key
 
-final class WordTree : PermutationTree<Key>(Node(Key('ε'))) {
+class WordTree : PermutationTree<Key>(Node(Key('ε'))) {
 
-    /** get all matched words (computes from node paths)) */
+    /** get all matched words (computes from node paths) */
     fun getWords(): MutableList<String> {
         val paths: MutableList<MutableList<Node<Key>>> = this.getPaths()
 
         // generate the words array
         var words: MutableList<String> = mutableListOf()
         paths.forEach { path ->
-            val word = (path.map{ node -> node.value }.joinToString(separator = ""))
+            val word = (path.map { node -> node.value }.joinToString(separator = ""))
             words.add(word)
         }
 
