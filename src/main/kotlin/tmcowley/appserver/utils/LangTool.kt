@@ -9,8 +9,8 @@ class LangTool {
     val langTool: JLanguageTool = JLanguageTool(BritishEnglish())
 
     init {
-//         comment in to use statistical ngram data:
-//         langTool.activateLanguageModelRules(new File("/data/google-ngram-data"))
+        // comment in to use statistical ngram data:
+//        langTool.activateLanguageModelRules(new File("/data/google-ngram-data"))
     }
 
     /** count the number of syntax errors in the given sentence */

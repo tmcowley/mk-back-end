@@ -1,0 +1,14 @@
+{
+  "properties": [
+    {
+      "name": "analyseSyntax",
+      "type": "java.lang.String",
+      "description": "Description for analyseSyntax."
+    },
+    {
+      "name": "analyseFrequency",
+      "type": "java.lang.String",
+      "description": "Description for analyseFrequency."
+    }
+  ]
+}

@@ -1,42 +1,30 @@
 package tmcowley.appserver.controllers
 
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Disabled
 
 import org.assertj.core.api.Assertions.assertThat
 
 import org.springframework.boot.test.context.SpringBootTest
 
-@Disabled
 @SpringBootTest
 class APIsGetTests {
 
-    val apiInstance: APIsGet = APIsGet()
+    val apiInstance = APIsGet()
 
     val phrase: String = "The house at the end of the street is red."
 
-    @SuppressWarnings("SpellCheckingInspection")
+    @Suppress("SpellCheckingInspection")
     val phraseLHS: String = "Tge gwrse at tge ebd wf tge street es red."
 
-    @SuppressWarnings("SpellCheckingInspection")
+    @Suppress("SpellCheckingInspection")
     val phraseRHS: String = "Thi houli ay yhi ink oj yhi lyuiiy il uik."
-
-    @Disabled
-    @Test
-            /** for general debugging */
-    fun `for debugging`() {
-    }
 
     // -----
 
     @Test
-    fun `context loads`() {
-    }
-
-    @Test
     fun `basic submission`() {
         val phrase = "this is a test"
-        val matches = listOf("tges es a test", "this is a test")
+        val matches = listOf("this is a test", "this is a tilt")
         val results = apiInstance.submit(phrase)
 
         matches.forEach { match -> assertThat(results).contains(match) }

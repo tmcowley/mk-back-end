@@ -11,7 +11,7 @@ class LogicTests {
 
     @Test
     fun `test left form conversion`() {
-        @SuppressWarnings("SpellCheckingInspection")
+        @Suppress("SpellCheckingInspection")
         val sentencesToLeftForm = mapOf(
             "qwert" to "qwert",
             "poiuy" to "qwert",

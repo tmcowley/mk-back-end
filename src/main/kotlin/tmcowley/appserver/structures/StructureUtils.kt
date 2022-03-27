@@ -5,8 +5,6 @@ import tmcowley.appserver.Singleton
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
 
-class StructureUtils
-
 /** get the matching words from a word in key-pair list form */
 fun getMatchedWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     if (currentWord.isEmpty()) return mutableListOf()

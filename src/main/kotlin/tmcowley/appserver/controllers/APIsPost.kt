@@ -1,13 +1,15 @@
 package tmcowley.appserver.controllers
 
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
+import tmcowley.appserver.models.LoginForm
+import tmcowley.appserver.models.MetricsData
 import tmcowley.appserver.models.SessionData
+import tmcowley.appserver.models.SignupForm
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -101,7 +103,7 @@ class APIsPost {
     fun signOut(request: HttpServletRequest) {
 
         // ensure user is logged in
-        if (!isLoggedIn(request)) return
+        if (isNotSignedIn(request)) return
 
         // get session, invalidate
         val session = request.getSession(false)
@@ -110,10 +112,15 @@ class APIsPost {
 
     /** check if a user is signed-in using their request */
     @PostMapping(value = ["/is-logged-in"])
-    fun isLoggedIn(request: HttpServletRequest): Boolean {
+    fun isSignedIn(request: HttpServletRequest): Boolean {
         // get session
         request.getSession(false) ?: return false
         return true
+    }
+
+    /** check if a user is not signed-in using their request */
+    private fun isNotSignedIn(request: HttpServletRequest): Boolean {
+        return !(isSignedIn(request))
     }
 
     /** get the next phrase from the session's number and phrase number */
@@ -121,7 +128,7 @@ class APIsPost {
     fun getNextPhrase(request: HttpServletRequest): String? {
 
         // ensure user is logged in
-        if (!isLoggedIn(request)) return null
+        if (isNotSignedIn(request)) return null
 
         // get the user session, session number
         val session: HttpSession = request.getSession(false)
@@ -150,16 +157,14 @@ class APIsPost {
 
     /** get the phrases per session count */
     @PostMapping(value = ["/get-phrases-per-session"])
-    fun phrasesPerSession(): Int {
-        return Singleton.phrasesPerSession
-    }
+    fun phrasesPerSession(): Int = Singleton.phrasesPerSession
 
     /** get the user code attached to the session */
     @PostMapping(value = ["/get-user-code"])
     fun getUserCode(request: HttpServletRequest): String? {
 
         // ensure user is logged in
-        if (!isLoggedIn(request)) return null
+        if (isNotSignedIn(request)) return null
 
         val session: HttpSession = request.getSession(false)
         return session.getAttribute("userCode") as String
@@ -170,7 +175,7 @@ class APIsPost {
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
 
         // ensure user is logged in
-        if (!isLoggedIn(request)) return null
+        if (isNotSignedIn(request)) return null
 
         val session: HttpSession = request.getSession(false)
         val userCode = session.getAttribute("userCode") as String
@@ -196,12 +201,3 @@ class APIsPost {
         return true
     }
 }
-
-@Serializable
-data class LoginForm(val userCode: String)
-
-@Serializable
-data class SignupForm(val age: Int, val speed: Int)
-
-@Serializable
-data class MetricsData(val speed: Float, val accuracy: Float)

@@ -8,6 +8,8 @@ RUN apk add --no-cache curl tar bash procps
 # 1- Define a constant with the version of maven you want to install
 ARG MAVEN_VERSION=3.8.4
 
+ARG USER_HOME_DIR="/root"
+
 # 3- Define the SHA (sha512sum) key to validate the maven download
 ARG SHA=a9b2d825eacf2e771ed5d6b0e01398589ac1bfa4171f36154d1b5787879605507802f699da6f7cfc80732a5282fd31b28e4cd6052338cbef0fa1358b48a5e3c8
 

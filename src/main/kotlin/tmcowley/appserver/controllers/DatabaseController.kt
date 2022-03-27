@@ -132,7 +132,7 @@ class DatabaseController {
     fun getNextSessionNumber(userCode: String): Int? {
 
         // ensure the user code is taken
-        if (!userCodeTaken(userCode)) return null
+        if (userCodeFree(userCode)) return null
 
         // get userId of user
         val userId = getUserId(userCode) ?: return null
@@ -186,8 +186,7 @@ class DatabaseController {
 
     /** check if a user-code is free */
     private fun userCodeFree(userCode: String): Boolean {
-        val isFree: Boolean = transaction { User.find { Users.uid eq userCode }.empty() }
-        return isFree
+        return transaction { User.find { Users.uid eq userCode }.empty() }
     }
 
     /**
@@ -236,7 +235,7 @@ class DatabaseController {
     fun getAllSessions(userCode: String): MutableList<Session>? {
 
         // ensure the user code is taken
-        if (!userCodeTaken(userCode)) return null
+        if (userCodeFree(userCode)) return null
 
         // get user entity-id
         val userId = getUserId(userCode) ?: return null

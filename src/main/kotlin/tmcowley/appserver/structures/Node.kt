@@ -10,11 +10,6 @@ class Node<V>(val value: V) {
         return (this.children.isEmpty())
     }
 
-    /** check if this node is not a leaf */
-    fun isNotLeaf(): Boolean {
-        return !(this.isLeaf())
-    }
-
     /** add a child node */
     fun addChild(child: Node<V>) {
         this.children.add(child)
@@ -23,11 +18,6 @@ class Node<V>(val value: V) {
     /** get all child nodes */
     fun getChildren(): List<Node<V>> {
         return this.children
-    }
-
-    /** add many child nodes */
-    private fun setChildren(children: MutableList<Node<V>>) {
-        this.children = children
     }
 
     /** set the parent node */

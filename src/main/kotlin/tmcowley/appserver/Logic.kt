@@ -100,9 +100,7 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
     if (listOfMatchedWords.isEmpty()) return mutableListOf()
 
     // compute viable sentences from text array
-    val resultingSentences = getSentences(listOfMatchedWords)
-
-    return resultingSentences
+    return getSentences(listOfMatchedWords)
 }
 
 /** check if a character is in the alphabet */
