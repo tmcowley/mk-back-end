@@ -139,20 +139,19 @@ class APIsPost {
         if (isFirstSession) session.setAttribute("phraseNumber", 1)
 
         // completed typing session
-        val phraseNumber = session.getAttribute("phraseNumber") as Int
+        var phraseNumber = session.getAttribute("phraseNumber") as Int
         val hasCompletedTypingSession = (phraseNumber >= Singleton.phrasesPerSession)
         if (hasCompletedTypingSession) {
             // need to collect metrics before progressing
             return null
         }
 
-        // get next phrase from current session
-        val nextPhrase = Singleton.getNextPhrase(sessionNumber, phraseNumber) ?: return null
-
         // update phrase number
         session.setAttribute("phraseNumber", phraseNumber + 1)
+        phraseNumber = session.getAttribute("phraseNumber") as Int
 
-        return nextPhrase
+        // get new phrase from session and new phrase numbers
+        return Singleton.getPhrase(sessionNumber, phraseNumber)
     }
 
     /** get the phrases per session count */

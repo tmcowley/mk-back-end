@@ -53,10 +53,17 @@ object Singleton {
         frequencyAnalysisEnabled = (this.prop["analyseFrequency"] as String).toBoolean()
     }
 
-    /** get the next phrase according to the current phrase number and the session */
-    fun getNextPhrase(sessionNumber: Int, phraseNumber: Int): String? {
+    /**
+     * get the phrase from the phrase and session numbers
+     * sessions: [1, ∞)
+     * phrases: [1, 8]
+     * */
+    fun getPhrase(sessionNumber: Int, phraseNumber: Int): String? {
+        // ensure session number is positive
+        if (sessionNumber <= 0) return null
 
         // ensure the phrase number does not exceed the defined count
+        if (phraseNumber <= 0) return null
         if (phraseNumber > phrasesPerSession) return null
 
         fun getRandomList(random: Random): List<Int> {
@@ -67,7 +74,7 @@ object Singleton {
 
         // find the corresponding phrase index
         val sessionPhraseIndexes = getRandomList(Random(seed = sessionNumber))
-        val phraseIndex = sessionPhraseIndexes[phraseNumber + 1]
+        val phraseIndex = sessionPhraseIndexes[phraseNumber-1]
 
         return phrases[phraseIndex]
     }
