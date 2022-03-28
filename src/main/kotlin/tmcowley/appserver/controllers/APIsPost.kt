@@ -111,7 +111,7 @@ class APIsPost {
     }
 
     /** check if a user is signed-in using their request */
-    @PostMapping(value = ["/is-logged-in"])
+    @PostMapping(value = ["/is-signed-in"])
     fun isSignedIn(request: HttpServletRequest): Boolean {
         // get session
         request.getSession(false) ?: return false
