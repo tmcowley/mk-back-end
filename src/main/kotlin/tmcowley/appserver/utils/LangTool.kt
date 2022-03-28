@@ -6,7 +6,7 @@ import org.languagetool.rules.RuleMatch
 
 class LangTool {
 
-    val langTool: JLanguageTool = JLanguageTool(BritishEnglish())
+    private val langTool: JLanguageTool = JLanguageTool(BritishEnglish())
 
     init {
         // comment in to use statistical ngram data:
@@ -17,10 +17,10 @@ class LangTool {
     fun countErrors(sentence: String): Int {
         // use language tool to count error instances
         val matches: List<RuleMatch> = langTool.check(sentence)
-//        matches.forEach { match ->
-//            println("Potential error at characters ${match.fromPos}-${match.toPos}:${match.message}")
-//            println("Suggested correction(s): ${match.suggestedReplacements}")
-//        }
+        matches.forEach { match ->
+            println("Potential error at characters ${match.fromPos}-${match.toPos}:${match.message}")
+            println("Suggested correction(s): ${match.suggestedReplacements}")
+        }
         return matches.size
     }
 }

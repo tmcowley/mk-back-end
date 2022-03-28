@@ -16,7 +16,7 @@ import tmcowley.appserver.Singleton
 import tmcowley.appserver.models.SessionData
 
 object Users : IntIdTable() {
-    val uid = varchar("uid", 120).uniqueIndex()
+    val userCode = varchar("uid", 120).uniqueIndex()
     val speed = integer("speed")
     val age = integer("age")
     // val sessions = reference("sessions", Sessions)
@@ -25,7 +25,7 @@ object Users : IntIdTable() {
 class User(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<User>(Users)
 
-    var uid by Users.uid
+    var userCode by Users.userCode
     var speed by Users.speed
     var age by Users.age
 }
@@ -96,7 +96,7 @@ class DatabaseController {
     /** create a new user by age and typing speed, returning user-code */
     fun createNewUserGettingCode(userAge: Int, typingSpeed: Int): String? {
         val user = createNewUser(userAge, typingSpeed) ?: return null
-        return user.uid
+        return user.userCode
     }
 
     /** create a new user by age and typing speed */
@@ -110,7 +110,7 @@ class DatabaseController {
 
         // create the new user
         val user = transaction {
-            User.new { uid = userCode; age = userAge; speed = typingSpeed }
+            User.new { this.userCode = userCode; age = userAge; speed = typingSpeed }
         }
 
         // verify user by code exists
@@ -174,7 +174,7 @@ class DatabaseController {
     /** get the entity-id of a user by user-code */
     private fun getUserEntityId(userCode: String): EntityID<Int>? {
         val entityId: EntityID<Int>? = transaction {
-            User.find { Users.uid eq userCode }.firstOrNull()?.id
+            User.find { Users.userCode eq userCode }.firstOrNull()?.id
         }
         return entityId
     }
@@ -186,7 +186,7 @@ class DatabaseController {
 
     /** check if a user-code is free */
     private fun userCodeFree(userCode: String): Boolean {
-        return transaction { User.find { Users.uid eq userCode }.empty() }
+        return transaction { User.find { Users.userCode eq userCode }.empty() }
     }
 
     /**

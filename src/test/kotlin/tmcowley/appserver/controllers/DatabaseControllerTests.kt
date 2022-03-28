@@ -6,10 +6,13 @@ import org.assertj.core.api.Assertions.assertThat
 
 // for assertions with smart-casts (nullability inferred)
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 import org.springframework.boot.test.context.SpringBootTest
 
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.junit.jupiter.api.Disabled
+import org.junit.jupiter.api.Nested
 
 import tmcowley.appserver.models.SessionData
 
@@ -53,10 +56,16 @@ class DatabaseControllerTests {
     }
 
     @Test
+    fun `user creation getting id`() {
+        val newUserId = db.createNewUserGettingId(23, 23)
+        assertNotNull(newUserId)
+    }
+
+    @Test
     fun `adding users, sessions, sessions_to_users`() {
         transaction {
             val user = User.new {
-                uid = "admin-admin-admin"
+                userCode = "admin-admin-admin"
                 age = 21
                 speed = 60
             }
@@ -137,7 +146,7 @@ class DatabaseControllerTests {
     fun `get user-id from user-code`() {
         // create a new user
         val user = createUser() ?: return
-        val userCode = user.uid
+        val userCode = user.userCode
         val correctUserId = user.id.value
 
         // lookup user-id from user-code
@@ -145,5 +154,40 @@ class DatabaseControllerTests {
 
         // ensure mapped id is correct
         assertThat(mappedUserId).isEqualTo(correctUserId)
+    }
+
+    @Nested
+    inner class GetAllSessions {
+
+        private val invalidUserCode = "invalid-user-code"
+
+        @Test
+        fun `invalid arguments`() {
+            // test an invalid user-code
+            val sessionsOfInvalidUser = db.getAllSessions(invalidUserCode)
+            assertNull(sessionsOfInvalidUser)
+        }
+
+        @Test
+        fun `for a new user`() {
+            val newUser = createUser()
+            assertNotNull(newUser)
+
+            val sessions = db.getAllSessions(newUser.userCode)
+            assertNotNull(sessions)
+
+            // ensure the user has a single session
+            assertThat(sessions.size).isEqualTo(1)
+
+            // and that this single session is the completed zero-session
+            val firstSession = sessions.firstOrNull() ?: return
+            assertThat(firstSession.number).isEqualTo(0)
+        }
+
+        @Disabled
+        @Test
+        fun `for a user with recorded sessions`() {
+            // TODO
+        }
     }
 }

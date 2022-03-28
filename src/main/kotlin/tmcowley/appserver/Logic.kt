@@ -2,14 +2,10 @@ package tmcowley.appserver
 
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
+import tmcowley.appserver.models.SideForm
 import tmcowley.appserver.utils.getFrequencyScore
 import tmcowley.appserver.structures.getSentences
 import tmcowley.appserver.structures.getMatchedWords
-
-private enum class Form {
-    LEFT,
-    RIGHT
-}
 
 /** submit a sentence to turn an input phrase into an array of matched phrases */
 fun submitSentence(sentence: String): Array<String> {
@@ -115,24 +111,24 @@ private fun isNotAlphabetic(char: Char): Boolean {
 
 /** convert from any form to right-hand side form */
 fun convertToRight(input: String?): String {
-    return convertToForm(Form.RIGHT, input)
+    return convertToForm(SideForm.RIGHT, input)
 }
 
 /** convert from any form to left-hand side form */
 fun convertToLeft(input: String?): String {
-    return convertToForm(Form.LEFT, input)
+    return convertToForm(SideForm.LEFT, input)
 }
 
 /** convert from any form to side forms */
-private fun convertToForm(form: Form, input: String?): String {
+private fun convertToForm(form: SideForm, input: String?): String {
     input ?: return ""
 
     val inputForm = (input.map { char ->
         if (isNotAlphabetic(char)) char
         else (
                 when (form) {
-                    Form.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
-                    Form.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
+                    SideForm.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
+                    SideForm.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
                 }
                 )
     }.joinToString(separator = ""))

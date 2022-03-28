@@ -69,10 +69,14 @@ class APIsGet {
         return true
     }
 
-    /** Random phrase query endpoint */
+    /** random phrase query endpoint */
     @GetMapping(value = ["/get-random-phrase"])
     fun getRandomPhrase(): String {
         // get a random phrase from the phrase list
         return Singleton.getRandomPhrase()
     }
+
+    /** get the phrases per session count */
+    @GetMapping(value = ["/get-phrases-per-session"])
+    fun getPhrasesPerSession(): Int = Singleton.phrasesPerSession
 }

@@ -42,7 +42,7 @@ class APIsPost {
      * speed returns the newly generated userCode
      */
     @PostMapping(value = ["/sign-up"])
-    fun signup(
+    fun signUp(
         @RequestBody signupForm: String,
         request: HttpServletRequest
     ): String? {
@@ -110,6 +110,7 @@ class APIsPost {
         session.invalidate()
     }
 
+    // TODO: move to get request
     /** check if a user is signed-in using their request */
     @PostMapping(value = ["/is-signed-in"])
     fun isSignedIn(request: HttpServletRequest): Boolean {
@@ -123,6 +124,7 @@ class APIsPost {
         return !(isSignedIn(request))
     }
 
+    // TODO: move to get request
     /** get the next phrase from the session's number and phrase number */
     @PostMapping(value = ["/get-next-phrase"])
     fun getNextPhrase(request: HttpServletRequest): String? {
@@ -153,10 +155,6 @@ class APIsPost {
         // get new phrase from session and new phrase numbers
         return Singleton.getPhrase(sessionNumber, phraseNumber)
     }
-
-    /** get the phrases per session count */
-    @PostMapping(value = ["/get-phrases-per-session"])
-    fun phrasesPerSession(): Int = Singleton.phrasesPerSession
 
     /** get the user code attached to the session */
     @PostMapping(value = ["/get-user-code"])
