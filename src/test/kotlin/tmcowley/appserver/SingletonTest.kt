@@ -1,18 +1,21 @@
 package tmcowley.appserver
 
-import org.junit.jupiter.api.Test
-
-// for assertions with smart-casts (nullability inferred)
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
+import tmcowley.appserver.models.Key
+import tmcowley.appserver.models.KeyPair
 
 import org.springframework.boot.test.context.SpringBootTest
 
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.DisplayName
+// junit5
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Nested
-import tmcowley.appserver.models.Key
-import tmcowley.appserver.models.KeyPair
+import org.junit.jupiter.api.DisplayName
+
+// for fluent assertions
+import org.assertj.core.api.Assertions.assertThat
+
+// for assertions with smart-casts (nullability inferred)
+import kotlin.test.assertNull
+import kotlin.test.assertNotNull
 
 @SpringBootTest
 class SingletonTest {
@@ -89,7 +92,7 @@ class SingletonTest {
         private val validPhraseNumber = validPhraseNumbers[0]
 
         @Test
-        fun `test invalid args`() {
+        fun `invalid args`() {
             invalidSessionNumbers.forEach { invalidSessionNumber ->
                 val nextPhrase = Singleton.getPhrase(invalidSessionNumber, validPhraseNumber)
                 assertNull(nextPhrase)
@@ -102,7 +105,7 @@ class SingletonTest {
         }
 
         @Test
-        fun `test valid args`() {
+        fun `valid args`() {
             validSessionNumbers.forEach { validSessionNumber ->
                 val nextPhrase = Singleton.getPhrase(validSessionNumber, validPhraseNumber)
                 assertNotNull(nextPhrase)
@@ -112,6 +115,54 @@ class SingletonTest {
                 val nextPhrase = Singleton.getPhrase(validSessionNumber, validPhraseNumber)
                 assertNotNull(nextPhrase)
             }
+        }
+
+        @Test
+        fun `determinism for first 20 sessions`() {
+            // for each of the first 20 sessions, ensure phrases are deterministic
+            repeat(20) { sessionNumber ->
+                repeat(8) { phraseNumber ->
+                    val phraseN = Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
+                    assertThat(phraseN).isEqualTo(Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1))
+                }
+            }
+        }
+
+        /**
+         * to ensure the random mapping has worked as intended;
+         * we should expect some phrase overlap as we test more sessions;
+         * this test does not account for that tolerance
+         */
+        @Test
+        fun `uniqueness in the first 5 sessions`() {
+            // for each of the first five sessions, ensure phrases are unique
+            repeat(5) { sessionNumber ->
+                val phrases = List<String?>(8) { phraseNumber  ->
+                    // println("sessionNumber: $sessionNumber, phraseNumber: $phraseNumber")
+                    Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
+                }
+                phrases.forEach { phrase -> println(phrase) }
+                val nonNullPhrases = phrases.filterNotNull()
+
+                // ensure no phrase was null
+                assertThat(nonNullPhrases.size).isEqualTo(8)
+
+                // ensure all phrases are unique
+                assertThat(nonNullPhrases.distinct()).isEqualTo(nonNullPhrases)
+            }
+        }
+
+        @Test
+        fun `session uniqueness`() {
+            val sessionPhrases = List<List<String>>(5) { sessionNumber ->
+                // generate session phrase list
+                List<String?>(8) { phraseNumber  ->
+                    Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
+                }.filterNotNull()
+            }
+
+            // ensure sessions are unique
+            assertThat(sessionPhrases.distinct()).isEqualTo(sessionPhrases)
         }
     }
 }
