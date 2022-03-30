@@ -20,11 +20,12 @@ import javax.servlet.http.HttpSession
 
     // allow client cookies
     // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-    allowCredentials = "true"
+    allowCredentials = "true",
 
     // TODO filter down from wildcard to allowCredentials
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
-//    allowedHeaders = ["*"],
+    // allowedHeaders = ["*"]
+    allowedHeaders = ["Content-Type, Accept, X-Requested-With"]
 //
 //    exposedHeaders = ["*"],
 //    // exposedHeaders = arrayOf("set-cookie"),
