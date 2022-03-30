@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession
     // TODO filter down from wildcard to allowCredentials
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
     // allowedHeaders = ["*"]
-    allowedHeaders = ["Content-Type, Accept, X-Requested-With"]
+    allowedHeaders = ["Content-Type", "Accept", "X-Requested-With"]
 //
 //    exposedHeaders = ["*"],
 //    // exposedHeaders = arrayOf("set-cookie"),
