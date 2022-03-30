@@ -19,8 +19,8 @@ import tmcowley.appserver.submitSentence
 
     // TODO filter down from wildcard
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
-    // allowedHeaders = ["*"]
-    allowedHeaders = ["Content-Type", "Accept", "X-Requested-With"]
+    allowedHeaders = ["*"]
+//    allowedHeaders = ["Content-Type", "Accept", "X-Requested-With"]
 
     // exposedHeaders = ["*"],
     // exposedHeaders = arrayOf("set-cookie"),
