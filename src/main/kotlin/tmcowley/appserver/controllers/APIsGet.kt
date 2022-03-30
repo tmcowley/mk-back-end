@@ -5,25 +5,25 @@ import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.convertToLeft
 import tmcowley.appserver.convertToRight
+import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.submitSentence
 
-// // https://kotlinlang.org/docs/annotations.html#arrays-as-annotation-parameters
 @CrossOrigin(
     origins =
-    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com/", "https://tcowley.com/", "https://mirrored-keyboard.vercel.app/"],
+    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
     methods = [RequestMethod.GET],
-
-    // allow client cookies
-    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-    allowCredentials = "true",
 
     // TODO filter down from wildcard
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
     allowedHeaders = ["*"],
     // allowedHeaders = ["Content-Type", "Accept", "X-Requested-With"]
 
-    exposedHeaders = ["*"]
+    exposedHeaders = ["*"],
     // exposedHeaders = arrayOf("set-cookie"),
+
+    // allow client cookies
+    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+    allowCredentials = "true",
 )
 @RequestMapping(value = ["/api/v0"], produces = ["application/json"])
 @RestController
@@ -80,4 +80,10 @@ class APIsGet {
     /** get the phrases per session count */
     @GetMapping(value = ["/get-phrases-per-session"])
     fun getPhrasesPerSession(): Int = Singleton.phrasesPerSession
+
+    /** get a map of all user-ids to a list of their training sessions */
+    fun getAllSessionsForAllUsers(): HashMap<Int, List<TrainingSessionData>> {
+        // TODO
+        return hashMapOf<Int, List<TrainingSessionData>>()
+    }
 }

@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import tmcowley.appserver.Singleton
-import tmcowley.appserver.models.SessionData
+import tmcowley.appserver.models.TrainingSessionData
 
 object Users : IntIdTable() {
     val userCode = varchar("uid", 120).uniqueIndex()
@@ -193,7 +193,7 @@ class DatabaseController {
      * add a completed session to the database under user by user-code
      * stores it as the next available session number
      */
-    fun storeCompletedSession(userCode: String, data: SessionData): Boolean {
+    fun storeCompletedSession(userCode: String, data: TrainingSessionData): Boolean {
 
         // get next session number to be completed
         val sessionNumber = getNextSessionNumber(userCode) ?: return false
@@ -202,7 +202,7 @@ class DatabaseController {
     }
 
     /** add a new session to the database under user by user-code */
-    private fun createNewSession(userCode: String, sessionNumber: Int, sessionData: SessionData): Boolean {
+    private fun createNewSession(userCode: String, sessionNumber: Int, sessionData: TrainingSessionData): Boolean {
 
         // get userId of user
         val userEntityId = getUserEntityId(userCode) ?: return false
@@ -228,7 +228,7 @@ class DatabaseController {
     }
 
     private fun createSessionZero(userCode: String): Boolean {
-        return createNewSession(userCode, sessionNumber = 0, SessionData(speed = 0f, accuracy = 0f))
+        return createNewSession(userCode, sessionNumber = 0, TrainingSessionData(speed = 0f, accuracy = 0f))
     }
 
     /** get all sessions of a user by user-code */

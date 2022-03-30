@@ -3,6 +3,7 @@ package tmcowley.appserver.controllers
 import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
@@ -133,5 +134,11 @@ class APIsGetTests {
     @Test
     fun `get phrases per session`() {
         assertThat(apiInstance.getPhrasesPerSession()).isEqualTo(Singleton.phrasesPerSession)
+    }
+
+    @Disabled
+    @Test
+    fun `get user-id to sessions map`() {
+        // TODO
     }
 }

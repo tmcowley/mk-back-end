@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 
-import tmcowley.appserver.models.SessionData
+import tmcowley.appserver.models.TrainingSessionData
 
 @SpringBootTest
 class DatabaseControllerTests {
@@ -38,7 +38,9 @@ class DatabaseControllerTests {
     @Test
     fun `user-code taken`() {
         val nonMappingStrings = listOf("", " ", "test", "test-test", "test-test-test")
-        nonMappingStrings.forEach { code -> assertThat(db.userCodeTaken(code)).isFalse() }
+        nonMappingStrings.forEach { code ->
+            assertThat(db.userCodeTaken(code)).isFalse()
+        }
     }
 
     @Test
@@ -109,7 +111,7 @@ class DatabaseControllerTests {
         val nextSessionNumber = db.getNextSessionNumber(userCode) ?: return
 
         // add a session under the user
-        val sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        val sessionAdded = db.storeCompletedSession(userCode, TrainingSessionData(speed = 23f, accuracy = 23f))
         assertThat(sessionAdded)
 
         // check next session number is incremented
@@ -123,9 +125,9 @@ class DatabaseControllerTests {
         val userCode: String = createUserGettingCode() ?: return
 
         // add two sessions under the user
-        var sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        var sessionAdded = db.storeCompletedSession(userCode, TrainingSessionData(speed = 23f, accuracy = 23f))
         assertThat(sessionAdded)
-        sessionAdded = db.storeCompletedSession(userCode, SessionData(speed = 23f, accuracy = 23f))
+        sessionAdded = db.storeCompletedSession(userCode, TrainingSessionData(speed = 23f, accuracy = 23f))
         assertThat(sessionAdded)
 
         // check next session number is incremented

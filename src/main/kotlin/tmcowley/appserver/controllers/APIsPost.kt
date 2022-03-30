@@ -6,29 +6,30 @@ import kotlinx.serialization.json.Json
 import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
-import tmcowley.appserver.models.LoginForm
-import tmcowley.appserver.models.MetricsData
-import tmcowley.appserver.models.SessionData
-import tmcowley.appserver.models.SignupForm
+import tmcowley.appserver.models.SignInForm
+import tmcowley.appserver.models.TrainingSessionData
+import tmcowley.appserver.models.SignUpForm
+import tmcowley.appserver.utils.validateSessionData
+import tmcowley.appserver.utils.validateSignUpForm
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @CrossOrigin(
     origins =
-    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com/", "https://tcowley.com/", "https://mirrored-keyboard.vercel.app/"],
+    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
     methods = [RequestMethod.POST],
-
-    // allow client cookies
-    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-    allowCredentials = "true",
 
     // TODO filter down from wildcard to allowCredentials
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
     allowedHeaders = ["*"],
 //    allowedHeaders = ["Content-Type", "Accept", "X-Requested-With"]
 //
-    exposedHeaders = ["*"]
+    exposedHeaders = ["*"],
 //    // exposedHeaders = arrayOf("set-cookie"),
+
+    // allow client cookies
+    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+    allowCredentials = "true",
 )
 @RequestMapping(value = ["/api/v0"], consumes = ["application/json"], produces = ["application/json"])
 @RestController
@@ -49,13 +50,13 @@ class APIsPost {
     ): String? {
 
         val form = try {
-            Json.decodeFromString<SignupForm>(signupForm)
+            Json.decodeFromString<SignUpForm>(signupForm)
         } catch (e: SerializationException) {
-            println("Error: signup(): failed to deserialize form")
+            println("Error: signUp(): failed to deserialize form")
             return null
         }
 
-        if (form.age < 13) return null
+        if (!validateSignUpForm(form)) return null
 
         val userCode = SingletonControllers.db.createNewUserGettingCode(form.age, form.speed) ?: return null
 
@@ -73,7 +74,7 @@ class APIsPost {
     fun signIn(@RequestBody loginForm: String, request: HttpServletRequest): Boolean {
 
         val form = try {
-            Json.decodeFromString<LoginForm>(loginForm)
+            Json.decodeFromString<SignInForm>(loginForm)
         } catch (e: SerializationException) {
             println("Error: login(): failed to deserialize form")
             return false
@@ -82,8 +83,8 @@ class APIsPost {
         println("Notice: sign in attempt with user-code:${form.userCode}")
 
         // ensure the user exists
-        val validUser = userCodeTaken(form.userCode)
-        if (!validUser) return false
+        val isValidUser = userCodeTaken(form.userCode)
+        if (!isValidUser) return false
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
@@ -111,7 +112,6 @@ class APIsPost {
         session.invalidate()
     }
 
-    // TODO: move to get request
     /** check if a user is signed-in using their request */
     @PostMapping(value = ["/is-signed-in"])
     fun isSignedIn(request: HttpServletRequest): Boolean {
@@ -125,7 +125,6 @@ class APIsPost {
         return !(isSignedIn(request))
     }
 
-    // TODO: move to get request
     /** get the next phrase from the session's number and phrase number */
     @PostMapping(value = ["/get-next-phrase"])
     fun getNextPhrase(request: HttpServletRequest): String? {
@@ -179,15 +178,15 @@ class APIsPost {
         val userCode = session.getAttribute("userCode") as String
 
         // collect metrics
-        val metrics = try {
-            Json.decodeFromString<MetricsData>(metricsObj)
+        val sessionData = try {
+            Json.decodeFromString<TrainingSessionData>(metricsObj)
         } catch (e: SerializationException) {
             println("Error: login(): failed to deserialize form")
             return false
         }
 
-        // store metrics in session obj
-        val sessionData = SessionData(metrics.speed, metrics.accuracy)
+        // validate session data object
+        if (!validateSessionData(sessionData)) return null
 
         // store completed session in database
         SingletonControllers.db.storeCompletedSession(userCode, sessionData)

@@ -1,6 +1,6 @@
 package tmcowley.appserver.models
 
-enum class SideForm {
+enum class KeyboardSite {
     LEFT,
     RIGHT
 }

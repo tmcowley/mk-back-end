@@ -182,14 +182,6 @@
             <version>1.6.20-RC2</version>
         </dependency>
 
-<!--        &lt;!&ndash; https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-reflect &ndash;&gt;-->
-<!--        <dependency>-->
-<!--            <groupId>org.jetbrains.kotlin</groupId>-->
-<!--            <artifactId>kotlin-reflect</artifactId>-->
-<!--            <version>1.6.20-RC2</version>-->
-<!--            <scope>runtime</scope>-->
-<!--        </dependency>-->
-
     </dependencies>
 
     <build>
