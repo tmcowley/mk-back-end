@@ -15,6 +15,6 @@ class AppTests {
     @Disabled
     @Test
     fun `entry point invocation`() {
-        main(arrayOf())
+//        App.main(arrayOf())
     }
 }

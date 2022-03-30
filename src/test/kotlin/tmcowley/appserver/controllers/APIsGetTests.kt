@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
 
 @SpringBootTest
 class APIsGetTests {
@@ -31,8 +33,58 @@ class APIsGetTests {
         matches.forEach { match -> assertThat(results).contains(match) }
     }
 
+    private fun setSyntaxAnalysis(state: Boolean) {
+        setAnalysisProperty("syntaxAnalysisEnabled", state)
+        assertThat(Singleton.syntaxAnalysisEnabled).isEqualTo(state)
+    }
+
+    private fun setFrequencyAnalysis(state: Boolean) {
+        setAnalysisProperty("frequencyAnalysisEnabled", state)
+        assertThat(Singleton.syntaxAnalysisEnabled).isEqualTo(state)
+    }
+
+    private fun setAnalysisProperty(name: String, state: Boolean) {
+        // use reflection to manually enable syntax analysis
+        val singletonKClass = Singleton::class
+        val property = singletonKClass.memberProperties.find { property ->
+            property.name == name
+        }
+        if (property is KMutableProperty<*>) {
+            property.setter.call(Singleton, state)
+        }
+    }
+
+    /** reset analysis properties */
+    private fun resetAnalysisProperties() {
+        Singleton.resetAnalysisEnabledStates()
+    }
+
+    /**
+     * tests all analysis combinations: {syntax, frequency}, {syntax, no frequency}, ...
+     */
+    @Test
+    fun `basic submission with analysis combinations`() {
+
+        val booleanStates = listOf(true, false)
+
+        booleanStates.zip(booleanStates) { syntaxState, analysisState ->
+            // given
+            setSyntaxAnalysis(syntaxState)
+            setFrequencyAnalysis(analysisState)
+
+            // when, then
+            `basic submission`()
+
+            // reset properties
+            resetAnalysisProperties()
+        }
+    }
+
     @Test
     fun `basic submission with whole number`() {
+
+        assertThat(Singleton.syntaxAnalysisEnabled).isFalse
+
         val phrase = "there are 500 people"
         val matches = listOf(phrase)
         val results = apiInstance.submit(phrase)

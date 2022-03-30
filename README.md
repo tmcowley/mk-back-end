@@ -39,11 +39,12 @@ mvn clean install package exec:exec
 ### Back-end
 
 - [Spring Boot](https://spring.io/projects/spring-boot) 2.5.6
-- [Kotlin 1.6.10](https://kotlinlang.org/)
+- [Kotlin](https://kotlinlang.org/) 1.6.10
 - JDK: [java 17.0.1](https://openjdk.java.net/projects/jdk/17/) 2021-10-19 LTS
 
-### Front-end Configuration
+### Front-end
 
+- [TypeScript](https://www.typescriptlang.org/)
 - [React JS](https://reactjs.org/)
 
 ## Notices

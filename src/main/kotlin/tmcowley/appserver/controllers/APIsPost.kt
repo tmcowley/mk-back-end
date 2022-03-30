@@ -18,16 +18,16 @@ import javax.servlet.http.HttpSession
     ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com/", "https://tcowley.com/", "https://mirrored-keyboard.vercel.app/"],
     methods = [RequestMethod.POST],
 
-    // TODO filter down from wildcard to allowCredentials
-    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
-    allowedHeaders = ["*"],
-
-    exposedHeaders = ["*"],
-    // exposedHeaders = arrayOf("set-cookie"),
-
     // allow client cookies
     // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
     allowCredentials = "true"
+
+    // TODO filter down from wildcard to allowCredentials
+    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
+//    allowedHeaders = ["*"],
+//
+//    exposedHeaders = ["*"],
+//    // exposedHeaders = arrayOf("set-cookie"),
 )
 @RequestMapping(value = ["/api/v0"], consumes = ["application/json"], produces = ["application/json"])
 @RestController

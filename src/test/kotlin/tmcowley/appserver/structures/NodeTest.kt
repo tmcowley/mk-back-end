@@ -5,9 +5,10 @@ import org.junit.jupiter.api.Test
 
 internal class NodeTest {
 
-    private val parent = Node<String>("parent")
-    private val middle = Node<String>("middle")
-    private val child = Node<String>("child")
+    // given
+    private val parent = Node("parent")
+    private val middle = Node("middle")
+    private val child = Node("child")
 
     init {
         // set middle node's parent and add child
@@ -17,8 +18,10 @@ internal class NodeTest {
 
     @Test
     fun `destructuring with componentN functions`() {
+        // when
         val (value, parent, children) = middle
 
+        // then
         assertThat(value).isEqualTo("middle")
         assertThat(parent).isEqualTo(parent)
         assertThat(children).isEqualTo(mutableListOf(child))

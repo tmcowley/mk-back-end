@@ -8,33 +8,35 @@ import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.structures.getKeyPairHashMap
 import tmcowley.appserver.utils.LangTool
-import tmcowley.appserver.utils.parseFiveGrams
-import tmcowley.appserver.utils.parsePhrases
-import tmcowley.appserver.utils.parseWordFrequencies
-import tmcowley.appserver.utils.parseWords
+import tmcowley.appserver.utils.getFiveGrams
+import tmcowley.appserver.utils.getPhrases
+import tmcowley.appserver.utils.getWordFrequencies
+import tmcowley.appserver.utils.getWords
 
 object Singleton {
 
     // word and phrase lists
 
-    var words: HashSet<String> = parseWords()
-    val phrases: List<String> = parsePhrases()
-    var fiveGrams = parseFiveGrams()
+    var words: HashSet<String> = getWords()
+    val phrases: List<String> = getPhrases()
+    var fiveGrams = getFiveGrams()
 
     // properties and constants
 
     private val propertiesFile = File("src/main/resources/application.properties")
     val prop = Properties()
 
-    val syntaxAnalysisEnabled: Boolean
-    val frequencyAnalysisEnabled: Boolean
+    // mutable to allow setting with testing reflection
+    var syntaxAnalysisEnabled: Boolean
+    var frequencyAnalysisEnabled: Boolean
+
     const val phrasesPerSession = 8
     val maxWord = words.maxByOrNull { word -> word.length }
 
     // maps
 
     var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
-    private val wordFreqLookup: HashMap<String, Int> = parseWordFrequencies()
+    private val wordFreqLookup: HashMap<String, Int> = getWordFrequencies()
 
 
     // tools/ util-classes
@@ -48,7 +50,7 @@ object Singleton {
         // set prop using application.properties
         FileInputStream(propertiesFile).use { inStream -> prop.load(inStream) }
 
-        // set constants from system properties
+        // set from system properties
         syntaxAnalysisEnabled = (this.prop["analyseSyntax"] as String).toBoolean()
         frequencyAnalysisEnabled = (this.prop["analyseFrequency"] as String).toBoolean()
     }
@@ -114,5 +116,12 @@ object Singleton {
     fun getWordFrequency(word: String): Int {
         val wordFreq: Int? = wordFreqLookup[word]
         return wordFreq ?: 0
+    }
+
+    /** for resetting analysis enabled states from properties (used in testing) */
+    fun resetAnalysisEnabledStates() {
+        // set from system properties
+        syntaxAnalysisEnabled = (this.prop["analyseSyntax"] as String).toBoolean()
+        frequencyAnalysisEnabled = (this.prop["analyseFrequency"] as String).toBoolean()
     }
 }

@@ -6,19 +6,20 @@ import org.springframework.cache.annotation.EnableCaching
 
 @SpringBootApplication
 @EnableCaching
-class App
+class App {
+
+    init{
+        // output algorithm configuration
+        println("\nNotice: Syntax analysis ${
+            if (Singleton.syntaxAnalysisEnabled) "enabled" else "disabled"
+        }")
+
+        println("Notice: Frequency analysis ${
+            if (Singleton.frequencyAnalysisEnabled) "enabled" else "disabled"
+        }\n")
+    }
+}
 
 fun main(args: Array<String>) {
     runApplication<App>(*args)
-
-    // output algorithm configuration
-    run {
-        println()
-
-        if (Singleton.syntaxAnalysisEnabled) println("Notice: Syntax analysis enabled")
-        else println("Notice: Syntax analysis disabled")
-
-        if (Singleton.frequencyAnalysisEnabled) println("Notice: Frequency analysis enabled")
-        else println("Notice: Frequency analysis disabled")
-    }
 }

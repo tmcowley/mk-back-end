@@ -120,10 +120,10 @@ class SingletonTest {
         @Test
         fun `determinism for first 20 sessions`() {
             // for each of the first 20 sessions, ensure phrases are deterministic
-            repeat(20) { sessionNumber ->
-                repeat(8) { phraseNumber ->
-                    val phraseN = Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
-                    assertThat(phraseN).isEqualTo(Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1))
+            (1 .. 20).forEach { sessionNumber ->
+                (1 .. 8).forEach { phraseNumber ->
+                    val phraseN = Singleton.getPhrase(sessionNumber, phraseNumber)
+                    assertThat(phraseN).isEqualTo(Singleton.getPhrase(sessionNumber, phraseNumber))
                 }
             }
         }
@@ -136,10 +136,11 @@ class SingletonTest {
         @Test
         fun `uniqueness in the first 5 sessions`() {
             // for each of the first five sessions, ensure phrases are unique
-            repeat(5) { sessionNumber ->
-                val phrases = List<String?>(8) { phraseNumber  ->
+            (1 .. 5).forEach { sessionNumber ->
+                val phrases = List(Singleton.phrasesPerSession) { phraseIndex  ->
+                    val phraseNumber = phraseIndex + 1
                     // println("sessionNumber: $sessionNumber, phraseNumber: $phraseNumber")
-                    Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
+                    Singleton.getPhrase(sessionNumber, phraseNumber)
                 }
                 phrases.forEach { phrase -> println(phrase) }
                 val nonNullPhrases = phrases.filterNotNull()
@@ -154,10 +155,12 @@ class SingletonTest {
 
         @Test
         fun `session uniqueness`() {
-            val sessionPhrases = List<List<String>>(5) { sessionNumber ->
+            val sessionPhrases = List(5) { sessionIndex ->
+                val sessionNumber = sessionIndex + 1
                 // generate session phrase list
-                List<String?>(8) { phraseNumber  ->
-                    Singleton.getPhrase(sessionNumber + 1, phraseNumber + 1)
+                List(Singleton.phrasesPerSession) { phraseIndex  ->
+                    val phraseNumber = phraseIndex + 1
+                    Singleton.getPhrase(sessionNumber, phraseNumber)
                 }.filterNotNull()
             }
 
