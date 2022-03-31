@@ -158,6 +158,18 @@ class DatabaseControllerTests {
         assertThat(mappedUserId).isEqualTo(correctUserId)
     }
 
+    @Test
+    fun `count users`() {
+        // given (at least one user)
+        createUser()
+
+        // when
+        val count = db.countUsers()
+
+        // then
+        assertThat(count).isGreaterThan(0)
+    }
+
     @Nested
     inner class GetAllSessions {
 

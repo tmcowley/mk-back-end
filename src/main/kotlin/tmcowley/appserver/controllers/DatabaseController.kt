@@ -58,6 +58,30 @@ class Session(id: EntityID<Int>) : IntEntity(id) {
     var number by Sessions.number
     var speed by Sessions.speed
     var accuracy by Sessions.accuracy
+
+    override fun toString(): String {
+        return "Session(number=$number, speed=$speed, accuracy=$accuracy)"
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Session
+
+        if (number != other.number) return false
+        if (speed != other.speed) return false
+        if (accuracy != other.accuracy) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = number
+        result = 31 * result + speed.hashCode()
+        result = 31 * result + accuracy.hashCode()
+        return result
+    }
 }
 
 class DatabaseController {
@@ -120,8 +144,8 @@ class DatabaseController {
             return null
         }
 
-        // create empty session (as session 0)
-        val createdNewSession = createSessionZero(userCode)
+        // create the zero session, storing normal typing speed
+        val createdNewSession = createSessionZero(userCode, typingSpeed.toFloat())
         if (!createdNewSession) return null
 
         // return full user object
@@ -227,8 +251,8 @@ class DatabaseController {
         return true
     }
 
-    private fun createSessionZero(userCode: String): Boolean {
-        return createNewSession(userCode, sessionNumber = 0, TrainingSessionData(speed = 0f, accuracy = 0f))
+    private fun createSessionZero(userCode: String, normalTypingSpeed: Float): Boolean {
+        return createNewSession(userCode, sessionNumber = 0, TrainingSessionData(speed = normalTypingSpeed, accuracy = 0f))
     }
 
     /** get all sessions of a user by user-code */
@@ -260,5 +284,30 @@ class DatabaseController {
         }
 
         return sessions
+    }
+
+    /** count the number of system users */
+    fun countUsers(): Long {
+        return transaction {
+            User.all().count()
+        }
+    }
+
+    /** get a map of users to their training sessions */
+    fun getTrainingSessionsForEachUser(): Map<User, List<Session>> {
+
+        val userToSessions = mutableMapOf<User, List<Session>>()
+
+        transaction {
+            // get all users
+            val users = User.all()
+            users.forEach { user ->
+                // get sessions against user
+                val sessions = getAllSessions(user.id.value)
+                userToSessions[user] = sessions
+            }
+        }
+
+        return userToSessions
     }
 }

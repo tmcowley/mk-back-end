@@ -3,10 +3,10 @@ package tmcowley.appserver.controllers
 import org.junit.jupiter.api.Test
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
+import tmcowley.appserver.SingletonControllers
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
 
@@ -14,6 +14,7 @@ import kotlin.reflect.full.memberProperties
 class APIsGetTests {
 
     val apiInstance = APIsGet()
+    val db = SingletonControllers.db
 
     val phrase: String = "The house at the end of the street is red."
 
@@ -136,9 +137,27 @@ class APIsGetTests {
         assertThat(apiInstance.getPhrasesPerSession()).isEqualTo(Singleton.phrasesPerSession)
     }
 
-    @Disabled
     @Test
-    fun `get user-id to sessions map`() {
-        // TODO
+    fun `get user-id to sessions map - size check`() {
+        // given
+        val userCount = db.countUsers()
+
+        // when
+        val userIdToSessions = apiInstance.getSessionsForEachUser()
+
+        // then
+        assertThat(userIdToSessions.size).isEqualTo(userCount)
+    }
+
+    @Test
+    fun `get user-id to sessions map - deep check`() {
+        // given
+        val userIdToSessions = apiInstance.getSessionsForEachUser()
+
+        userIdToSessions.forEach { (userId, sessions) ->
+            // then
+            val expectedSessions = db.getAllSessions(userId)
+            assertThat(sessions).isEqualTo(expectedSessions)
+        }
     }
 }

@@ -2,11 +2,7 @@ package tmcowley.appserver.controllers
 
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation.*
-import tmcowley.appserver.Singleton
-import tmcowley.appserver.convertToLeft
-import tmcowley.appserver.convertToRight
-import tmcowley.appserver.models.TrainingSessionData
-import tmcowley.appserver.submitSentence
+import tmcowley.appserver.*
 
 @CrossOrigin(
     origins =
@@ -82,8 +78,15 @@ class APIsGet {
     fun getPhrasesPerSession(): Int = Singleton.phrasesPerSession
 
     /** get a map of all user-ids to a list of their training sessions */
-    fun getAllSessionsForAllUsers(): HashMap<Int, List<TrainingSessionData>> {
-        // TODO
-        return hashMapOf<Int, List<TrainingSessionData>>()
+    @GetMapping(value = ["/get-sessions-for-each-user"])
+    fun getSessionsForEachUser(): Map<Int, List<Session>> {
+        // map of users to their sessions
+        val userMap = SingletonControllers.db.getTrainingSessionsForEachUser()
+
+        // create map of user-id to their sessions
+        val userIdMap = userMap.mapKeys { (user, _) ->
+            user.id.value
+        }
+        return userIdMap
     }
 }
