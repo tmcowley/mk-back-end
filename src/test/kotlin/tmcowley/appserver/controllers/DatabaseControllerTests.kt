@@ -204,4 +204,19 @@ class DatabaseControllerTests {
             // TODO
         }
     }
+
+    @Nested
+    inner class Entities {
+        @Test
+        fun `Session overwritten functions`() {
+            createUser()
+            val sessionOne = transaction { Session.all().firstOrNull() }
+            createUser()
+            val sessionTwo = transaction { Session.all().firstOrNull() }
+
+            sessionOne.toString()
+
+            assertThat(sessionOne?.hashCode()).isEqualTo(sessionTwo?.hashCode())
+        }
+    }
 }

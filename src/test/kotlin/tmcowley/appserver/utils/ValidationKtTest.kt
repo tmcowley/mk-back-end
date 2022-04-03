@@ -1,7 +1,6 @@
 package tmcowley.appserver.utils
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import tmcowley.appserver.models.TrainingSessionData
 
@@ -105,9 +104,55 @@ internal class ValidationKtTest {
         }
     }
 
-    @Disabled
     @Test
-    fun `user-code format validation`() {
-        // TODO
+    fun `user-code format validation - valid`() {
+        // given
+        val codes = listOf(
+            "spilt-cubes-world",
+            "altos-fiche-twist",
+            "altar-drift-drool"
+        )
+
+        codes.forEach { code ->
+            // when
+            val codeIsValid = validateUserCode(code)
+
+            // then
+            assertThat(codeIsValid)
+        }
+    }
+
+    @Test
+    fun `user-code format validation - invalid`() {
+        // given
+        val codes = listOf(
+
+            // empty
+            "",
+
+            // too short
+            "altos-fiche",
+
+            // too long
+            "spilt-cubes-worlds",
+
+            // wrong formatting
+            "spilt_cubes_world",
+
+            // words wrong size
+            "a-caterpillar-art",
+
+            // wrong case
+            "SPLIT-CUBES-WORLD",
+            "Spilt-Cubes-World",
+        )
+
+        codes.forEach { code ->
+            // when
+            val codeIsValid = validateUserCode(code)
+
+            // then
+            assertThat(codeIsValid).isFalse
+        }
     }
 }

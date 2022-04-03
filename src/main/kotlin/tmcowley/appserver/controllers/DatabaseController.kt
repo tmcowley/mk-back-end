@@ -139,10 +139,8 @@ class DatabaseController {
 
         // verify user by code exists
         val userAdded = userCodeTaken(userCode)
-        if (!userAdded) {
-            println("Error: User-creation failed")
-            return null
-        }
+        if (!userAdded) println("Error: User-creation failed")
+        if (!userAdded) return null
 
         // create the zero session, storing normal typing speed
         val createdNewSession = createSessionZero(userCode, typingSpeed.toFloat())
@@ -184,8 +182,7 @@ class DatabaseController {
         val topSession: Session? = getAllSessions(userId).maxByOrNull { session -> session.number }
 
         // null top session indicates error
-        topSession
-            ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
+        topSession ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
 
         return topSession
     }

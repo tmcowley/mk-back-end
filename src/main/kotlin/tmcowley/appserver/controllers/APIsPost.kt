@@ -11,6 +11,7 @@ import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.models.SignUpForm
 import tmcowley.appserver.utils.validateSessionData
 import tmcowley.appserver.utils.validateSignUpForm
+import tmcowley.appserver.utils.validateUserCode
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
@@ -35,6 +36,8 @@ import javax.servlet.http.HttpSession
 @RestController
 class APIsPost {
 
+    private val db = SingletonControllers.db
+
     // -----
     // STATE-DEPENDENT APIs
     // -----
@@ -58,12 +61,12 @@ class APIsPost {
 
         if (!validateSignUpForm(form)) return null
 
-        val userCode = SingletonControllers.db.createNewUserGettingCode(form.age, form.speed) ?: return null
+        val userCode = db.createNewUserGettingCode(form.age, form.speed) ?: return null
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
         session.setAttribute("userCode", userCode)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(userCode))
+        session.setAttribute("sessionNumber", db.getNextSessionNumber(userCode))
 
         // get a random phrase from the phrase list
         return userCode
@@ -76,20 +79,25 @@ class APIsPost {
         val form = try {
             Json.decodeFromString<SignInForm>(loginForm)
         } catch (e: SerializationException) {
-            println("Error: login(): failed to deserialize form")
+            println("Error: signIn(): failed to deserialize form")
             return false
         }
 
-        println("Notice: sign in attempt with user-code:${form.userCode}")
+        val userCode = form.userCode.lowercase()
+
+        println("Notice: sign in attempt with user-code:${userCode}")
+
+        // validate code format
+        if (!validateUserCode(userCode)) return false
 
         // ensure the user exists
-        val isValidUser = userCodeTaken(form.userCode)
+        val isValidUser = userCodeTaken(userCode)
         if (!isValidUser) return false
 
         // create new session, if needed
         val session: HttpSession = request.getSession(true)
-        session.setAttribute("userCode", form.userCode)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(form.userCode))
+        session.setAttribute("userCode", userCode)
+        session.setAttribute("sessionNumber", db.getNextSessionNumber(form.userCode))
 
         return true
     }
@@ -97,7 +105,7 @@ class APIsPost {
     /** check if a user-code is assigned to a user */
     private fun userCodeTaken(userCode: String): Boolean {
         // println("userCodeTaken() called with user-code: ${userCode}")
-        return SingletonControllers.db.userCodeTaken(userCode)
+        return db.userCodeTaken(userCode)
     }
 
     /** sign out a user; invalidates the user session */
@@ -189,10 +197,10 @@ class APIsPost {
         if (!validateSessionData(sessionData)) return null
 
         // store completed session in database
-        SingletonControllers.db.storeCompletedSession(userCode, sessionData)
+        db.storeCompletedSession(userCode, sessionData)
 
         // increment session number (if exists next session)
-        session.setAttribute("sessionNumber", SingletonControllers.db.getNextSessionNumber(userCode))
+        session.setAttribute("sessionNumber", db.getNextSessionNumber(userCode))
 
         // report success
         return true

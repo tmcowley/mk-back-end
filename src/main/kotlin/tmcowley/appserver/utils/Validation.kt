@@ -31,6 +31,20 @@ fun validateSessionData(session: TrainingSessionData): Boolean {
 
 /** validate the format of a user-code (5gram-5gram-5gram) */
 fun validateUserCode(userCode: String): Boolean {
-    // TODO
+    // length check
+    if (userCode.length != 17) return false
+
+    // case check - must be lowercase
+    if (userCode.lowercase() != userCode) return false
+
+    // split on dashes
+    val words = userCode.split("-")
+
+    // check there are three words
+    if (words.size != 3) return false
+
+    // check each word is a 5-gram
+    if (!words.all { word -> word.length == 5}) return false
+
     return true
 }
