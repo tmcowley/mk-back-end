@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class AppTests {
+internal class AppTests {
 
     @Test
     fun contextLoads() {
@@ -15,6 +15,6 @@ class AppTests {
     @Disabled
     @Test
     fun `entry point invocation`() {
-//        App.main(arrayOf())
+        main(arrayOf())
     }
 }

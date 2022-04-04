@@ -1,6 +1,6 @@
 package tmcowley.appserver.models
 
-enum class KeyboardSite {
+enum class KeyboardSide {
     LEFT,
     RIGHT
 }

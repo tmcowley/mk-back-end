@@ -2,7 +2,7 @@ package tmcowley.appserver
 
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
-import tmcowley.appserver.models.KeyboardSite
+import tmcowley.appserver.models.KeyboardSide
 import tmcowley.appserver.utils.getFrequencyScore
 import tmcowley.appserver.structures.getSentences
 import tmcowley.appserver.structures.getMatchedWords
@@ -111,24 +111,24 @@ private fun isNotAlphabetic(char: Char): Boolean {
 
 /** convert from any form to right-hand side form */
 fun convertToRight(input: String?): String {
-    return convertToForm(KeyboardSite.RIGHT, input)
+    return convertToForm(KeyboardSide.RIGHT, input)
 }
 
 /** convert from any form to left-hand side form */
 fun convertToLeft(input: String?): String {
-    return convertToForm(KeyboardSite.LEFT, input)
+    return convertToForm(KeyboardSide.LEFT, input)
 }
 
 /** convert from any form to side forms */
-private fun convertToForm(form: KeyboardSite, input: String?): String {
+private fun convertToForm(form: KeyboardSide, input: String?): String {
     input ?: return ""
 
     val inputForm = (input.map { char ->
         if (isNotAlphabetic(char)) char
         else (
                 when (form) {
-                    KeyboardSite.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
-                    KeyboardSite.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
+                    KeyboardSide.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
+                    KeyboardSide.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
                 }
                 )
     }.joinToString(separator = ""))

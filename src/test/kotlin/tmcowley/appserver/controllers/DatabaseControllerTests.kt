@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Nested
 import tmcowley.appserver.models.TrainingSessionData
 
 @SpringBootTest
-class DatabaseControllerTests {
+internal class DatabaseControllerTests {
 
     val db = DatabaseController()
 
@@ -72,7 +72,7 @@ class DatabaseControllerTests {
                 speed = 60
             }
 
-            val session = Session.new {
+            val trainingSession = TrainingSession.new {
                 number = 1
                 speed = 60f
                 accuracy = 70f
@@ -80,13 +80,13 @@ class DatabaseControllerTests {
 
             val sessionToUser = SessionToUser.new {
                 userId = user.id
-                sessionId = session.id
+                sessionId = trainingSession.id
             }
 
             commit()
 
             assertThat(User.all()).contains(user)
-            assertThat(Session.all()).contains(session)
+            assertThat(TrainingSession.all()).contains(trainingSession)
             assertThat(SessionToUser.all()).contains(sessionToUser)
         }
     }
@@ -171,7 +171,7 @@ class DatabaseControllerTests {
     }
 
     @Nested
-    inner class GetAllSessions {
+    inner class GetAllTrainingSessions {
 
         private val invalidUserCode = "invalid-user-code"
 
@@ -210,9 +210,9 @@ class DatabaseControllerTests {
         @Test
         fun `Session overwritten functions`() {
             createUser()
-            val sessionOne = transaction { Session.all().firstOrNull() }
+            val sessionOne = transaction { TrainingSession.all().firstOrNull() }
             createUser()
-            val sessionTwo = transaction { Session.all().firstOrNull() }
+            val sessionTwo = transaction { TrainingSession.all().firstOrNull() }
 
             sessionOne.toString()
 

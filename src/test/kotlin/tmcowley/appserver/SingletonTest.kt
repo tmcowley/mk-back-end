@@ -18,7 +18,7 @@ import kotlin.test.assertNull
 import kotlin.test.assertNotNull
 
 @SpringBootTest
-class SingletonTest {
+internal class SingletonTest {
 
     init {
         Singleton
@@ -141,15 +141,13 @@ class SingletonTest {
                     val phraseNumber = phraseIndex + 1
                     // println("sessionNumber: $sessionNumber, phraseNumber: $phraseNumber")
                     Singleton.getPhrase(sessionNumber, phraseNumber)
-                }
-                phrases.forEach { phrase -> println(phrase) }
-                val nonNullPhrases = phrases.filterNotNull()
+                }.filterNotNull()
 
                 // ensure no phrase was null
-                assertThat(nonNullPhrases.size).isEqualTo(8)
+                assertThat(phrases.size).isEqualTo(8)
 
                 // ensure all phrases are unique
-                assertThat(nonNullPhrases.distinct()).isEqualTo(nonNullPhrases)
+                assertThat(phrases.distinct()).isEqualTo(phrases)
             }
         }
 

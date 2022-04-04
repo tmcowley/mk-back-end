@@ -79,7 +79,7 @@ class APIsGet {
 
     /** get a map of all user-ids to a list of their training sessions */
     @GetMapping(value = ["/get-sessions-for-each-user"])
-    fun getSessionsForEachUser(): Map<Int, List<Session>> {
+    fun getSessionsForEachUser(): Map<Int, List<TrainingSession>> {
         // map of users to their sessions
         val userMap = SingletonControllers.db.getTrainingSessionsForEachUser()
 

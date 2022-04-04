@@ -12,7 +12,7 @@ import tmcowley.appserver.controllers.APIsGet
     Tag("slow")
 )
 @SpringBootTest
-class Evaluation {
+internal class Evaluation {
 
     val getAPIs: APIsGet = APIsGet()
     val phrases: List<String> = Singleton.phrases

@@ -5,15 +5,18 @@ import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockHttpServletRequest
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.encodeToString
-import org.junit.jupiter.api.Disabled
+import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.models.SignInForm
 import tmcowley.appserver.models.SignUpForm
+import tmcowley.appserver.models.TrainingSessionData
+import tmcowley.appserver.utils.validateSessionData
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
 internal class APIsPostTest {
 
+    private val db = SingletonControllers.db
     private val apiInstance = APIsPost()
 
     /** get a fresh (unseen by server) request */
@@ -26,21 +29,31 @@ internal class APIsPostTest {
     /** create a new user, get the user-code */
     private fun createUser(): String {
         // create new user, get user-code
-        val userCode = SingletonControllers.db.createNewUserGettingCode(21, 60)
+        val userCode = db.createNewUserGettingCode(21, 60)
         assertNotNull(userCode)
-        assertThat(SingletonControllers.db.userCodeTaken(userCode))
+        assertThat(db.userCodeTaken(userCode))
         return userCode
     }
 
-    fun getSignedInRequest(): MockHttpServletRequest {
+    /** get a signed-in request with a fresh user */
+    private fun getSignedInRequest(): MockHttpServletRequest {
         // create a new user
         val userCode = createUser()
 
-        return getSignedInRequest(userCode)
+        // sign-in user, get request
+        val request = getSignedInRequest(userCode)
+
+        // ensure session established correctly
+        val session = request.getSession(false)
+        assertNotNull(session)
+        assertThat(session.getAttribute("sessionNumber")).isEqualTo(1)
+        assertThat(session.getAttribute("phraseNumber")).isEqualTo(0)
+
+        return request
     }
 
-    /** get a signed-in request */
-    fun getSignedInRequest(userCode: String): MockHttpServletRequest {
+    /** get a signed-in request, with user-code */
+    private fun getSignedInRequest(userCode: String): MockHttpServletRequest {
         // create sign in form
         val form = SignInForm(userCode)
         val formSerialized = Json.encodeToString(form)
@@ -60,7 +73,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign up - with valid form`() {
+    fun `sign-up - with valid form`() {
         // given
         val form = SignUpForm(21, 60)
         val formSerialized = Json.encodeToString(form)
@@ -76,7 +89,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign up - with invalid form`() {
+    fun `sign-up - with invalid form`() {
         // given
         val form = SignUpForm(-10, 60)
         val formSerialized = Json.encodeToString(form)
@@ -92,7 +105,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign up - with invalidly serialized form`() {
+    fun `sign-up - with invalidly serialized form`() {
         // given
 
         // serialization is deliberately invalid
@@ -109,7 +122,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign in - with valid form`() {
+    fun `sign-in - with valid form`() {
         // given
         val userCode = createUser()
         val form = SignInForm(userCode)
@@ -126,7 +139,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign in - with invalid form`() {
+    fun `sign-in - with invalid form`() {
         // given
         val userCode = "not-a-user"
         val form = SignInForm(userCode)
@@ -143,7 +156,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun `sign in - with invalidly serialized form`() {
+    fun `sign-in - with invalidly serialized form`() {
         // given
         val userCode = "not-a-user"
 
@@ -161,7 +174,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun signOut() {
+    fun `sign-out`() {
         // given
 
         // get signed-in user request
@@ -176,7 +189,7 @@ internal class APIsPostTest {
     }
 
     @Test
-    fun isSignedIn() {
+    fun `is signed-in`() {
         // given
 
         // get signed-in user request
@@ -189,26 +202,67 @@ internal class APIsPostTest {
         assertThat(isSignedIn)
     }
 
-    @Disabled
     @Test
     fun `get next phrase - initial request`() {
-        // TODO
+        // given
+        // new user signed in
+        val request = getSignedInRequest()
+
+        // when
+        val phrase = apiInstance.getNextPhrase(request)
+        val session = request.getSession(false)
+        assertNotNull(session)
+        assertThat(session.getAttribute("sessionNumber")).isEqualTo(1)
+        assertThat(session.getAttribute("phraseNumber")).isEqualTo(1)
+
+        // then
+        assertNotNull(phrase)
+        assertThat(phrase).isNotEmpty
+        assertThat(phrase).isEqualTo(Singleton.getPhrase(1, 1))
     }
 
-    @Disabled
     @Test
-    fun `get next phrase - request at session one, phrase two`() {
-        // TODO
+    fun `get next phrase - request session one, phrase two`() {
+        // given
+        // existing user signed in
+        val request = getSignedInRequest()
+        val session = request.getSession(false)
+        assertNotNull(session)
+        session.setAttribute("sessionNumber", 1)
+        session.setAttribute("phraseNumber", 1)
+
+        // when
+        val phrase = apiInstance.getNextPhrase(request)
+
+        // then
+        assertNotNull(phrase)
+        assertThat(phrase).isNotEmpty
+        assertThat(phrase).isEqualTo(Singleton.getPhrase(1, 2))
+
+        // ensure second phrase does not collide with initial
+        assertThat(phrase).isNotEqualTo(apiInstance.getNextPhrase(getSignedInRequest()))
     }
 
-    @Disabled
     @Test
-    fun `get next phrase - request at session two, phrase one`() {
-        // TODO
+    fun `get next phrase - request out of phrase bounds`() {
+        // given
+        // existing user signed in
+        val request = getSignedInRequest()
+        val session = request.getSession(false)
+        assertNotNull(session)
+        session.setAttribute("sessionNumber", 1)
+        session.setAttribute("phraseNumber", Singleton.phrasesPerSession)
+
+        // when
+        // query (upper limit + 1)th phrase
+        val phrase = apiInstance.getNextPhrase(request)
+
+        // then
+        assertNull(phrase)
     }
 
     @Test
-    fun getUserCode() {
+    fun `get user-code`() {
         // given
 
         // create new user
@@ -222,9 +276,122 @@ internal class APIsPostTest {
         assertThat(actualUserCode).isEqualTo(expectedUserCode)
     }
 
-    @Disabled
     @Test
-    fun reportCompletedSession() {
-        // TODO
+    fun `report completed session`() {
+        // given
+
+        // signed-in new user, on session 1 final phrase
+        val userCode = createUser()
+        val request = getSignedInRequest(userCode)
+        val session = request.getSession(false)
+        assertNotNull(session)
+        session.setAttribute("sessionNumber", 1)
+        session.setAttribute("phraseNumber", Singleton.phrasesPerSession)
+
+        // with valid metrics:
+        val metrics = TrainingSessionData(60f, 100f)
+        val metricsSerialized = Json.encodeToString(metrics)
+        assertThat(validateSessionData(metrics))
+
+        // when
+
+        // we report completed session
+        val trainingSessionAdded = apiInstance.reportCompletedSession(metricsSerialized, request)
+
+        // then
+
+        // ensure session added successfully
+        assertThat(trainingSessionAdded)
+
+        // check db
+        val trainingSessions = db.getAllSessions(userCode)
+        assertNotNull(trainingSessions)
+        val trainingSession = trainingSessions.firstOrNull()
+        assertNotNull(trainingSession)
+        val speedsMatch = trainingSession.speed == metrics.speed
+        val accuraciesMatch = trainingSession.accuracy == metrics.accuracy
+        val trainingSessionMatchesEntry = (speedsMatch && accuraciesMatch)
+        assertThat(trainingSessionMatchesEntry)
+
+        // check attributes set accordingly
+        val sessionNumber = session.getAttribute("sessionNumber")
+        val phraseNumber = session.getAttribute("phraseNumber")
+
+        assertThat(sessionNumber).isEqualTo(2)
+        assertThat(phraseNumber).isEqualTo(0)
+    }
+
+    @Test
+    fun `report completed session - failing - user not signed in`() {
+        // given
+
+        // non-signed-in request
+        val request = getFreshRequest()
+
+        // with valid metrics:
+        val metrics = TrainingSessionData(60f, 100f)
+        val metricsSerialized = Json.encodeToString(metrics)
+        assertThat(validateSessionData(metrics))
+
+        // when
+
+        // we report completed session
+        val trainingSessionAdded = apiInstance.reportCompletedSession(metricsSerialized, request)
+
+        // then
+
+        // ensure session addition fails
+        assertThat(trainingSessionAdded).isFalse
+    }
+
+    @Test
+    fun `report completed session - failing - form encoding invalid`() {
+        // given
+
+        // signed-in new user, on session 1 final phrase
+        val userCode = createUser()
+        val request = getSignedInRequest(userCode)
+        val session = request.getSession(false)
+        assertNotNull(session)
+        session.setAttribute("sessionNumber", 1)
+        session.setAttribute("phraseNumber", Singleton.phrasesPerSession)
+
+        // with valid metrics (intentionally invalidly formatted)
+        val metrics = TrainingSessionData(60f, 100f)
+        val metricsIncorrectlySerialized = metrics.toString()
+
+        // we report completed session
+        val trainingSessionAdded = apiInstance.reportCompletedSession(metricsIncorrectlySerialized, request)
+
+        // then
+
+        // ensure session addition fails
+        assertThat(trainingSessionAdded).isFalse
+    }
+
+    @Test
+    fun `report completed session - failing - metrics invalid`() {
+        // given
+
+        // signed-in new user, on session 1 final phrase
+        val userCode = createUser()
+        val request = getSignedInRequest(userCode)
+        val session = request.getSession(false)
+        assertNotNull(session)
+        session.setAttribute("sessionNumber", 1)
+        session.setAttribute("phraseNumber", Singleton.phrasesPerSession)
+
+        // with invalid metrics:
+        val metrics = TrainingSessionData(60f, 101f)
+        val metricsSerialized = Json.encodeToString(metrics)
+        assertThat(validateSessionData(metrics)).isFalse
+
+        // we report completed session
+        val trainingSessionAdded = apiInstance.reportCompletedSession(metricsSerialized, request)
+
+        // then
+
+        // ensure session addition fails
+        assertThat(trainingSessionAdded).isFalse
     }
 }

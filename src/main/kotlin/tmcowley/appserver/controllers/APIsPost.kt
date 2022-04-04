@@ -67,6 +67,7 @@ class APIsPost {
         val session: HttpSession = request.getSession(true)
         session.setAttribute("userCode", userCode)
         session.setAttribute("sessionNumber", db.getNextSessionNumber(userCode))
+        session.setAttribute("phraseNumber", 0)
 
         // get a random phrase from the phrase list
         return userCode
@@ -98,6 +99,7 @@ class APIsPost {
         val session: HttpSession = request.getSession(true)
         session.setAttribute("userCode", userCode)
         session.setAttribute("sessionNumber", db.getNextSessionNumber(form.userCode))
+        session.setAttribute("phraseNumber", 0)
 
         return true
     }
@@ -144,13 +146,9 @@ class APIsPost {
         val session: HttpSession = request.getSession(false)
         val sessionNumber = session.getAttribute("sessionNumber") as Int
 
-        // if first session -> init phrase count
-        val isFirstSession = (sessionNumber == 1)
-        if (isFirstSession) session.setAttribute("phraseNumber", 1)
-
-        // completed typing session
+        // session phrases exhausted
         var phraseNumber = session.getAttribute("phraseNumber") as Int
-        val hasCompletedTypingSession = (phraseNumber >= Singleton.phrasesPerSession)
+        val hasCompletedTypingSession = (phraseNumber == Singleton.phrasesPerSession)
         if (hasCompletedTypingSession) {
             // need to collect metrics before progressing
             return null
@@ -171,19 +169,22 @@ class APIsPost {
         // ensure user is logged in
         if (isNotSignedIn(request)) return null
 
-        val session: HttpSession = request.getSession(false)
+        val session = request.getSession(false)
         return session.getAttribute("userCode") as String
     }
 
     /** get the user code attached to the session */
     @PostMapping(value = ["/report-completed-session"])
-    fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean? {
+    fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean {
 
         // ensure user is logged in
-        if (isNotSignedIn(request)) return null
+        if (isNotSignedIn(request)) return false
 
-        val session: HttpSession = request.getSession(false)
+        val session = request.getSession(false)
         val userCode = session.getAttribute("userCode") as String
+
+        val isNotLastPhrase = (session.getAttribute("phraseNumber") != Singleton.phrasesPerSession)
+        if (isNotLastPhrase) return false
 
         // collect metrics
         val sessionData = try {
@@ -194,13 +195,14 @@ class APIsPost {
         }
 
         // validate session data object
-        if (!validateSessionData(sessionData)) return null
+        if (!validateSessionData(sessionData)) return false
 
         // store completed session in database
         db.storeCompletedSession(userCode, sessionData)
 
-        // increment session number (if exists next session)
+        // increment session number (if exists next session); reset phrase number
         session.setAttribute("sessionNumber", db.getNextSessionNumber(userCode))
+        session.setAttribute("phraseNumber", 0)
 
         // report success
         return true

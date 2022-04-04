@@ -32,7 +32,7 @@ class User(id: EntityID<Int>) : IntEntity(id) {
 
 object SessionsToUsers : IntIdTable() {
     val user_id = reference("user_id", Users)
-    val session_id = reference("session_id", Sessions)
+    val session_id = reference("session_id", TrainingSessions)
 
     // override val primaryKey = PrimaryKey(user, session)
 }
@@ -44,7 +44,7 @@ class SessionToUser(id: EntityID<Int>) : IntEntity(id) {
     var sessionId by SessionsToUsers.session_id
 }
 
-object Sessions : IntIdTable() {
+object TrainingSessions : IntIdTable() {
     val number = integer("number")
 
     // val metrics = reference("metrics", Metrics)
@@ -52,12 +52,12 @@ object Sessions : IntIdTable() {
     val accuracy = float("accuracy")
 }
 
-class Session(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<Session>(Sessions)
+class TrainingSession(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<TrainingSession>(TrainingSessions)
 
-    var number by Sessions.number
-    var speed by Sessions.speed
-    var accuracy by Sessions.accuracy
+    var number by TrainingSessions.number
+    var speed by TrainingSessions.speed
+    var accuracy by TrainingSessions.accuracy
 
     override fun toString(): String {
         return "Session(number=$number, speed=$speed, accuracy=$accuracy)"
@@ -67,7 +67,7 @@ class Session(id: EntityID<Int>) : IntEntity(id) {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Session
+        other as TrainingSession
 
         if (number != other.number) return false
         if (speed != other.speed) return false
@@ -105,7 +105,7 @@ class DatabaseController {
         transaction(db = dbLocal) {
             // addLogger(StdOutSqlLogger)
 
-            SchemaUtils.create(Users, Sessions, SessionsToUsers)
+            SchemaUtils.create(Users, TrainingSessions, SessionsToUsers)
 
             commit()
         }
@@ -176,15 +176,15 @@ class DatabaseController {
      * assumes the user by user-code exists
      */
     @Throws(RuntimeException::class)
-    private fun getTopCompletedSession(userId: Int): Session {
+    private fun getTopCompletedSession(userId: Int): TrainingSession {
 
         // get the highest numbered session
-        val topSession: Session? = getAllSessions(userId).maxByOrNull { session -> session.number }
+        val topTrainingSession: TrainingSession? = getAllSessions(userId).maxByOrNull { session -> session.number }
 
         // null top session indicates error
-        topSession ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
+        topTrainingSession ?: throw RuntimeException("getTopCompletedSession() failed -> user addition failed to add session zero")
 
-        return topSession
+        return topTrainingSession
     }
 
     /** get the user-id of a user by user-code */
@@ -229,7 +229,7 @@ class DatabaseController {
         val userEntityId = getUserEntityId(userCode) ?: return false
 
         transaction {
-            val session = Session.new {
+            val session = TrainingSession.new {
                 number = sessionNumber
                 speed = sessionData.speed
                 accuracy = sessionData.accuracy
@@ -253,7 +253,7 @@ class DatabaseController {
     }
 
     /** get all sessions of a user by user-code */
-    fun getAllSessions(userCode: String): MutableList<Session>? {
+    fun getAllSessions(userCode: String): MutableList<TrainingSession>? {
 
         // ensure the user code is taken
         if (userCodeFree(userCode)) return null
@@ -269,15 +269,15 @@ class DatabaseController {
      * get all sessions of a user by user-entity-id;
      * join users with sessions via sessions_to_users
      */
-    fun getAllSessions(userId: Int): MutableList<Session> {
+    fun getAllSessions(userId: Int): MutableList<TrainingSession> {
 
         // get all sessions of a user, by joins
-        val sessions: MutableList<Session> = transaction {
+        val sessions: MutableList<TrainingSession> = transaction {
             // get all sessions by user; join users with sessions via sessions_to_users
-            val sessionsQuery = Users.rightJoin(SessionsToUsers).rightJoin(Sessions).select {
+            val sessionsQuery = Users.rightJoin(SessionsToUsers).rightJoin(TrainingSessions).select {
                 Users.id eq userId
             }
-            Session.wrapRows(sessionsQuery).toMutableList()
+            TrainingSession.wrapRows(sessionsQuery).toMutableList()
         }
 
         return sessions
@@ -291,9 +291,9 @@ class DatabaseController {
     }
 
     /** get a map of users to their training sessions */
-    fun getTrainingSessionsForEachUser(): Map<User, List<Session>> {
+    fun getTrainingSessionsForEachUser(): Map<User, List<TrainingSession>> {
 
-        val userToSessions = mutableMapOf<User, List<Session>>()
+        val userToSessions = mutableMapOf<User, List<TrainingSession>>()
 
         transaction {
             // get all users

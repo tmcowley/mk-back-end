@@ -11,7 +11,7 @@ import tmcowley.appserver.Singleton
 import tmcowley.appserver.models.Key
 
 @SpringBootTest
-class WordTreeTests {
+internal class WordTreeTests {
 
     var tree = WordTree()
 
