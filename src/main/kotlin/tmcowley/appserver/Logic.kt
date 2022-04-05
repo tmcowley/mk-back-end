@@ -9,50 +9,50 @@ import tmcowley.appserver.structures.getMatchedWords
 
 /** submit a sentence to turn an input phrase into an array of matched phrases */
 fun submitSentence(sentence: String): Array<String> {
-
-    val lowercaseInput = sentence.lowercase()
-
     // compute the matching sentences
-    val resultingSentences = getMatchingSentences(lowercaseInput).toMutableList()
-    // println("input: ${sentence}, output: ${resultingSentences.toString()}")
-    if (resultingSentences.isEmpty()) println("Notice: no results found")
+    val sentences = getMatchingSentences(sentence.lowercase()).toMutableList()
 
+    if (sentences.isEmpty()) println("Notice: no results found")
+    // if (sentences.isNotEmpty()) println("input: ${sentence}, output: ${sentences.toString()}")
+
+    rankSentences(sentences)
+
+    return sentences.toTypedArray()
+}
+
+/** rank sentences based on frequency, syntax (if enabled) */
+fun rankSentences(sentences: MutableList<String>) {
     // syntax analysis enabled -> rank according to syntax correctness (lower better)
-    if (Singleton.syntaxAnalysisEnabled) resultingSentences.sortBy { resultingSentence ->
+    if (Singleton.syntaxAnalysisEnabled) sentences.sortBy { resultingSentence ->
         Singleton.langTool.countErrors(resultingSentence)
     }
 
     // frequency analysis enabled -> rank according to frequency (higher better)
-    if (Singleton.frequencyAnalysisEnabled) resultingSentences.sortByDescending { resultingSentence ->
+    if (Singleton.frequencyAnalysisEnabled) sentences.sortByDescending { resultingSentence ->
         getFrequencyScore(resultingSentence)
     }
-
-    return resultingSentences.toTypedArray()
 }
 
 /** split a string into a word array */
 fun splitIntoWords(sentence: String): Array<String> {
-    return sentence.split(" ").toTypedArray()
+    return sentence
+        .split(" ")
+        .toTypedArray()
 }
 
-fun getWordInKeyPairForm(word: String): MutableList<KeyPair> {
+/** get a word in key-pair form, e.g. "word" -> [(w, o), (w, o), (r, u), (d, k)] */
+fun getWordInKeyPairForm(word: String): List<KeyPair> {
+    // filter out non-alphabetic characters, and non-mapping chars
+    val wordAlphabetic = word
+        .filter { char -> isAlphabetic(char) }
+        .filter { char -> Singleton.getKeyPairOrNull(char) != null }
+
     // create key-pair list for word
-    val wordKeyPairs: MutableList<KeyPair> = mutableListOf()
-    for (char: Char in word) {
+    @Suppress("UnnecessaryVariable")
+    val wordAsKeyPairs = wordAlphabetic
+        .map { char -> Singleton.getKeyPairOrNull(char)!! }
 
-        // char is non-alphabetic -> do nothing
-        if (isNotAlphabetic(char)) continue
-
-        // char is alphabetic
-
-        // get key-pair for key with char
-        val keyPair = Singleton.getKeyPairOrNull(char) ?: continue
-
-        // add the key-pair to the current word
-        wordKeyPairs.add(keyPair)
-    }
-
-    return wordKeyPairs
+    return wordAsKeyPairs
 }
 
 /** get the matching words to a given word */
@@ -65,30 +65,31 @@ fun getMatchingSentences(sentence: String): List<String> {
 
     // create word array
     val words: Array<String> = splitIntoWords(sentence)
-    val nonEmptyWords = words.filterNot { word -> word == "" }
+    val nonEmptyWords = words.filter { word -> word != "" }
 
     // ensure word length is not exceeded
     val wordLengthExceeded = nonEmptyWords.any { word -> (word.length >= 25) }
     if (wordLengthExceeded) return mutableListOf()
 
     // create the list of matched words
-    val listOfMatchedWords: MutableList<List<String>> = mutableListOf()
-    nonEmptyWords.forEach { word ->
+    val listOfMatchedWords = buildList {
+        nonEmptyWords.forEach { word ->
 
-        var matchedWords: List<String> = getMatchedWords(word)
+            var matchedWords: List<String> = getMatchedWords(word)
 
-        if (matchedWords.isEmpty()) {
-            val isNumber = (word.toDoubleOrNull() != null)
+            if (matchedWords.isEmpty()) {
+                val isNumber = (word.toDoubleOrNull() != null)
 
-            // numbers should not be in non-matched form
-            // non-numbers should be in non-matched form (e.g. {<word>})
-            matchedWords = if (isNumber) listOf(word) else listOf("{${word}}")
+                // numbers should not be in non-matched form
+                // non-numbers should be in non-matched form (e.g. {<word>})
+                matchedWords = if (isNumber) listOf(word) else listOf("{${word}}")
+            }
+
+            // println("word: ${word}, matchedWords: ${matchedWords.toString()}")
+
+            // add the viable words to the total list
+            add(matchedWords)
         }
-
-        // println("word: ${word}, matchedWords: ${matchedWords.toString()}")
-
-        // add the viable words to the total list
-        listOfMatchedWords.add(matchedWords)
     }
 
     // no words have been computed
@@ -96,7 +97,7 @@ fun getMatchingSentences(sentence: String): List<String> {
     if (listOfMatchedWords.isEmpty()) return listOf()
 
     // compute viable sentences from text array
-    return getSentences(listOfMatchedWords.toList())
+    return getSentences(listOfMatchedWords)
 }
 
 /** check if a character is in the alphabet */
@@ -123,15 +124,17 @@ fun convertToLeft(input: String?): String {
 private fun convertToForm(form: KeyboardSide, input: String?): String {
     input ?: return ""
 
-    val inputForm = (input.map { char ->
-        if (isNotAlphabetic(char)) char
-        else (
+    val inputForm = input
+        .map { char ->
+            if (isNotAlphabetic(char))
+                char
+            else
                 when (form) {
                     KeyboardSide.LEFT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).leftKey.character
                     KeyboardSide.RIGHT -> (Singleton.getKeyPairOrNull(Key(char)) ?: KeyPair(char, char)).rightKey.character
                 }
-                )
-    }.joinToString(separator = ""))
+        }
+        .joinToString(separator = "")
 
     return inputForm
 }

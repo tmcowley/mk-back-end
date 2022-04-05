@@ -11,7 +11,6 @@ import kotlin.test.assertNull
 import org.springframework.boot.test.context.SpringBootTest
 
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Nested
 
 import tmcowley.appserver.models.TrainingSessionData
@@ -225,11 +224,11 @@ internal class DatabaseControllerTests {
         fun `for a new user`() {
             // given
             // fresh user created
-            val freshUser = createUser()
+            val userCode = createUserGettingCode()
 
             // when
             // we query the user's sessions
-            val sessions = db.getAllSessions(freshUser.userCode)
+            val sessions = db.getAllSessions(userCode)
 
             // then
 
@@ -244,10 +243,29 @@ internal class DatabaseControllerTests {
             assertThat(firstSession.number).isEqualTo(0)
         }
 
-        @Disabled
         @Test
         fun `for a user with recorded sessions`() {
-            // TODO
+            // given
+            // user created with initial session and first session completed
+            val userCode = createUserGettingCode()
+            val successfulAddition = db.storeCompletedSession(userCode, TrainingSessionData(60f, 100f))
+            assertThat(successfulAddition)
+
+            // when
+            // we query the user's sessions
+            val sessions = db.getAllSessions(userCode)
+
+            // then
+
+            assertNotNull(sessions)
+
+            // ensure the user has two sessions
+            assertThat(sessions.size).isEqualTo(2)
+
+            // and that the last session is the second session
+            val secondSession = sessions.lastOrNull()
+            assertNotNull(secondSession)
+            assertThat(secondSession.number).isEqualTo(1)
         }
     }
 

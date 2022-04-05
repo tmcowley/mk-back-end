@@ -211,6 +211,39 @@
             <version>3.3.0</version>
         </dependency>
 
+        <!-- fixing org/locationtech/jts/geom/Geometry not found error from h2-->
+        <!-- https://mvnrepository.com/artifact/org.locationtech.jts/jts-core -->
+        <dependency>
+            <groupId>org.locationtech.jts</groupId>
+            <artifactId>jts-core</artifactId>
+            <version>1.18.2</version>
+        </dependency>
+
+        <!-- fixing error: -->
+        <!--
+            Error during class instrumentation:
+            org.springframework.mail.javamail.JavaMailSenderImpl:
+            java.lang.RuntimeException:
+            java.io.IOException:
+            Class javax/mail/internet/MimeMessage not found
+         -->
+        <!-- https://mvnrepository.com/artifact/javax.mail/mail -->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.5.0-b01</version>
+        </dependency>
+
+        <!-- fixing error: -->
+        <!--
+            Error during class instrumentation:
+            org.springframework.boot.logging.log4j2.Log4J2LoggingSystem:
+            java.lang.RuntimeException:
+            java.io.IOException:
+            Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
+        -->
+        <!-- TODO -->
+
     </dependencies>
 
     <build>

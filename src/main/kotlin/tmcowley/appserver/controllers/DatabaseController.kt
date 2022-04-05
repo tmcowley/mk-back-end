@@ -243,8 +243,6 @@ class DatabaseController {
             commit()
         }
 
-        // TODO: validate session and session_to_user were added
-
         return true
     }
 

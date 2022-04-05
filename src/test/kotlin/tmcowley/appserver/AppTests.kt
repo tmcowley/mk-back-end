@@ -7,10 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest
 internal class AppTests {
 
-    @Test
-    fun contextLoads() {
-    }
-
     /** Test class added ONLY to cover main() invocation not covered by application tests*/
     @Disabled
     @Test
