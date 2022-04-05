@@ -19,7 +19,7 @@ import tmcowley.appserver.models.TrainingSessionData
 @SpringBootTest
 internal class DatabaseControllerTests {
 
-    val db = DatabaseController()
+    private val db = DatabaseController()
 
     fun createUserGettingCode(): String? {
         return db.createNewUserGettingCode(

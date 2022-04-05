@@ -204,6 +204,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+        <dependency>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>3.3.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -217,43 +224,43 @@
             </plugin>
 
             <!-- https://github.com/Kotlin/kotlinx.serialization#maven -->
-<!--            <plugin>-->
-<!--                <groupId>org.jetbrains.kotlin</groupId>-->
-<!--                <artifactId>kotlin-maven-plugin</artifactId>-->
-<!--                <version>1.6.20</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <id>compile</id>-->
-<!--                        <phase>compile</phase>-->
-<!--                        <goals>-->
-<!--                            <goal>compile</goal>-->
-<!--                        </goals>-->
-<!--                    </execution>-->
-<!--                </executions>-->
+            <plugin>
+                <groupId>org.jetbrains.kotlin</groupId>
+                <artifactId>kotlin-maven-plugin</artifactId>
+                <version>${kotlin.version}</version>
+                <executions>
+                    <execution>
+                        <id>compile</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                    </execution>
+                </executions>
 
-<!--                <configuration>-->
-<!--                    <args>-->
-<!--                        <arg>-Xjsr305=strict</arg>-->
-<!--                    </args>-->
-<!--                    <compilerPlugins>-->
-<!--                        <plugin>spring</plugin>-->
-<!--                        <plugin>kotlinx-serialization</plugin>-->
-<!--                    </compilerPlugins>-->
-<!--                </configuration>-->
+                <configuration>
+                    <args>
+                        <arg>-Xjsr305=strict</arg>
+                    </args>
+                    <compilerPlugins>
+                        <plugin>spring</plugin>
+                        <plugin>kotlinx-serialization</plugin>
+                    </compilerPlugins>
+                </configuration>
 
-<!--                <dependencies>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.jetbrains.kotlin</groupId>-->
-<!--                        <artifactId>kotlin-maven-allopen</artifactId>-->
-<!--                        <version>${kotlin.version}</version>-->
-<!--                    </dependency>-->
-<!--                    <dependency>-->
-<!--                        <groupId>org.jetbrains.kotlin</groupId>-->
-<!--                        <artifactId>kotlin-maven-serialization</artifactId>-->
-<!--                        <version>${kotlin.version}</version>-->
-<!--                    </dependency>-->
-<!--                </dependencies>-->
-<!--            </plugin>-->
+                <dependencies>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-allopen</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.jetbrains.kotlin</groupId>
+                        <artifactId>kotlin-maven-serialization</artifactId>
+                        <version>${kotlin.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
 
             <!-- https://stackoverflow.com/questions/17920920/maven-excluding-java-files-in-compilation -->
             <!-- <plugin>
@@ -306,8 +313,9 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>3.3.0</version>
             </plugin>
 
         </plugins>
