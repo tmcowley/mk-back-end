@@ -40,7 +40,7 @@ class Node<V>(val value: V) {
         return this.parent
     }
 
-    operator fun component3(): MutableList<Node<V>> {
+    operator fun component3(): List<Node<V>> {
         return this.children
     }
 }

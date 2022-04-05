@@ -10,4 +10,8 @@ data class KeyPair(val leftKey: Key, val rightKey: Key) {
     override fun toString(): String {
         return ("(" + this.leftKey.toString() + ", " + this.rightKey.toString() + ")")
     }
+
+    fun contains(key: Key): Boolean {
+        return (key == leftKey || key == rightKey)
+    }
 }

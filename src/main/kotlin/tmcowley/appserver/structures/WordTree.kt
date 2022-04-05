@@ -6,18 +6,17 @@ import tmcowley.appserver.models.Key
 class WordTree : PermutationTree<Key>(Node(Key('ε'))) {
 
     /** get all matched words (computes from node paths) */
-    fun getWords(): MutableList<String> {
-        val paths: MutableList<MutableList<Node<Key>>> = this.getPaths()
+    fun getWords(): List<String> {
+        val paths: List<List<Node<Key>>> = this.getPaths()
 
-        // generate the words array
-        var words: MutableList<String> = mutableListOf()
-        paths.forEach { path ->
-            val word = (path.map { node -> node.value }.joinToString(separator = ""))
-            words.add(word)
-        }
+        // generate the words array, removing duplicates
+        val words: List<String> = buildList {
+            paths.forEach { path ->
+                val word = (path.map { node -> node.value }.joinToString(separator = ""))
+                add(word)
+            }
+        }.distinct()
 
-        // remove duplicate words
-        words = words.distinct().toMutableList()
         return words
     }
 

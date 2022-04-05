@@ -6,8 +6,8 @@ import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
 
 /** get the matching words from a word in key-pair list form */
-fun getMatchedWords(currentWord: MutableList<KeyPair>): MutableList<String> {
-    if (currentWord.isEmpty()) return mutableListOf()
+fun getMatchedWords(currentWord: List<KeyPair>): List<String> {
+    if (currentWord.isEmpty()) return listOf()
 
     // generate word permutation tree (representing key-pair form)
     val currentWordTree = WordTree()
@@ -17,14 +17,14 @@ fun getMatchedWords(currentWord: MutableList<KeyPair>): MutableList<String> {
     var wordMatches = currentWordTree.getWords()
 
     // filter words not in the dictionary
-    wordMatches = (wordMatches.filter { word -> Singleton.wordExists(word) }.toMutableList())
+    wordMatches = wordMatches.filter { word -> Singleton.wordExists(word) }
 
     return wordMatches
 }
 
 /** get the matching sentences against a list of matching words */
-fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableList<String> {
-    if (listOfMatchedWords.isEmpty()) return mutableListOf()
+fun getSentences(listOfMatchedWords: List<List<String>>): List<String> {
+    if (listOfMatchedWords.isEmpty()) return listOf()
 
     // generate sentence permutation tree
     val sentenceTree = SentenceTree()
@@ -34,83 +34,78 @@ fun getSentences(listOfMatchedWords: MutableList<MutableList<String>>): MutableL
 }
 
 /** get the hash-map linking keys to key-pairs */
-fun getKeyPairHashMap(): HashMap<Key, KeyPair> {
+fun getKeyPairHashMap(): Map<Key, KeyPair> {
 
-    // map key-pairs
-
-    // top row
-    val qp = KeyPair('q', 'p')
-    val wo = KeyPair('w', 'o')
-    val ei = KeyPair('e', 'i')
-    val ru = KeyPair('r', 'u')
-    val ty = KeyPair('t', 'y')
-
-    // middle row
-    val aAndColon = KeyPair('a', 'a')
-    val sl = KeyPair('s', 'l')
-    val dk = KeyPair('d', 'k')
-    val fj = KeyPair('f', 'j')
-    val gh = KeyPair('g', 'h')
-
-    // bottom row
-    val zAndForwardSlash = KeyPair('z', 'z')
-    val xAndDot = KeyPair('x', 'x')
-    val cAndComma = KeyPair('c', 'c')
-    val vm = KeyPair('v', 'm')
-    val bn = KeyPair('b', 'n')
-
-    // define key -> key-pair HM
-    val keyPairs = hashMapOf<Key, KeyPair>()
-
-    // map top row
-    run {
+    val topRowMapping = listOf(
         // top row: left half
-        keyPairs[Key('q')] = qp
-        keyPairs[Key('w')] = wo
-        keyPairs[Key('e')] = ei
-        keyPairs[Key('r')] = ru
-        keyPairs[Key('t')] = ty
+        Pair(Key('q'), KeyPair('q', 'p')),
+        Pair(Key('w'), KeyPair('w', 'o')),
+        Pair(Key('e'), KeyPair('e', 'i')),
+        Pair(Key('r'), KeyPair('r', 'u')),
+        Pair(Key('t'), KeyPair('t', 'y')),
 
         // top row: right half
-        keyPairs[Key('p')] = qp
-        keyPairs[Key('o')] = wo
-        keyPairs[Key('i')] = ei
-        keyPairs[Key('u')] = ru
-        keyPairs[Key('y')] = ty
-    }
+        Pair(Key('p'), KeyPair('q', 'p')),
+        Pair(Key('o'), KeyPair('w', 'o')),
+        Pair(Key('i'), KeyPair('e', 'i')),
+        Pair(Key('u'), KeyPair('r', 'u')),
+        Pair(Key('y'), KeyPair('t', 'y'))
+    )
 
-    // map middle row
-    run {
+    val middleRowMapping = listOf(
         // middle row: left half
-        keyPairs[Key('a')] = aAndColon
-        keyPairs[Key('s')] = sl
-        keyPairs[Key('d')] = dk
-        keyPairs[Key('f')] = fj
-        keyPairs[Key('g')] = gh
+        Pair(Key('a'), KeyPair('a', 'a')),
+        Pair(Key('s'), KeyPair('s', 'l')),
+        Pair(Key('d'), KeyPair('d', 'k')),
+        Pair(Key('f'), KeyPair('f', 'j')),
+        Pair(Key('g'), KeyPair('g', 'h')),
 
         // middle row: right half
-        keyPairs[Key('a')] = aAndColon
-        keyPairs[Key('l')] = sl
-        keyPairs[Key('k')] = dk
-        keyPairs[Key('j')] = fj
-        keyPairs[Key('h')] = gh
-    }
+        Pair(Key('a'), KeyPair('a', 'a')),
+        Pair(Key('l'), KeyPair('s', 'l')),
+        Pair(Key('k'), KeyPair('d', 'k')),
+        Pair(Key('j'), KeyPair('f', 'j')),
+        Pair(Key('h'), KeyPair('g', 'h'))
+    )
 
-    // map bottom row
-    run {
+    val bottomRowMapping = listOf(
         // bottom row: left half
-        keyPairs[Key('z')] = zAndForwardSlash
-        keyPairs[Key('x')] = xAndDot
-        keyPairs[Key('c')] = cAndComma
-        keyPairs[Key('v')] = vm
-        keyPairs[Key('b')] = bn
+        Pair(Key('z'), KeyPair('z', 'z')),
+        Pair(Key('x'), KeyPair('x', 'x')),
+        Pair(Key('c'), KeyPair('c', 'c')),
+        Pair(Key('v'), KeyPair('v', 'm')),
+        Pair(Key('b'), KeyPair('b', 'n')),
 
         // bottom row: right half
-        keyPairs[Key('z')] = zAndForwardSlash
-        keyPairs[Key('x')] = xAndDot
-        keyPairs[Key('c')] = cAndComma
-        keyPairs[Key('m')] = vm
-        keyPairs[Key('n')] = bn
+        Pair(Key('z'), KeyPair('z', 'z')),
+        Pair(Key('x'), KeyPair('x', 'x')),
+        Pair(Key('c'), KeyPair('c', 'c')),
+        Pair(Key('m'), KeyPair('v', 'm')),
+        Pair(Key('n'), KeyPair('b', 'n'))
+    )
+
+    // define key -> key-pair HM
+    val keyPairs: Map<Key, KeyPair> = buildMap {
+        // map top row
+        topRowMapping.forEach { pairMap ->
+            val key = pairMap.first
+            val keyPair = pairMap.second
+            put(key, keyPair)
+        }
+
+        // map middle row
+        middleRowMapping.forEach { pairMap ->
+            val key = pairMap.first
+            val keyPair = pairMap.second
+            put(key, keyPair)
+        }
+
+        // map bottom row
+        bottomRowMapping.forEach { pairMap ->
+            val key = pairMap.first
+            val keyPair = pairMap.second
+            put(key, keyPair)
+        }
     }
 
     return keyPairs

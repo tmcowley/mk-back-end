@@ -17,7 +17,7 @@ object Singleton {
 
     // word and phrase lists
 
-    var words: HashSet<String> = getWords()
+    var words: Set<String> = getWords()
     val phrases: List<String> = getPhrases()
     var fiveGrams = getFiveGrams()
 
@@ -35,8 +35,8 @@ object Singleton {
 
     // maps
 
-    var keyPairs: HashMap<Key, KeyPair> = getKeyPairHashMap()
-    private val wordFreqLookup: HashMap<String, Int> = getWordFrequencies()
+    var keyPairs: Map<Key, KeyPair> = getKeyPairHashMap()
+    private val wordFreqLookup= getWordFrequencies()
 
 
     // tools/ util-classes

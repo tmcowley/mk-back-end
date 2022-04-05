@@ -7,12 +7,12 @@ abstract class PermutationTree<T>(val root: Node<T>) {
     private var leaves: MutableList<Node<T>> = mutableListOf()
 
     // global list for storing paths (sentences/ words)
-    private var paths: MutableList<MutableList<Node<T>>> = mutableListOf()
+    private var paths: MutableList<List<Node<T>>> = mutableListOf()
 
     /** insert a list of objects to the tree (as values, not nodes); adds each object to each leaf node */
-    fun insert(childValues: MutableList<T>) {
+    fun insert(childValues: List<T>) {
         // add each child to each leaf
-        val leaves: MutableList<Node<T>> = getLeaves()
+        val leaves = getLeaves()
         leaves.forEach { leaf -> childValues.forEach { childValue -> insert(childValue, leaf) } }
     }
 
@@ -24,14 +24,14 @@ abstract class PermutationTree<T>(val root: Node<T>) {
     }
 
     /** get the leaf nodes of the tree */
-    fun getLeaves(): MutableList<Node<T>> {
+    fun getLeaves(): List<Node<T>> {
         // reset global leaves list
         this.leaves = mutableListOf()
 
         findLeaves()
         // leaves.forEach{ leaf -> println("leaf found: ${leaf.value.character}") }
 
-        return this.leaves
+        return this.leaves.toList()
     }
 
     /** find the tree leaves, traversing down from root node */
@@ -52,13 +52,13 @@ abstract class PermutationTree<T>(val root: Node<T>) {
     }
 
     /** get the paths down the tree */
-    fun getPaths(): MutableList<MutableList<Node<T>>> {
+    fun getPaths(): List<List<Node<T>>> {
         // reset global paths list
         this.paths = mutableListOf()
 
         findPaths()
 
-        return this.paths
+        return this.paths.toList()
     }
 
     /** find the paths down the tree (traversing down from root) */
@@ -88,7 +88,7 @@ abstract class PermutationTree<T>(val root: Node<T>) {
             // reverse path order since we've traversed up the tree (leaf -> root)
             path.reverse()
 
-            this.paths.add(path)
+            this.paths.add(path.toList())
 
             return
         }

@@ -13,7 +13,7 @@ fun submitSentence(sentence: String): Array<String> {
     val lowercaseInput = sentence.lowercase()
 
     // compute the matching sentences
-    val resultingSentences: MutableList<String> = getMatchingSentences(lowercaseInput)
+    val resultingSentences = getMatchingSentences(lowercaseInput).toMutableList()
     // println("input: ${sentence}, output: ${resultingSentences.toString()}")
     if (resultingSentences.isEmpty()) println("Notice: no results found")
 
@@ -56,12 +56,12 @@ fun getWordInKeyPairForm(word: String): MutableList<KeyPair> {
 }
 
 /** get the matching words to a given word */
-fun getMatchedWords(word: String): MutableList<String> {
+fun getMatchedWords(word: String): List<String> {
     return getMatchedWords(getWordInKeyPairForm(word))
 }
 
 /** get resulting sentences from the input phrase (in word array form) */
-fun getMatchingSentences(sentence: String): MutableList<String> {
+fun getMatchingSentences(sentence: String): List<String> {
 
     // create word array
     val words: Array<String> = splitIntoWords(sentence)
@@ -72,17 +72,17 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
     if (wordLengthExceeded) return mutableListOf()
 
     // create the list of matched words
-    val listOfMatchedWords: MutableList<MutableList<String>> = mutableListOf()
+    val listOfMatchedWords: MutableList<List<String>> = mutableListOf()
     nonEmptyWords.forEach { word ->
 
-        var matchedWords: MutableList<String> = getMatchedWords(word)
+        var matchedWords: List<String> = getMatchedWords(word)
 
         if (matchedWords.isEmpty()) {
             val isNumber = (word.toDoubleOrNull() != null)
 
             // numbers should not be in non-matched form
             // non-numbers should be in non-matched form (e.g. {<word>})
-            matchedWords = if (isNumber) mutableListOf(word) else mutableListOf("{${word}}")
+            matchedWords = if (isNumber) listOf(word) else listOf("{${word}}")
         }
 
         // println("word: ${word}, matchedWords: ${matchedWords.toString()}")
@@ -93,10 +93,10 @@ fun getMatchingSentences(sentence: String): MutableList<String> {
 
     // no words have been computed
     // if (listOfMatchedWords.isEmpty()) System.out.println("Notice: listOfMatchedWords is empty")
-    if (listOfMatchedWords.isEmpty()) return mutableListOf()
+    if (listOfMatchedWords.isEmpty()) return listOf()
 
     // compute viable sentences from text array
-    return getSentences(listOfMatchedWords)
+    return getSentences(listOfMatchedWords.toList())
 }
 
 /** check if a character is in the alphabet */

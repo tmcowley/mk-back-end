@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.controllers.APIsGet
 
+/** Test class for automated evaluation */
 @Disabled
 @Tags(
     Tag("slow")
@@ -14,24 +15,27 @@ import tmcowley.appserver.controllers.APIsGet
 @SpringBootTest
 internal class Evaluation {
 
-    val getAPIs: APIsGet = APIsGet()
-    val phrases: List<String> = Singleton.phrases
-    val words = Singleton.words.toMutableList()
+    private val getAPIs: APIsGet = APIsGet()
+    private val phrases = Singleton.phrases
+    private val wordsAsList = Singleton.words
+    private val words = Singleton.words.toMutableList()
 
     // word to word-matches lookup
-    val matchLookup = HashMap<String, MutableList<String>>()
+    private val matchLookup: Map<String, List<String>>
 
     init {
         // create word to word-matches hash-map
         println("Creating word to word-matches hash-map")
-        Singleton.words.forEach { word ->
-            matchLookup[word] = getMatchedWords(word)
+
+        matchLookup = buildMap(wordsAsList.size) {
+            wordsAsList.forEach { word ->
+                put(word, getMatchedWords(word))
+            }
         }
     }
 
     @Test
     fun `rank words by match count`() {
-
         println("\nTesting: evaluation of words by match count started")
 
         // generate list of words sorted by match count
@@ -49,7 +53,6 @@ internal class Evaluation {
 
     @Test
     fun `find proportion of single-matching words`() {
-
         println("\nTesting: evaluation: finding proportion of single-matching words")
 
         // find proportion of words with a single match
@@ -63,9 +66,9 @@ internal class Evaluation {
 
     @Test
     fun `eval algorithm with phrase set`() {
-
         println("\nTesting: evaluation of algorithm accuracy started")
 
+        // count matches for each level: first, in top 3, in top 5, found
         val phraseCount = phrases.size
         val matchedAsTop = phrases.count { phrase ->
             (getAPIs.submit(phrase).indexOf(phrase.lowercase()) == 0)
@@ -80,6 +83,7 @@ internal class Evaluation {
             (getAPIs.submit(phrase).contains(phrase.lowercase()))
         }
 
+        // output results
         println()
         println("Notice: Automatic evaluation complete: ")
         println("Matched in the top 1 results: ${(matchedAsTop * 100) / phraseCount}% [$matchedAsTop/$phraseCount]")
@@ -88,6 +92,7 @@ internal class Evaluation {
         println("Matched: ${(matched * 100) / phraseCount}% [$matched/$phraseCount]")
         println()
 
+        // check for non-matched phrases
         phrases
             .filter { phrase ->
                 (!getAPIs.submit(phrase).contains(phrase.lowercase()))

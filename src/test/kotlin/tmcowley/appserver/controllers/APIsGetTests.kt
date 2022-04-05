@@ -16,41 +16,25 @@ class APIsGetTests {
     val apiInstance = APIsGet()
     val db = SingletonControllers.db
 
-    val phrase: String = "The house at the end of the street is red."
-
-    @Suppress("SpellCheckingInspection")
-    val phraseLHS: String = "Tge gwrse at tge ebd wf tge street es red."
-
-    @Suppress("SpellCheckingInspection")
-    val phraseRHS: String = "Thi houli ay yhi ink oj yhi lyuiiy il uik."
-
-    // -----
-
-    @Test
-    fun `basic submission`() {
-        val phrase = "this is a test"
-        val matches = listOf("this is a test", "this is a tilt")
-        val results = apiInstance.submit(phrase)
-
-        matches.forEach { match -> assertThat(results).contains(match) }
-    }
-
+    /** set the syntax frequency analysis enabled state */
     private fun setSyntaxAnalysis(state: Boolean) {
         setAnalysisProperty("syntaxAnalysisEnabled", state)
         assertThat(Singleton.syntaxAnalysisEnabled).isEqualTo(state)
     }
 
+    /** set the internal frequency analysis enabled state */
     private fun setFrequencyAnalysis(state: Boolean) {
         setAnalysisProperty("frequencyAnalysisEnabled", state)
         assertThat(Singleton.syntaxAnalysisEnabled).isEqualTo(state)
     }
 
+    /** set the internal analysis tool state; uses reflection */
     private fun setAnalysisProperty(name: String, state: Boolean) {
-        // use reflection to manually enable syntax analysis
         val singletonKClass = Singleton::class
         val property = singletonKClass.memberProperties.find { property ->
             property.name == name
         }
+        // ensure property is mutable
         if (property is KMutableProperty<*>) {
             property.setter.call(Singleton, state)
         }
@@ -59,6 +43,19 @@ class APIsGetTests {
     /** reset analysis properties */
     private fun resetAnalysisProperties() {
         Singleton.resetAnalysisEnabledStates()
+    }
+
+    @Test
+    fun `basic submission`() {
+        // given
+        val phrase = "this is a test"
+        val matches = listOf("this is a test", "this is a tilt")
+
+        // when
+        val results = apiInstance.submit(phrase)
+
+        // then
+        matches.forEach { match -> assertThat(results).contains(match) }
     }
 
     /**
@@ -83,58 +80,102 @@ class APIsGetTests {
     }
 
     @Test
-    fun `basic submission with whole number`() {
-
-        assertThat(Singleton.syntaxAnalysisEnabled).isFalse
-
+    fun `basic submission containing whole number`() {
+        // given
         val phrase = "there are 500 people"
         val matches = listOf(phrase)
+
+        // when
         val results = apiInstance.submit(phrase)
 
+        // then
         matches.forEach { match -> assertThat(results).contains(match) }
     }
 
     @Test
-    fun `basic submission with decimal number`() {
+    fun `basic submission containing decimal number`() {
+        // given
         val phrase = "the probability is 0.5"
         val matches = listOf(phrase)
+
+        // when
         val results = apiInstance.submit(phrase)
 
+        // then
         matches.forEach { match -> assertThat(results).contains(match) }
     }
 
     @Test
-    fun `basic submission with error`() {
-
+    fun `basic submission containing error`() {
+        // given
         @Suppress("SpellCheckingInspection")
         val phrase = "this is a mistake asdf"
 
         @Suppress("SpellCheckingInspection")
         val matches = listOf("this is a mistake {asdf}")
+
+        // when
         val results = apiInstance.submit(phrase)
 
+        // then
         matches.forEach { match -> assertThat(results).contains(match) }
     }
 
     @Test
-    fun `side conversions`() {
-        assertThat(apiInstance.convertToLHS(phrase)).isEqualTo(phraseLHS)
-        assertThat(apiInstance.convertToRHS(phrase)).isEqualTo(phraseRHS)
+    fun `side conversions - left`() {
+        // given
+        val phrase = "The house at the end of the street is red."
+
+        @Suppress("SpellCheckingInspection")
+        val phraseLHS = "Tge gwrse at tge ebd wf tge street es red."
+
+        // when
+        val phraseConverted = apiInstance.convertToLHS(phrase)
+
+        // then
+        assertThat(phraseConverted).isEqualTo(phraseLHS)
+    }
+
+    @Test
+    fun `side conversions - right`() {
+        // given
+        val phrase = "The house at the end of the street is red."
+
+        @Suppress("SpellCheckingInspection")
+        val phraseRHS = "Thi houli ay yhi ink oj yhi lyuiiy il uik."
+
+        // when
+        val phraseConverted = apiInstance.convertToRHS(phrase)
+
+        // then
+        assertThat(phraseConverted).isEqualTo(phraseRHS)
     }
 
     @Test
     fun `get random phrase`() {
-        assertThat(apiInstance.getRandomPhrase()).isNotEmpty
+        // when
+        val randomPhrase = apiInstance.getRandomPhrase()
+
+        // then
+        assertThat(randomPhrase).isNotEmpty
     }
 
     @Test
     fun `get status`() {
-        assertThat(apiInstance.status()).isTrue
+        // when
+        val status = apiInstance.status()
+
+        // then
+        assertThat(status).isTrue
     }
 
     @Test
     fun `get phrases per session`() {
-        assertThat(apiInstance.getPhrasesPerSession()).isEqualTo(Singleton.phrasesPerSession)
+        // when
+        val phrasesPerSession = apiInstance.getPhrasesPerSession()
+
+        // then
+        assertThat(phrasesPerSession).isEqualTo(Singleton.phrasesPerSession)
     }
 
     @Test
@@ -151,10 +192,12 @@ class APIsGetTests {
 
     @Test
     fun `get user-id to sessions map - deep check`() {
-        // given
         val userIdToSessions = apiInstance.getSessionsForEachUser()
 
-        userIdToSessions.forEach { (userId, sessions) ->
+        userIdToSessions.forEach {
+            // given
+                (userId, sessions) ->
+
             // then
             val expectedSessions = db.getAllSessions(userId)
             assertThat(sessions).isEqualTo(expectedSessions)
