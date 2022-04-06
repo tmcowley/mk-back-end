@@ -3,25 +3,54 @@ package tmcowley.appserver
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.models.KeyboardSide
+import tmcowley.appserver.structures.SentenceTree
+import tmcowley.appserver.structures.WordTree
 import tmcowley.appserver.utils.getFrequencyScore
-import tmcowley.appserver.structures.getSentences
-import tmcowley.appserver.structures.getMatchedWords
+import kotlin.test.assertNotNull
 
 /** submit a sentence to turn an input phrase into an array of matched phrases */
-fun submitSentence(sentence: String): Array<String> {
+fun submitSentence(sentence: String): List<String> {
     // compute the matching sentences
     val sentences = getMatchingSentences(sentence.lowercase()).toMutableList()
 
     if (sentences.isEmpty()) println("Notice: no results found")
-    // if (sentences.isNotEmpty()) println("input: ${sentence}, output: ${sentences.toString()}")
+    // else println("input: $sentence, output: $sentences")
 
     rankSentences(sentences)
 
-    return sentences.toTypedArray()
+    return sentences
+}
+
+/** get the matching sentences set from a list of matching words */
+private fun getSentences(listOfMatchedWords: List<Set<String>>): Set<String> {
+    if (listOfMatchedWords.isEmpty()) return setOf()
+
+    // generate sentence permutation tree
+    val sentenceTree = SentenceTree()
+    listOfMatchedWords.forEach { matchingWordSet -> sentenceTree.insert(matchingWordSet) }
+
+    return sentenceTree.getSentences()
+}
+
+/** get the matching words from a word in key-pair list form */
+fun getMatchedWords(currentWord: List<KeyPair>): Set<String> {
+    if (currentWord.isEmpty()) return setOf()
+
+    // generate word permutation tree (representing key-pair form)
+    val currentWordTree = WordTree()
+    currentWord.forEach { keyPair -> currentWordTree.insertKeyPair(keyPair) }
+
+    // find matched words by traversing the tree paths
+    var wordMatches = currentWordTree.getWords()
+
+    // filter out words not in the dictionary
+    wordMatches = wordMatches.filter { word -> Singleton.wordExists(word) }.toSet()
+
+    return wordMatches
 }
 
 /** rank sentences based on frequency, syntax (if enabled) */
-fun rankSentences(sentences: MutableList<String>) {
+private fun rankSentences(sentences: MutableList<String>) {
     // syntax analysis enabled -> rank according to syntax correctness (lower better)
     if (Singleton.syntaxAnalysisEnabled) sentences.sortBy { resultingSentence ->
         Singleton.langTool.countErrors(resultingSentence)
@@ -33,15 +62,15 @@ fun rankSentences(sentences: MutableList<String>) {
     }
 }
 
-/** split a string into a word array */
-fun splitIntoWords(sentence: String): Array<String> {
+/** split a sentence into a list of non-empty words */
+private fun splitIntoWords(sentence: String): List<String> {
     return sentence
         .split(" ")
-        .toTypedArray()
+        .filter { word -> word != "" }
 }
 
 /** get a word in key-pair form, e.g. "word" -> [(w, o), (w, o), (r, u), (d, k)] */
-fun getWordInKeyPairForm(word: String): List<KeyPair> {
+private fun getWordInKeyPairForm(word: String): List<KeyPair> {
     // filter out non-alphabetic characters, and non-mapping chars
     val wordAlphabetic = word
         .filter { char -> isAlphabetic(char) }
@@ -50,59 +79,60 @@ fun getWordInKeyPairForm(word: String): List<KeyPair> {
     // create key-pair list for word
     @Suppress("UnnecessaryVariable")
     val wordAsKeyPairs = wordAlphabetic
-        .map { char -> Singleton.getKeyPairOrNull(char)!! }
+        .map { char ->
+            val keyPair = Singleton.getKeyPairOrNull(char)
+            assertNotNull(keyPair)
+            keyPair
+        }
 
     return wordAsKeyPairs
 }
 
 /** get the matching words to a given word */
-fun getMatchedWords(word: String): List<String> {
+fun getMatchedWords(word: String): Set<String> {
     return getMatchedWords(getWordInKeyPairForm(word))
 }
 
-/** get resulting sentences from the input phrase (in word array form) */
-fun getMatchingSentences(sentence: String): List<String> {
-
-    // create word array
-    val words: Array<String> = splitIntoWords(sentence)
-    val nonEmptyWords = words.filter { word -> word != "" }
+/** get resulting sentences from the input sentence */
+private fun getMatchingSentences(sentence: String): Set<String> {
+    // create sentence word list
+    val words = splitIntoWords(sentence)
 
     // ensure word length is not exceeded
-    val wordLengthExceeded = nonEmptyWords.any { word -> (word.length >= 25) }
-    if (wordLengthExceeded) return mutableListOf()
+    val wordLengthExceeded = words.any { word -> (word.length > Singleton.maxInputLength) }
+    if (wordLengthExceeded) return setOf("Maximum word length of ${Singleton.maxInputLength} exceeded")
 
     // create the list of matched words
     val listOfMatchedWords = buildList {
-        nonEmptyWords.forEach { word ->
+        words.forEach { word ->
+            // get matching words
+            var matchedWords: Set<String> = getMatchedWords(word)
 
-            var matchedWords: List<String> = getMatchedWords(word)
-
+            // numbers should not be in non-matched form
+            // non-numbers should be in non-matched form (e.g. {<word>})
             if (matchedWords.isEmpty()) {
-                val isNumber = (word.toDoubleOrNull() != null)
-
-                // numbers should not be in non-matched form
-                // non-numbers should be in non-matched form (e.g. {<word>})
-                matchedWords = if (isNumber) listOf(word) else listOf("{${word}}")
+                matchedWords = if (isNumber(word)) setOf(word) else setOf("{$word}")
             }
 
-            // println("word: ${word}, matchedWords: ${matchedWords.toString()}")
-
-            // add the viable words to the total list
             add(matchedWords)
         }
     }
 
-    // no words have been computed
-    // if (listOfMatchedWords.isEmpty()) System.out.println("Notice: listOfMatchedWords is empty")
-    if (listOfMatchedWords.isEmpty()) return listOf()
+    // no results found
+    if (listOfMatchedWords.isEmpty()) println("Notice: $sentence returned zero matches")
 
-    // compute viable sentences from text array
+    // compute viable sentences
     return getSentences(listOfMatchedWords)
+}
+
+/** check if the given string is a number */
+private fun isNumber(str: String): Boolean {
+    return (str.toDoubleOrNull() != null)
 }
 
 /** check if a character is in the alphabet */
 private fun isAlphabetic(char: Char): Boolean {
-    return (char in ('a' until 'z') || char in ('A' until 'Z'))
+    return (char in ('a' .. 'z') || char in ('A' .. 'Z'))
 }
 
 /** check if a character is not alphabetic */

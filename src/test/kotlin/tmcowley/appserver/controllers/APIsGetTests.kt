@@ -58,6 +58,20 @@ class APIsGetTests {
         matches.forEach { match -> assertThat(results).contains(match) }
     }
 
+    @Test
+    fun `basic submission - word`() {
+        // given
+        val word = "zero"
+        val matches = listOf(word)
+
+        // when
+        val results = apiInstance.submit(word)
+
+        // then
+        assertThat(Singleton.wordExists(word))
+        matches.forEach { match -> assertThat(results).contains(match) }
+    }
+
     /**
      * tests all analysis combinations: {syntax, frequency}, {syntax, no frequency}, ...
      */

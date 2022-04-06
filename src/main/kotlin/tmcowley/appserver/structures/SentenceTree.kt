@@ -2,16 +2,16 @@ package tmcowley.appserver.structures
 
 class SentenceTree : PermutationTree<String>(Node("ε")) {
 
-    fun getSentences(): List<String> {
+    fun getSentences(): Set<String> {
         val paths: List<List<Node<String>>> = this.getPaths()
 
         // generate the sentence array, removing duplicates
-        val sentences: List<String> = buildList {
+        val sentences: Set<String> = buildSet {
             paths.forEach { path ->
                 val sentence = path.joinToString(separator = " ") { node -> node.value }
                 add(sentence)
             }
-        }.distinct()
+        }
 
         return sentences
     }

@@ -6,12 +6,12 @@ import java.util.Properties
 import kotlin.random.Random
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
-import tmcowley.appserver.structures.getKeyPairHashMap
 import tmcowley.appserver.utils.LangTool
-import tmcowley.appserver.utils.getFiveGrams
-import tmcowley.appserver.utils.getPhrases
-import tmcowley.appserver.utils.getWordFrequencies
 import tmcowley.appserver.utils.getWords
+import tmcowley.appserver.utils.getPhrases
+import tmcowley.appserver.utils.getFiveGrams
+import tmcowley.appserver.utils.getKeyPairMap
+import tmcowley.appserver.utils.getWordFrequencies
 
 object Singleton {
 
@@ -23,19 +23,24 @@ object Singleton {
 
     // properties and constants
 
-    private val propertiesFile = File("src/main/resources/application.properties")
+    private const val resourcesPath = "src/main/resources/"
+    private val propertiesFile = File(resourcesPath + "application.properties")
     val prop = Properties()
 
-    // mutable to allow setting with testing reflection
+    // note: stringDataPath typically "src/main/resources/string-data/"
+    const val stringDataPath = resourcesPath + "string-data/"
+
+    // mutable to allow setting with reflection (when testing)
     var syntaxAnalysisEnabled: Boolean
     var frequencyAnalysisEnabled: Boolean
 
+    const val maxInputLength = 25
     const val phrasesPerSession = 8
     val maxWord = words.maxByOrNull { word -> word.length }
 
     // maps
 
-    var keyPairs: Map<Key, KeyPair> = getKeyPairHashMap()
+    var keyPairs: Map<Key, KeyPair> = getKeyPairMap()
     private val wordFreqLookup= getWordFrequencies()
 
 

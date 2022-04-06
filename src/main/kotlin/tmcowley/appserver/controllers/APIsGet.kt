@@ -30,7 +30,7 @@ class APIsGet {
     @GetMapping(
         value = ["/submit"],
     )
-    fun submit(@RequestParam("input") input: String): Array<String> {
+    fun submit(@RequestParam("input") input: String): List<String> {
         // println("\n\n/submit endpoint called")
         return submitSentence(input)
     }

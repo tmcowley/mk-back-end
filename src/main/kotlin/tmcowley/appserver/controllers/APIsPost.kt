@@ -51,7 +51,7 @@ class APIsPost {
         @RequestBody signupForm: String,
         request: HttpServletRequest
     ): String? {
-
+        // deserialize sign-up form
         val form = try {
             Json.decodeFromString<SignUpForm>(signupForm)
         } catch (e: SerializationException) {
@@ -75,10 +75,10 @@ class APIsPost {
 
     /** sign in a user; creates a session storing their userCode and current sessionNumber */
     @PostMapping(value = ["/sign-in"])
-    fun signIn(@RequestBody loginForm: String, request: HttpServletRequest): Boolean {
-
+    fun signIn(@RequestBody signInForm: String, request: HttpServletRequest): Boolean {
+        // deserialize sign-in form
         val form = try {
-            Json.decodeFromString<SignInForm>(loginForm)
+            Json.decodeFromString<SignInForm>(signInForm)
         } catch (e: SerializationException) {
             println("Error: signIn(): failed to deserialize form")
             return false
@@ -113,7 +113,6 @@ class APIsPost {
     /** sign out a user; invalidates the user session */
     @PostMapping(value = ["/sign-out"])
     fun signOut(request: HttpServletRequest) {
-
         // ensure user is logged in
         if (isNotSignedIn(request)) return
 
@@ -138,7 +137,6 @@ class APIsPost {
     /** get the next phrase from the session's number and phrase number */
     @PostMapping(value = ["/get-next-phrase"])
     fun getNextPhrase(request: HttpServletRequest): String? {
-
         // ensure user is logged in
         if (isNotSignedIn(request)) return null
 
@@ -165,7 +163,6 @@ class APIsPost {
     /** get the user code attached to the session */
     @PostMapping(value = ["/get-user-code"])
     fun getUserCode(request: HttpServletRequest): String? {
-
         // ensure user is logged in
         if (isNotSignedIn(request)) return null
 
@@ -173,10 +170,29 @@ class APIsPost {
         return session.getAttribute("userCode") as String
     }
 
+    /** get the current session number */
+    @PostMapping(value = ["/get-session-number"])
+    fun getSessionNumber(request: HttpServletRequest): Int? {
+        // ensure user is logged in
+        if (isNotSignedIn(request)) return null
+
+        val session = request.getSession(false)
+        return session.getAttribute("sessionNumber") as Int
+    }
+
+    /** get the current phrase number */
+    @PostMapping(value = ["/get-phrase-number"])
+    fun getPhraseNumber(request: HttpServletRequest): Int? {
+        // ensure user is logged in
+        if (isNotSignedIn(request)) return null
+
+        val session = request.getSession(false)
+        return session.getAttribute("phraseNumber") as Int
+    }
+
     /** get the user code attached to the session */
     @PostMapping(value = ["/report-completed-session"])
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean {
-
         // ensure user is logged in
         if (isNotSignedIn(request)) return false
 

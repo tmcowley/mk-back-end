@@ -1,11 +1,13 @@
 package tmcowley.appserver
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Tags
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.controllers.APIsGet
+import kotlin.test.assertNotNull
 
 /** Test class for automated evaluation */
 @Disabled
@@ -17,19 +19,22 @@ internal class Evaluation {
 
     private val getAPIs: APIsGet = APIsGet()
     private val phrases = Singleton.phrases
-    private val wordsAsList = Singleton.words
-    private val words = Singleton.words.toMutableList()
+    private val words = Singleton.words
 
     // word to word-matches lookup
-    private val matchLookup: Map<String, List<String>>
+    private val matchLookup: Map<String, Set<String>>
 
     init {
         // create word to word-matches hash-map
         println("Creating word to word-matches hash-map")
 
-        matchLookup = buildMap(wordsAsList.size) {
-            wordsAsList.forEach { word ->
-                put(word, getMatchedWords(word))
+        matchLookup = buildMap(words.size) {
+            words.forEachIndexed { index, word ->
+                // progress metre
+                if (index % 5_000 == 0) println("\rProgress: ${(index * 100) / words.size}%")
+
+                val wordMatches = getMatchedWords(word)
+                put(word, wordMatches)
             }
         }
     }
@@ -39,15 +44,39 @@ internal class Evaluation {
         println("\nTesting: evaluation of words by match count started")
 
         // generate list of words sorted by match count
-        words.sortBy { word -> word.length }
-        words.sortByDescending { word -> matchLookup[word]?.size }
+        val wordsMutable = words.toMutableList()
 
-        // get top 20 words by match count
-        println("Top 20 words by match count: ")
-        words.take(20).forEachIndexed { index, word ->
-            val matchedWords = matchLookup[word] ?: return@forEachIndexed
-            println("Position ${index + 1}: $word matching ${matchedWords.size}: $matchedWords")
+        // filter out non-mapped words
+        wordsMutable.filter { word -> matchLookup[word] != null}
+
+        // words sorted by length (asc.), then match count (desc.)
+        wordsMutable.sortBy { word -> word.length }
+        wordsMutable.sortByDescending { word ->
+            val matches = matchLookup[word]
+            assertNotNull(matches)
+            matches.size
         }
+
+        // get top words by match count
+        val topMatchingWords = buildList {
+            wordsMutable
+                .take(200)
+                .distinctBy { word -> matchLookup[word] }
+                .forEach { word ->
+                    val matches = matchLookup[word]
+                    assertNotNull(matches)
+                    add(matches)
+                }
+        }
+
+        println("Top 20 word sets by match count: ")
+        topMatchingWords
+            .take(20)
+            .forEachIndexed { index, wordSet ->
+                val wordSetAsString = wordSet.joinToString(prefix = "{ ", postfix = " }")
+                println("Position ${index + 1}: \t${wordSet.size} matches for \t$wordSetAsString")
+            }
+
         println()
     }
 
@@ -57,7 +86,10 @@ internal class Evaluation {
 
         // find proportion of words with a single match
         val singleMatchingWords = words.count { word ->
-            (matchLookup[word]?.size == 1)
+            val matches = matchLookup[word]
+            assertNotNull(matches)
+
+            (matches.size == 1)
         }
         val proportionOfSingleMatchingWords = ((singleMatchingWords * 100) / words.size)
         println("Proportion of single-matching words: ${proportionOfSingleMatchingWords}%")
@@ -100,5 +132,9 @@ internal class Evaluation {
             .forEach { phrase ->
                 println("Non-matched phrase found: $phrase")
             }
+
+        // ensure all phrases were matched
+        val anyUnmatched = (matched != phraseCount)
+        assertThat(anyUnmatched).isFalse
     }
 }

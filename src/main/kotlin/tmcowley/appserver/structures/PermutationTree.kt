@@ -1,16 +1,13 @@
 package tmcowley.appserver.structures
 
-// generic tree
+// generic permutation tree
 abstract class PermutationTree<T>(val root: Node<T>) {
 
     // global list for storing leaves
     private var leaves: MutableList<Node<T>> = mutableListOf()
 
-    // global list for storing paths (sentences/ words)
-    private var paths: MutableList<List<Node<T>>> = mutableListOf()
-
-    /** insert a list of objects to the tree (as values, not nodes); adds each object to each leaf node */
-    fun insert(childValues: List<T>) {
+    /** insert a set of values to the tree; adds each object to each leaf node */
+    fun insert(childValues: Set<T>) {
         // add each child to each leaf
         val leaves = getLeaves()
         leaves.forEach { leaf -> childValues.forEach { childValue -> insert(childValue, leaf) } }
@@ -53,47 +50,28 @@ abstract class PermutationTree<T>(val root: Node<T>) {
 
     /** get the paths down the tree */
     fun getPaths(): List<List<Node<T>>> {
-        // reset global paths list
-        this.paths = mutableListOf()
+        val leaves = getLeaves()
 
-        findPaths()
+        val paths = buildList(leaves.size) {
+            leaves.forEach { leaf ->
+                // path is a list of nodes from root to leaf
+                // reversed path order since we've traversed up the tree (leaf -> root)
+                val path = buildList {
+                    // crawl up from leaf node to root node
+                    var currentNode = leaf
+                    do {
+                        // add current node to path
+                        add(currentNode)
 
-        return this.paths.toList()
-    }
+                        // break (if currentNode is root)
+                        currentNode = currentNode.getParent() ?: break
+                    } while (currentNode != root)
+                }.asReversed()
 
-    /** find the paths down the tree (traversing down from root) */
-    private fun findPaths() {
-        return findPaths(this.root)
-    }
-
-    /** find the paths down the tree (traversing down from node) */
-    private fun findPaths(node: Node<T>?) {
-        if (node == null) return
-
-        // found leaf: traverse up to root
-        if (node.isLeaf()) {
-            // stores each word in the sentence (initially order reversed)
-            val path: MutableList<Node<T>> = mutableListOf()
-
-            // crawl up from leaf node to root node
-            var currentNode: Node<T> = node
-            do {
-                // add current node to path
-                path.add(currentNode)
-
-                // break (if currentNode is root)
-                currentNode = currentNode.getParent() ?: break
-            } while (currentNode != root)
-
-            // reverse path order since we've traversed up the tree (leaf -> root)
-            path.reverse()
-
-            this.paths.add(path.toList())
-
-            return
+                add(path)
+            }
         }
 
-        // run on each child
-        node.getChildren().forEach { child -> findPaths(child) }
+        return paths
     }
 }

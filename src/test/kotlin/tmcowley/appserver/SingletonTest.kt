@@ -25,6 +25,18 @@ internal class SingletonTest {
     }
 
     @Test
+    fun `word list should not contain empty string`() {
+        // given
+        val wordList = Singleton.words
+
+        // then
+        val containsEmptyString = wordList.any { word ->
+            word == ""
+        }
+        assertThat(containsEmptyString).isFalse
+    }
+
+    @Test
     fun `user code generation`() {
         // given, when
         val userCode = Singleton.getRandomUserCode()
