@@ -16,7 +16,7 @@ import tmcowley.appserver.Singleton
 import tmcowley.appserver.models.Key
 
 @SpringBootTest
-internal class PermutationTreeTests {
+internal class CartesianProductTreeTests {
 
     // test using word tree as derived class
     var tree = WordTree()

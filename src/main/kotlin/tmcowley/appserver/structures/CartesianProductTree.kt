@@ -15,7 +15,7 @@ package tmcowley.appserver.structures
  *  (k, e, t), (k, e, y), (k, i, t), (k, i, y)
  * ]
  */
-abstract class PermutationTree<T>(val root: Node<T>) {
+abstract class CartesianProductTree<T>(val root: Node<T>) {
 
     // global list for storing leaves
     private var leaves: MutableList<Node<T>> = mutableListOf()

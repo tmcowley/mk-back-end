@@ -3,7 +3,7 @@ package tmcowley.appserver.structures
 import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.models.Key
 
-class WordTree : PermutationTree<Key>(Node(Key('ε'))) {
+class WordTree : CartesianProductTree<Key>(Node(Key('ε'))) {
 
     /** get all matched words (computes from node paths) */
     fun getWords(): Set<String> {

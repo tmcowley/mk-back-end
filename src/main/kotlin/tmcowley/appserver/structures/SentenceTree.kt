@@ -1,6 +1,6 @@
 package tmcowley.appserver.structures
 
-class SentenceTree : PermutationTree<String>(Node("ε")) {
+class SentenceTree : CartesianProductTree<String>(Node("ε")) {
 
     fun getSentences(): Set<String> {
         val paths: List<List<Node<String>>> = this.getPaths()

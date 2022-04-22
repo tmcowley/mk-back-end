@@ -1,6 +1,6 @@
 package tmcowley.appserver.structures
 
-/** generic, variadic node */
+/** generic node */
 class Node<V>(val value: V) {
     private var parent: Node<V>? = null
     private var children: MutableList<Node<V>> = mutableListOf()
