@@ -30,7 +30,7 @@ class Node<V>(val value: V) {
         return this.parent
     }
 
-    // componentN() for supporting destructuring 
+    // componentN() for destructuring support
 
     operator fun component1(): V {
         return this.value

@@ -1,6 +1,20 @@
 package tmcowley.appserver.structures
 
-// generic permutation tree
+/** 
+ * generic cartesian product tree;
+ * 
+ * facilitates finding the cartesian product of the added sets; 
+ * new nodes are added at each leaf node; 
+ * the paths in the tree correspond to elements of the cartesian product of all added sets; 
+ * 
+ * cartesian product example for a key-pair list:
+ * word: key
+ * key-pair list: [{d, k}, {e, i}, {t, y}]
+ * cartesian product: {d, k} x {e, i} x {t, y} = [
+ *  (d, e, t), (d, e, y), (d, i, t), (d, i, y), 
+ *  (k, e, t), (k, e, y), (k, i, t), (k, i, y)
+ * ]
+ */
 abstract class PermutationTree<T>(val root: Node<T>) {
 
     // global list for storing leaves
