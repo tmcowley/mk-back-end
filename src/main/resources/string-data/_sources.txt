@@ -15,7 +15,8 @@
     },
 
     "word list 5-grams": {
-        file: "word-list-5-grams.txt", 
+        file: "word-list-5-grams.txt",
+        status: "modified from source",
         title: "Stanford GraphBase list of five-letter words", 
         url: "https://github.com/charlesreid1/five-letter-words/blob/master/sgb-words.txt"
     },

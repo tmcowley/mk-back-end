@@ -19,7 +19,7 @@ object Singleton {
 
     var words: Set<String> = getWords()
     val phrases: List<String> = getPhrases()
-    var fiveGrams = getFiveGrams()
+    private var fiveGrams = getFiveGrams()
 
     // properties and constants
 
@@ -40,7 +40,7 @@ object Singleton {
 
     // maps
 
-    var keyPairs: Map<Key, KeyPair> = getKeyPairMap()
+    private var keyPairs: Map<Key, KeyPair> = getKeyPairMap()
     private val wordFreqLookup= getWordFrequencies()
 
 

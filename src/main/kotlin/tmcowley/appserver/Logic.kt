@@ -16,6 +16,7 @@ fun submitSentence(sentence: String): List<String> {
     if (sentences.isEmpty()) println("Notice: no results found")
     // else println("input: $sentence, output: $sentences")
 
+    // rank sentences based on word frequency, syntax analysis (if enabled)
     rankSentences(sentences)
 
     return sentences
@@ -70,27 +71,26 @@ private fun splitIntoWords(sentence: String): List<String> {
 }
 
 /** get a word in key-pair form, e.g. "word" -> [(w, o), (w, o), (r, u), (d, k)] */
-private fun getWordInKeyPairForm(word: String): List<KeyPair> {
+fun getWordInKeyPairForm(word: String): List<KeyPair> {
     // filter out non-alphabetic characters, and non-mapping chars
     val wordAlphabetic = word
         .filter { char -> isAlphabetic(char) }
         .filter { char -> Singleton.getKeyPairOrNull(char) != null }
 
-    // create key-pair list for word
-    @Suppress("UnnecessaryVariable")
-    val wordAsKeyPairs = wordAlphabetic
+    // create key-pair list for word (word as key-pairs)
+    return wordAlphabetic
         .map { char ->
             val keyPair = Singleton.getKeyPairOrNull(char)
             assertNotNull(keyPair)
             keyPair
         }
-
-    return wordAsKeyPairs
 }
 
 /** get the matching words to a given word */
 fun getMatchedWords(word: String): Set<String> {
     return getMatchedWords(getWordInKeyPairForm(word))
+
+//    return getMatchedWordsUsingCartesian(getWordInKeyPairForm(word))
 }
 
 /** get resulting sentences from the input sentence */
@@ -123,6 +123,7 @@ private fun getMatchingSentences(sentence: String): Set<String> {
 
     // compute viable sentences
     return getSentences(listOfMatchedWords)
+//    return getSentencesUsingCartesian(listOfMatchedWords)
 }
 
 /** check if the given string is a number */

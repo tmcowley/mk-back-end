@@ -114,7 +114,7 @@
         <dependency>
             <groupId>org.languagetool</groupId>
             <artifactId>language-en</artifactId>
-            <version>5.6</version>
+            <version>5.7</version>
         </dependency>
 
         <!-- https://github.com/doyaaaaaken/kotlin-csv -->
@@ -186,7 +186,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test</artifactId>
-            <version>1.6.20-RC2</version>
+            <version>1.6.20</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
@@ -234,15 +234,13 @@
             <version>1.5.0-b01</version>
         </dependency>
 
-        <!-- fixing error: -->
-        <!--
-            Error during class instrumentation:
-            org.springframework.boot.logging.log4j2.Log4J2LoggingSystem:
-            java.lang.RuntimeException:
-            java.io.IOException:
-            Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
-        -->
-        <!-- TODO -->
+        <!-- for computing the cartesianProduct of a list - see Logic.kt -->
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>31.1-jre</version>
+        </dependency>
 
     </dependencies>
 

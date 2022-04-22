@@ -18,4 +18,8 @@ data class KeyPair(val leftKey: Key, val rightKey: Key) {
     fun contains(key: Key): Boolean {
         return (key == leftKey || key == rightKey)
     }
+
+    fun toList(): List<Key> = listOf(
+        leftKey, rightKey
+    )
 }
