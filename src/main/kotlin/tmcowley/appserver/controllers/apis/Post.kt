@@ -1,4 +1,4 @@
-package tmcowley.appserver.controllers
+package tmcowley.appserver.controllers.apis
 
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
@@ -9,18 +9,21 @@ import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.models.SignInForm
 import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.models.SignUpForm
-import tmcowley.appserver.utils.validateSessionData
+import tmcowley.appserver.utils.validateTrainingSessionData
 import tmcowley.appserver.utils.validateSignUpForm
 import tmcowley.appserver.utils.validateUserCode
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
 @CrossOrigin(
-    origins =
-    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
-    methods = [RequestMethod.POST],
+    methods = [RequestMethod.GET],
 
-    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
+    // enabled cross-origin urls
+    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com",
+        "https://mirrored-keyboard.vercel.app"],
+
+    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation
+    // /CrossOrigin.html#allowedHeaders
     allowedHeaders = ["*"],
     exposedHeaders = ["*"],
 
@@ -30,7 +33,7 @@ import javax.servlet.http.HttpSession
 )
 @RequestMapping(value = ["/api/v0"], consumes = ["application/json"], produces = ["application/json"])
 @RestController
-class APIsPost {
+class Post {
 
     private val db = SingletonControllers.db
 
@@ -185,13 +188,19 @@ class APIsPost {
     /** get the user code attached to the session */
     @PostMapping(value = ["/report-completed-session"])
     fun reportCompletedSession(@RequestBody metricsObj: String, request: HttpServletRequest): Boolean {
+
+        println("reportCompletedSession called")
+
         // ensure user is logged in
+        if (isNotSignedIn(request)) println("error: is not signed in")
         if (isNotSignedIn(request)) return false
 
         val session = request.getSession(false)
         val userCode = session.getAttribute("userCode") as String
+        val phraseNumber = session.getAttribute("phraseNumber") as Int
 
-        val isNotLastPhrase = (session.getAttribute("phraseNumber") != Singleton.phrasesPerSession)
+        val isNotLastPhrase = (phraseNumber != Singleton.phrasesPerSession)
+        if (isNotLastPhrase) println("error: is not last phrase, phraseNumber: $phraseNumber")
         if (isNotLastPhrase) return false
 
         // collect metrics
@@ -203,7 +212,8 @@ class APIsPost {
         }
 
         // validate session data object
-        if (!validateSessionData(sessionData)) return false
+        if (!validateTrainingSessionData(sessionData)) println("training session data invalid: ${sessionData.toString()}")
+        if (!validateTrainingSessionData(sessionData)) return false
 
         // store completed session in database
         db.storeCompletedSession(userCode, sessionData)

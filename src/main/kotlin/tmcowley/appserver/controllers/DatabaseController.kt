@@ -290,19 +290,17 @@ class DatabaseController {
 
     /** get a map of users to their training sessions */
     fun getTrainingSessionsForEachUser(): Map<User, List<TrainingSession>> {
-
-        val userToSessions = mutableMapOf<User, List<TrainingSession>>()
-
-        transaction {
-            // get all users
-            val users = User.all()
-            users.forEach { user ->
-                // get sessions against user
-                val sessions = getAllSessions(user.id.value)
-                userToSessions[user] = sessions
+        // build map of users to their training sessions
+        return buildMap {
+            transaction {
+                // get all users
+                val users = User.all()
+                users.forEach { user ->
+                    // get sessions against user
+                    val sessions = getAllSessions(user.id.value)
+                    put(user, sessions)
+                }
             }
         }
-
-        return userToSessions
     }
 }

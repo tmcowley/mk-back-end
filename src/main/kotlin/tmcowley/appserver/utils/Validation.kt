@@ -18,7 +18,7 @@ fun validateSignUpForm(form: SignUpForm): Boolean {
 }
 
 /** validate a training session */
-fun validateSessionData(session: TrainingSessionData): Boolean {
+fun validateTrainingSessionData(session: TrainingSessionData): Boolean {
     // validate speed
     if (session.speed < 0f) return false
 

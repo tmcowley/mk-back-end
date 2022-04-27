@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Tags
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import tmcowley.appserver.controllers.APIsGet
+import tmcowley.appserver.controllers.apis.Get
 import kotlin.test.assertNotNull
 
 /** Test class for automated evaluation */
@@ -17,7 +17,7 @@ import kotlin.test.assertNotNull
 @SpringBootTest
 internal class Evaluation {
 
-    private val getAPIs: APIsGet = APIsGet()
+    private val getAPIs: Get = Get()
     private val phrases = Singleton.phrases
     private val words = Singleton.words
 

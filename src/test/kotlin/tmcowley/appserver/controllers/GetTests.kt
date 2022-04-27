@@ -7,13 +7,16 @@ import org.assertj.core.api.Assertions.assertThat
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
+import tmcowley.appserver.controllers.apis.Get
+import tmcowley.appserver.utils.reportTrainingSession
+import tmcowley.appserver.utils.createUser
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
 
 @SpringBootTest
-class APIsGetTests {
+class GetTests {
 
-    val apiInstance = APIsGet()
+    val apiInstance = Get()
     val db = SingletonControllers.db
 
     /** set the syntax frequency analysis enabled state */
@@ -206,15 +209,103 @@ class APIsGetTests {
 
     @Test
     fun `get user-id to sessions map - deep check`() {
-        val userIdToSessions = apiInstance.getSessionsForEachUser()
+        val userIdToSessions = apiInstance.getSessionsForEachUserById()
 
-        userIdToSessions.forEach {
-            // given
-                (userId, sessions) ->
-
+        // given user-id, sessions
+        userIdToSessions.forEach { (userId, sessions) ->
             // then
             val expectedSessions = db.getAllSessions(userId)
             assertThat(sessions).isEqualTo(expectedSessions)
+        }
+    }
+
+    @Test
+    fun `getSessionsForEachUser - add some users`() {
+        // given
+        // at least 5 users in database
+        val users = buildSet {
+            repeat(5) {
+                // create a new user
+                val user = createUser(db)
+
+                // add 5 training sessions to this user
+                repeat(5) {
+                    reportTrainingSession(db, user)
+                }
+
+                // add user to users set
+                add(user)
+            }
+        }
+
+        // when
+        // we query the user to sessions map
+        val userToSessions = apiInstance.getSessionsForEachUser()
+
+        // then
+        // ensure the map contains the 5 added users
+        users.forEach { user ->
+            assertThat(userToSessions.contains(user))
+        }
+    }
+
+    @Test
+    fun `getSessionsForEachUserById - add some users`() {
+        // given
+        // at least 5 users in database
+        val users = buildSet {
+            repeat(5) {
+                // create a new user
+                val user = createUser(db)
+
+                // add 5 training sessions to this user
+                repeat(5) {
+                    reportTrainingSession(db, user)
+                }
+
+                // add user to users set
+                add(user)
+            }
+        }
+
+        // when
+        // we query the user to sessions map
+        val userToSessions = apiInstance.getSessionsForEachUserById()
+
+        // then
+        // ensure the map contains the 5 added users
+        users.forEach { user ->
+            assertThat(userToSessions.contains(user.id.value))
+        }
+    }
+
+    @Test
+    fun `getSessionsForEachUserByCode - add some users`() {
+        // given
+        // at least 5 users in database
+        val users = buildSet {
+            repeat(5) {
+                // create a new user
+                val user = createUser(db)
+
+                // add 5 training sessions to this user
+                repeat(5) {
+                    reportTrainingSession(db, user)
+                }
+
+                // add user to users set
+                add(user)
+            }
+        }
+
+        // when
+        // we query the user to sessions map
+        val userToSessions = apiInstance.getSessionsForEachUserByCode()
+
+        // then
+        // ensure the map contains the 5 added users
+        users.forEach { user ->
+            assertThat(userToSessions.contains(user.userCode))
         }
     }
 }

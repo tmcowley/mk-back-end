@@ -76,7 +76,7 @@ internal class ValidationKtTest {
 
         validTrainingSessions.forEach { session ->
             // when
-            val trainingSessionIsValid = validateSessionData(session)
+            val trainingSessionIsValid = validateTrainingSessionData(session)
 
             // then
             assertThat(trainingSessionIsValid)
@@ -97,7 +97,7 @@ internal class ValidationKtTest {
 
         invalidTrainingSessions.forEach { session ->
             // when
-            val trainingSessionIsValid = validateSessionData(session)
+            val trainingSessionIsValid = validateTrainingSessionData(session)
 
             // then
             assertThat(trainingSessionIsValid).isFalse

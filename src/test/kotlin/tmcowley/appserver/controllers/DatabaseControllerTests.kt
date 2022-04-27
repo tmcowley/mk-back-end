@@ -15,32 +15,13 @@ import org.junit.jupiter.api.Nested
 
 import tmcowley.appserver.models.TrainingSessionData
 
+import tmcowley.appserver.utils.createUserGettingCode
+import tmcowley.appserver.utils.createUser
+
 @SpringBootTest
 internal class DatabaseControllerTests {
 
     private val db = DatabaseController()
-
-    /** create a fresh user, returning the user's user-code */
-    private fun createUserGettingCode(): String {
-        val freshUserCode = db.createNewUserGettingCode(
-            userAge = 23,
-            typingSpeed = 23
-        )
-        assertNotNull(freshUserCode)
-
-        return freshUserCode
-    }
-
-    /** create a fresh user, returning the User object */
-    private fun createUser(): User {
-        val freshUser = db.createNewUser(
-            userAge = 23,
-            typingSpeed = 23
-        )
-        assertNotNull(freshUser)
-
-        return freshUser
-    }
 
     @Test
     fun `user-code taken`() {
@@ -111,7 +92,7 @@ internal class DatabaseControllerTests {
     @Test
     fun `get top completed session of new user`() {
         // when
-        val userCode = createUserGettingCode()
+        val userCode = createUserGettingCode(this.db)
 
         // then
         // for new user, next session number should be one
@@ -122,7 +103,7 @@ internal class DatabaseControllerTests {
     fun `create new session under user by user-code`() {
         // given
         // fresh user created
-        val userCode = createUserGettingCode()
+        val userCode = createUserGettingCode(this.db)
 
         // get next available session number
         val nextSessionNumber = db.getNextSessionNumber(userCode)
@@ -144,7 +125,7 @@ internal class DatabaseControllerTests {
     fun `get top completed session of (non-initial) user`() {
         // given
         // fresh user created
-        val userCode = createUserGettingCode()
+        val userCode = createUserGettingCode(this.db)
 
         // when
         // add two sessions under the user
@@ -164,7 +145,7 @@ internal class DatabaseControllerTests {
     fun `get next session number`() {
         // given
         // fresh user created
-        val userCode = createUserGettingCode()
+        val userCode = createUserGettingCode(this.db)
 
         // when
         val nextSessionNumber = db.getNextSessionNumber(userCode)
@@ -178,7 +159,7 @@ internal class DatabaseControllerTests {
     fun `get user-id from user-code`() {
         // given
         // fresh user created
-        val user = createUser()
+        val user = createUser(this.db)
         val userCode = user.userCode
         val correctUserId = user.id.value
 
@@ -194,7 +175,7 @@ internal class DatabaseControllerTests {
     @Test
     fun `count users`() {
         // given (at least one user)
-        createUser()
+        createUser(this.db)
 
         // when
         val count = db.countUsers()
@@ -224,7 +205,7 @@ internal class DatabaseControllerTests {
         fun `for a new user`() {
             // given
             // fresh user created
-            val userCode = createUserGettingCode()
+            val userCode = createUserGettingCode(db)
 
             // when
             // we query the user's sessions
@@ -247,7 +228,7 @@ internal class DatabaseControllerTests {
         fun `for a user with recorded sessions`() {
             // given
             // user created with initial session and first session completed
-            val userCode = createUserGettingCode()
+            val userCode = createUserGettingCode(db)
             val successfulAddition = db.storeCompletedSession(userCode, TrainingSessionData(60f, 100f))
             assertThat(successfulAddition)
 
@@ -273,11 +254,11 @@ internal class DatabaseControllerTests {
     inner class Entities {
         @Test
         fun `Session overwritten functions`() {
-            createUser()
+            createUser(db)
             val sessionOne = transaction { TrainingSession.all().firstOrNull() }
             assertNotNull(sessionOne)
 
-            createUser()
+            createUser(db)
             val sessionTwo = transaction { TrainingSession.all().firstOrNull() }
             assertNotNull(sessionTwo)
 

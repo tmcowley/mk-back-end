@@ -8,17 +8,18 @@ import kotlinx.serialization.encodeToString
 import org.junit.jupiter.api.Nested
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
+import tmcowley.appserver.controllers.apis.Post
 import tmcowley.appserver.models.SignInForm
 import tmcowley.appserver.models.SignUpForm
 import tmcowley.appserver.models.TrainingSessionData
-import tmcowley.appserver.utils.validateSessionData
+import tmcowley.appserver.utils.validateTrainingSessionData
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-internal class APIsPostTest {
+internal class PostTest {
 
     private val db = SingletonControllers.db
-    private val apiInstance = APIsPost()
+    private val apiInstance = Post()
 
     /** get a fresh (unseen by server) request */
     private fun getFreshRequest(): MockHttpServletRequest {
@@ -327,7 +328,7 @@ internal class APIsPostTest {
             // with valid metrics:
             val metrics = TrainingSessionData(60f, 100f)
             val metricsSerialized = Json.encodeToString(metrics)
-            assertThat(validateSessionData(metrics))
+            assertThat(validateTrainingSessionData(metrics))
 
             // when
 
@@ -367,7 +368,7 @@ internal class APIsPostTest {
             // with valid metrics:
             val metrics = TrainingSessionData(60f, 100f)
             val metricsSerialized = Json.encodeToString(metrics)
-            assertThat(validateSessionData(metrics))
+            assertThat(validateTrainingSessionData(metrics))
 
             // when
 
@@ -420,7 +421,7 @@ internal class APIsPostTest {
             // with invalid metrics:
             val metrics = TrainingSessionData(60f, 101f)
             val metricsSerialized = Json.encodeToString(metrics)
-            assertThat(validateSessionData(metrics)).isFalse
+            assertThat(validateTrainingSessionData(metrics)).isFalse
 
             // we report completed session
             val trainingSessionAdded = apiInstance.reportCompletedSession(metricsSerialized, request)

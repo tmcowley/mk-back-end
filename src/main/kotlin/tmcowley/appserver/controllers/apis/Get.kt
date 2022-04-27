@@ -1,15 +1,20 @@
-package tmcowley.appserver.controllers
+package tmcowley.appserver.controllers.apis
 
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.*
+import tmcowley.appserver.controllers.TrainingSession
+import tmcowley.appserver.controllers.User
 
 @CrossOrigin(
-    origins =
-    ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
     methods = [RequestMethod.GET],
 
-    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation/CrossOrigin.html#allowedHeaders
+    // enabled cross-origin urls
+    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com",
+        "https://mirrored-keyboard.vercel.app"],
+
+    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation
+    // /CrossOrigin.html#allowedHeaders
     allowedHeaders = ["*"],
     exposedHeaders = ["*"],
 
@@ -19,7 +24,7 @@ import tmcowley.appserver.*
 )
 @RequestMapping(value = ["/api/v0"], produces = ["application/json"])
 @RestController
-class APIsGet {
+class Get {
 
     /** For converting any form to full form (main computation) */
     @Cacheable(value = ["results"])
@@ -73,16 +78,27 @@ class APIsGet {
     @GetMapping(value = ["/get-phrases-per-session"])
     fun getPhrasesPerSession(): Int = Singleton.phrasesPerSession
 
-    /** get a map of all user-ids to a list of their training sessions */
+    /** get a map of all users to a list of their training sessions */
     @GetMapping(value = ["/get-sessions-for-each-user"])
-    fun getSessionsForEachUser(): Map<Int, List<TrainingSession>> {
+    fun getSessionsForEachUser(): Map<User, List<TrainingSession>> =
         // map of users to their sessions
-        val userMap = SingletonControllers.db.getTrainingSessionsForEachUser()
+        SingletonControllers.db.getTrainingSessionsForEachUser()
 
-        // create map of user-id to their sessions
-        val userIdMap = userMap.mapKeys { (user, _) ->
-            user.id.value
-        }
-        return userIdMap
-    }
+    /** get a map of all user-ids to a list of their training sessions */
+    @GetMapping(value = ["/get-sessions-for-each-user-by-id"])
+    fun getSessionsForEachUserById(): Map<Int, List<TrainingSession>> =
+        // map of users, by user-id, to their sessions
+        SingletonControllers.db.getTrainingSessionsForEachUser()
+            .mapKeys { (user, _) ->
+                user.id.value
+            }
+
+    /** get a map of all user-codes to a list of their training sessions */
+    @GetMapping(value = ["/get-sessions-for-each-user-by-user-code"])
+    fun getSessionsForEachUserByCode(): Map<String, List<TrainingSession>> =
+        // map of users, by user-id, to their sessions
+        SingletonControllers.db.getTrainingSessionsForEachUser()
+            .mapKeys { (user, _) ->
+                user.userCode
+            }
 }

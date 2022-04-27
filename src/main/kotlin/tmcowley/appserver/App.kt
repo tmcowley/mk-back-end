@@ -21,5 +21,10 @@ class App {
 }
 
 fun main(args: Array<String>) {
-    runApplication<App>(*args)
+
+    // testing flag for full code-coverage in testing
+    val firstArgument = args.firstOrNull()
+    val inTesting = (firstArgument != null)
+
+    if (!inTesting) runApplication<App>(*args)
 }
