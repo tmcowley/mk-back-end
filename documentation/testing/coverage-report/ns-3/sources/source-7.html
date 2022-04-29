@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > TrainingSession</title>
+  <title>Coverage Report > Users</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,12 +20,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">tmcowley.appserver.controllers</a>
 </div>
 
-<h1>Coverage Summary for Class: TrainingSession (tmcowley.appserver.controllers)</h1>
+<h1>Coverage Summary for Class: Users (tmcowley.appserver.controllers)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -36,26 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">TrainingSession</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (5/5)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (17/17)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">TrainingSession$Companion</td>
+  <td class="name">Users</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -69,18 +53,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (1/1)
-  </span>
-</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (6/6)
+    (4/4)
   </span>
 </td>
 <td class="coverageStat">
@@ -88,10 +61,11 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (18/18)
+    (4/4)
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -99,7 +73,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><b class="fc"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.controllers</b>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.controllers
 <i class="no-highlight">2</i>&nbsp;
 <i class="no-highlight">3</i>&nbsp;// using:
 <i class="no-highlight">4</i>&nbsp;// https://github.com/JetBrains/Exposed
@@ -116,10 +90,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">15</i>&nbsp;import tmcowley.appserver.Singleton
 <i class="no-highlight">16</i>&nbsp;import tmcowley.appserver.models.TrainingSessionData
 <i class="no-highlight">17</i>&nbsp;
-<i class="no-highlight">18</i>&nbsp;object Users : IntIdTable() {
-<i class="no-highlight">19</i>&nbsp;    val userCode = varchar(&quot;uid&quot;, 120).uniqueIndex()
-<i class="no-highlight">20</i>&nbsp;    val speed = integer(&quot;speed&quot;)
-<i class="no-highlight">21</i>&nbsp;    val age = integer(&quot;age&quot;)
+<b class="fc"><i class="no-highlight">18</i>&nbsp;object Users : IntIdTable() {</b>
+<b class="fc"><i class="no-highlight">19</i>&nbsp;    val userCode = varchar(&quot;uid&quot;, 120).uniqueIndex()</b>
+<b class="fc"><i class="no-highlight">20</i>&nbsp;    val speed = integer(&quot;speed&quot;)</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    val age = integer(&quot;age&quot;)</b>
 <i class="no-highlight">22</i>&nbsp;    // val sessions = reference(&quot;sessions&quot;, Sessions)
 <i class="no-highlight">23</i>&nbsp;}
 <i class="no-highlight">24</i>&nbsp;
@@ -153,35 +127,35 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">52</i>&nbsp;    val accuracy = float(&quot;accuracy&quot;)
 <i class="no-highlight">53</i>&nbsp;}
 <i class="no-highlight">54</i>&nbsp;
-<b class="fc"><i class="no-highlight">55</i>&nbsp;class TrainingSession(id: EntityID&lt;Int&gt;) : IntEntity(id) {</b>
-<b class="fc"><i class="no-highlight">56</i>&nbsp;    companion object : IntEntityClass&lt;TrainingSession&gt;(TrainingSessions)</b>
+<i class="no-highlight">55</i>&nbsp;class TrainingSession(id: EntityID&lt;Int&gt;) : IntEntity(id) {
+<i class="no-highlight">56</i>&nbsp;    companion object : IntEntityClass&lt;TrainingSession&gt;(TrainingSessions)
 <i class="no-highlight">57</i>&nbsp;
-<b class="fc"><i class="no-highlight">58</i>&nbsp;    var number by TrainingSessions.number</b>
-<b class="fc"><i class="no-highlight">59</i>&nbsp;    var speed by TrainingSessions.speed</b>
-<b class="fc"><i class="no-highlight">60</i>&nbsp;    var accuracy by TrainingSessions.accuracy</b>
+<i class="no-highlight">58</i>&nbsp;    var number by TrainingSessions.number
+<i class="no-highlight">59</i>&nbsp;    var speed by TrainingSessions.speed
+<i class="no-highlight">60</i>&nbsp;    var accuracy by TrainingSessions.accuracy
 <i class="no-highlight">61</i>&nbsp;
 <i class="no-highlight">62</i>&nbsp;    override fun toString(): String {
-<b class="fc"><i class="no-highlight">63</i>&nbsp;        return &quot;Session(number=$number, speed=$speed, accuracy=$accuracy)&quot;</b>
+<i class="no-highlight">63</i>&nbsp;        return &quot;Session(number=$number, speed=$speed, accuracy=$accuracy)&quot;
 <i class="no-highlight">64</i>&nbsp;    }
 <i class="no-highlight">65</i>&nbsp;
 <i class="no-highlight">66</i>&nbsp;    override fun equals(other: Any?): Boolean {
-<b class="fc"><i class="no-highlight">67</i>&nbsp;        if (this === other) return true</b>
-<b class="fc"><i class="no-highlight">68</i>&nbsp;        if (javaClass != other?.javaClass) return false</b>
+<i class="no-highlight">67</i>&nbsp;        if (this === other) return true
+<i class="no-highlight">68</i>&nbsp;        if (javaClass != other?.javaClass) return false
 <i class="no-highlight">69</i>&nbsp;
-<b class="fc"><i class="no-highlight">70</i>&nbsp;        other as TrainingSession</b>
+<i class="no-highlight">70</i>&nbsp;        other as TrainingSession
 <i class="no-highlight">71</i>&nbsp;
-<b class="fc"><i class="no-highlight">72</i>&nbsp;        if (number != other.number) return false</b>
-<b class="fc"><i class="no-highlight">73</i>&nbsp;        if (speed != other.speed) return false</b>
-<b class="fc"><i class="no-highlight">74</i>&nbsp;        if (accuracy != other.accuracy) return false</b>
+<i class="no-highlight">72</i>&nbsp;        if (number != other.number) return false
+<i class="no-highlight">73</i>&nbsp;        if (speed != other.speed) return false
+<i class="no-highlight">74</i>&nbsp;        if (accuracy != other.accuracy) return false
 <i class="no-highlight">75</i>&nbsp;
-<b class="fc"><i class="no-highlight">76</i>&nbsp;        return true</b>
+<i class="no-highlight">76</i>&nbsp;        return true
 <i class="no-highlight">77</i>&nbsp;    }
 <i class="no-highlight">78</i>&nbsp;
 <i class="no-highlight">79</i>&nbsp;    override fun hashCode(): Int {
-<b class="fc"><i class="no-highlight">80</i>&nbsp;        var result = number</b>
-<b class="fc"><i class="no-highlight">81</i>&nbsp;        result = 31 * result + speed.hashCode()</b>
-<b class="fc"><i class="no-highlight">82</i>&nbsp;        result = 31 * result + accuracy.hashCode()</b>
-<b class="fc"><i class="no-highlight">83</i>&nbsp;        return result</b>
+<i class="no-highlight">80</i>&nbsp;        var result = number
+<i class="no-highlight">81</i>&nbsp;        result = 31 * result + speed.hashCode()
+<i class="no-highlight">82</i>&nbsp;        result = 31 * result + accuracy.hashCode()
+<i class="no-highlight">83</i>&nbsp;        return result
 <i class="no-highlight">84</i>&nbsp;    }
 <i class="no-highlight">85</i>&nbsp;}
 <i class="no-highlight">86</i>&nbsp;
@@ -431,7 +405,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-04-28 15:34</div>
+    <div style="float:right;">generated on 2022-04-29 18:35</div>
 </div>
 </body>
 </html>

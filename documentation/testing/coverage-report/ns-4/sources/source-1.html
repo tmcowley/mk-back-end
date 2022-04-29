@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > Key</title>
+  <title>Coverage Report > Get</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -17,18 +17,15 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">tmcowley.appserver.models</a>
+    <a href="../index.html">tmcowley.appserver.controllers.apis</a>
 </div>
 
-<h1>Coverage Summary for Class: Key (tmcowley.appserver.models)</h1>
+<h1>Coverage Summary for Class: Get (tmcowley.appserver.controllers.apis)</h1>
 
 <table class="coverageStats">
+
 <tr>
   <th class="name">Class</th>
-<th class="coverageStat 
-">
-  Class, %
-</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -39,13 +36,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Key</td>
+  <td class="name">Get</td>
 <td class="coverageStat">
   <span class="percent">
     100%
   </span>
   <span class="absValue">
-    (1/1)
+    (10/10)
   </span>
 </td>
 <td class="coverageStat">
@@ -53,19 +50,32 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (2/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (2/2)
+    (14/14)
   </span>
 </td>
 </tr>
-
+  <tr>
+    <td class="name">Get$$EnhancerBySpringCGLIB$$4f751cc1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
 </table>
 
 <br/>
@@ -73,19 +83,110 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.models
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.controllers.apis
 <i class="no-highlight">2</i>&nbsp;
-<i class="no-highlight">3</i>&nbsp;/** 
-<i class="no-highlight">4</i>&nbsp; * a key is a character storing entity; 
-<i class="no-highlight">5</i>&nbsp; * Kotlin data class defines equals, hashCode, and toString
-<i class="no-highlight">6</i>&nbsp; */
-<b class="fc"><i class="no-highlight">7</i>&nbsp;data class Key(val character: Char) {</b>
-<i class="no-highlight">8</i>&nbsp;
-<i class="no-highlight">9</i>&nbsp;    /** string representation is its character */
-<i class="no-highlight">10</i>&nbsp;    override fun toString(): String {
-<b class="fc"><i class="no-highlight">11</i>&nbsp;        return character.toString()</b>
-<i class="no-highlight">12</i>&nbsp;    }
-<i class="no-highlight">13</i>&nbsp;}
+<i class="no-highlight">3</i>&nbsp;import org.springframework.cache.annotation.Cacheable
+<i class="no-highlight">4</i>&nbsp;import org.springframework.web.bind.annotation.*
+<i class="no-highlight">5</i>&nbsp;import tmcowley.appserver.*
+<i class="no-highlight">6</i>&nbsp;import tmcowley.appserver.controllers.TrainingSession
+<i class="no-highlight">7</i>&nbsp;import tmcowley.appserver.controllers.User
+<i class="no-highlight">8</i>&nbsp;import tmcowley.appserver.utils.convertToLeft
+<i class="no-highlight">9</i>&nbsp;import tmcowley.appserver.utils.convertToRight
+<i class="no-highlight">10</i>&nbsp;
+<b class="fc"><i class="no-highlight">11</i>&nbsp;@RestController</b>
+<i class="no-highlight">12</i>&nbsp;@CrossOrigin(
+<i class="no-highlight">13</i>&nbsp;    // enabled cross-origin urls
+<i class="no-highlight">14</i>&nbsp;    origins = [&quot;http://localhost:3000&quot;, &quot;https://localhost:3000&quot;, &quot;https://www.tcowley.com&quot;, &quot;https://tcowley.com&quot;, &quot;https://mirrored-keyboard.vercel.app&quot;],
+<i class="no-highlight">15</i>&nbsp;    methods = [RequestMethod.GET],
+<i class="no-highlight">16</i>&nbsp;
+<i class="no-highlight">17</i>&nbsp;    // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation
+<i class="no-highlight">18</i>&nbsp;    // /CrossOrigin.html#allowedHeaders
+<i class="no-highlight">19</i>&nbsp;    allowedHeaders = [&quot;*&quot;],
+<i class="no-highlight">20</i>&nbsp;    exposedHeaders = [&quot;*&quot;],
+<i class="no-highlight">21</i>&nbsp;
+<i class="no-highlight">22</i>&nbsp;    // allow client cookies
+<i class="no-highlight">23</i>&nbsp;    // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
+<i class="no-highlight">24</i>&nbsp;    allowCredentials = &quot;true&quot;
+<i class="no-highlight">25</i>&nbsp;)
+<i class="no-highlight">26</i>&nbsp;@RequestMapping(value = [&quot;/api/v0&quot;], produces = [&quot;application/json&quot;])
+<i class="no-highlight">27</i>&nbsp;class Get {
+<i class="no-highlight">28</i>&nbsp;
+<i class="no-highlight">29</i>&nbsp;    /** For converting any form to full form (main computation) */
+<i class="no-highlight">30</i>&nbsp;    @Cacheable(value = [&quot;results&quot;])
+<i class="no-highlight">31</i>&nbsp;    @GetMapping(
+<i class="no-highlight">32</i>&nbsp;        value = [&quot;/submit&quot;],
+<i class="no-highlight">33</i>&nbsp;    )
+<i class="no-highlight">34</i>&nbsp;    fun submit(@RequestParam(&quot;input&quot;) input: String): List&lt;String&gt; {
+<i class="no-highlight">35</i>&nbsp;        // println(&quot;\n\n/submit endpoint called&quot;)
+<b class="fc"><i class="no-highlight">36</i>&nbsp;        return submitSentence(input)</b>
+<i class="no-highlight">37</i>&nbsp;    }
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;    /** For converting any form to left-hand form */
+<i class="no-highlight">40</i>&nbsp;    @Cacheable(value = [&quot;left-forms&quot;])
+<i class="no-highlight">41</i>&nbsp;    @GetMapping(
+<i class="no-highlight">42</i>&nbsp;        value = [&quot;/convert-lhs&quot;],
+<i class="no-highlight">43</i>&nbsp;    )
+<i class="no-highlight">44</i>&nbsp;    fun convertToLHS(@RequestParam(&quot;input&quot;) input: String?): String {
+<i class="no-highlight">45</i>&nbsp;        // println(&quot;/post/convert/lhs convertToLHS called with input: ${input}&quot;)
+<i class="no-highlight">46</i>&nbsp;
+<i class="no-highlight">47</i>&nbsp;        // for each alphabetic char in string -&gt; lookup keypair, get left key in keypair
+<b class="fc"><i class="no-highlight">48</i>&nbsp;        return convertToLeft(input)</b>
+<i class="no-highlight">49</i>&nbsp;    }
+<i class="no-highlight">50</i>&nbsp;
+<i class="no-highlight">51</i>&nbsp;    /** For converting any form to right-hand form */
+<i class="no-highlight">52</i>&nbsp;    @Cacheable(value = [&quot;right-forms&quot;])
+<i class="no-highlight">53</i>&nbsp;    @GetMapping(
+<i class="no-highlight">54</i>&nbsp;        value = [&quot;/convert-rhs&quot;],
+<i class="no-highlight">55</i>&nbsp;    )
+<i class="no-highlight">56</i>&nbsp;    fun convertToRHS(@RequestParam(&quot;input&quot;) input: String?): String {
+<i class="no-highlight">57</i>&nbsp;        // println(&quot;/post/convert/rhs convertToRHS called with input: ${input}&quot;)
+<i class="no-highlight">58</i>&nbsp;
+<i class="no-highlight">59</i>&nbsp;        // for each alphabetic char in string -&gt; lookup keypair, get right key in keypair
+<b class="fc"><i class="no-highlight">60</i>&nbsp;        return convertToRight(input)</b>
+<i class="no-highlight">61</i>&nbsp;    }
+<i class="no-highlight">62</i>&nbsp;
+<i class="no-highlight">63</i>&nbsp;    /** API status query endpoint */
+<i class="no-highlight">64</i>&nbsp;    @GetMapping(value = [&quot;/get-status&quot;])
+<i class="no-highlight">65</i>&nbsp;    fun status(): Boolean {
+<i class="no-highlight">66</i>&nbsp;        // return true when active
+<b class="fc"><i class="no-highlight">67</i>&nbsp;        return true</b>
+<i class="no-highlight">68</i>&nbsp;    }
+<i class="no-highlight">69</i>&nbsp;
+<i class="no-highlight">70</i>&nbsp;    /** random phrase query endpoint */
+<i class="no-highlight">71</i>&nbsp;    @GetMapping(value = [&quot;/get-random-phrase&quot;])
+<i class="no-highlight">72</i>&nbsp;    fun getRandomPhrase(): String {
+<i class="no-highlight">73</i>&nbsp;        // get a random phrase from the phrase list
+<b class="fc"><i class="no-highlight">74</i>&nbsp;        return Singleton.getRandomPhrase()</b>
+<i class="no-highlight">75</i>&nbsp;    }
+<i class="no-highlight">76</i>&nbsp;
+<i class="no-highlight">77</i>&nbsp;    /** get the phrases per session count */
+<i class="no-highlight">78</i>&nbsp;    @GetMapping(value = [&quot;/get-phrases-per-session&quot;])
+<b class="fc"><i class="no-highlight">79</i>&nbsp;    fun getPhrasesPerSession(): Int = Singleton.phrasesPerSession</b>
+<i class="no-highlight">80</i>&nbsp;
+<i class="no-highlight">81</i>&nbsp;    /** get a map of all users to a list of their training sessions */
+<i class="no-highlight">82</i>&nbsp;    @GetMapping(value = [&quot;/get-sessions-for-each-user&quot;])
+<i class="no-highlight">83</i>&nbsp;    fun getSessionsForEachUser(): Map&lt;User, List&lt;TrainingSession&gt;&gt; =
+<i class="no-highlight">84</i>&nbsp;        // map of users to their sessions
+<b class="fc"><i class="no-highlight">85</i>&nbsp;        SingletonControllers.db.getTrainingSessionsForEachUser()</b>
+<i class="no-highlight">86</i>&nbsp;
+<i class="no-highlight">87</i>&nbsp;    /** get a map of all user-ids to a list of their training sessions */
+<i class="no-highlight">88</i>&nbsp;    @GetMapping(value = [&quot;/get-sessions-for-each-user-by-id&quot;])
+<i class="no-highlight">89</i>&nbsp;    fun getSessionsForEachUserById(): Map&lt;Int, List&lt;TrainingSession&gt;&gt; =
+<i class="no-highlight">90</i>&nbsp;        // map of users, by user-id, to their sessions
+<b class="fc"><i class="no-highlight">91</i>&nbsp;        SingletonControllers.db.getTrainingSessionsForEachUser()</b>
+<b class="fc"><i class="no-highlight">92</i>&nbsp;            .mapKeys { (user, _) -&gt;</b>
+<b class="fc"><i class="no-highlight">93</i>&nbsp;                user.id.value</b>
+<i class="no-highlight">94</i>&nbsp;            }
+<i class="no-highlight">95</i>&nbsp;
+<i class="no-highlight">96</i>&nbsp;    /** get a map of all user-codes to a list of their training sessions */
+<i class="no-highlight">97</i>&nbsp;    @GetMapping(value = [&quot;/get-sessions-for-each-user-by-user-code&quot;])
+<i class="no-highlight">98</i>&nbsp;    fun getSessionsForEachUserByCode(): Map&lt;String, List&lt;TrainingSession&gt;&gt; =
+<i class="no-highlight">99</i>&nbsp;        // map of users, by user-id, to their sessions
+<b class="fc"><i class="no-highlight">100</i>&nbsp;        SingletonControllers.db.getTrainingSessionsForEachUser()</b>
+<b class="fc"><i class="no-highlight">101</i>&nbsp;            .mapKeys { (user, _) -&gt;</b>
+<b class="fc"><i class="no-highlight">102</i>&nbsp;                user.userCode</b>
+<i class="no-highlight">103</i>&nbsp;            }
+<i class="no-highlight">104</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -112,7 +213,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-04-28 15:34</div>
+    <div style="float:right;">generated on 2022-04-29 18:35</div>
 </div>
 </body>
 </html>

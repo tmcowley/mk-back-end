@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName
 
 // for fluent assertions
 import org.assertj.core.api.Assertions.assertThat
+import tmcowley.appserver.utils.splitIntoWords
 
 // for assertions with smart-casts (nullability inferred)
 import kotlin.test.assertNull
@@ -131,11 +132,17 @@ internal class SingletonTests {
 
         @Test
         fun `determinism for first 20 sessions`() {
-            // for each of the first 20 sessions, ensure phrases are deterministic
-            (1 .. 20).forEach { sessionNumber ->
-                (1 .. 8).forEach { phraseNumber ->
-                    val phraseN = Singleton.getPhrase(sessionNumber, phraseNumber)
-                    assertThat(phraseN).isEqualTo(Singleton.getPhrase(sessionNumber, phraseNumber))
+            val sessions = (1 .. 20)
+            val phrases = (1 .. 8)
+
+            // for each of the first 20 sessions
+            sessions.forEach { sessionNumber ->
+                phrases.forEach { phraseNumber ->
+                    val phraseCalledFirst = Singleton.getPhrase(sessionNumber, phraseNumber)
+                    val phraseCalledSecond = Singleton.getPhrase(sessionNumber, phraseNumber)
+
+                    // ensure phrases are deterministic
+                    assertThat(phraseCalledFirst).isEqualTo(phraseCalledSecond)
                 }
             }
         }
@@ -148,7 +155,9 @@ internal class SingletonTests {
         @Test
         fun `uniqueness in the first 5 sessions`() {
             // for each of the first five sessions, ensure phrases are unique
-            (1 .. 5).forEach { sessionNumber ->
+            val sessions = (1 .. 5)
+
+            sessions.forEach { sessionNumber ->
                 val phrases = List(Singleton.phrasesPerSession) { phraseIndex  ->
                     val phraseNumber = phraseIndex + 1
                     // println("sessionNumber: $sessionNumber, phraseNumber: $phraseNumber")
@@ -176,6 +185,50 @@ internal class SingletonTests {
 
             // ensure sessions are unique
             assertThat(sessionPhrases.distinct()).isEqualTo(sessionPhrases)
+        }
+
+        @Test
+        fun `test word-counts for the first 10 sessions`() {
+            // all phrases from sessions one to ten
+            val sessions = (1 .. 10)
+            val phrases = (1 .. 8)
+
+            sessions.forEach { sessionNumber ->
+                var wordCount = 0
+                phrases.forEach { phraseNumber ->
+                    val phrase = Singleton.getPhrase(sessionNumber, phraseNumber)
+                    assertNotNull(phrase)
+
+                    val phraseAsList = splitIntoWords(phrase)
+                    // println("phrase $phraseNumber of length ${phraseAsList.size}, $phrase")
+
+                    wordCount += phraseAsList.size
+                }
+                println("Session $sessionNumber \tcontains \t$wordCount words.")
+            }
+        }
+
+        @Test
+        fun `test normalised word-counts for the first 10 sessions`() {
+            // we define a word as 5 characters (4 letters and a space)
+            val standardisedWordLength = 5
+
+            // all phrases from sessions one to ten
+            val sessions = (1 .. 10)
+            val phrases = (1 .. 8)
+
+            sessions.forEach { sessionNumber ->
+                var characterCount = 0
+                phrases.forEach { phraseNumber ->
+                    val phrase = Singleton.getPhrase(sessionNumber, phraseNumber)
+                    assertNotNull(phrase)
+
+                    characterCount += phrase.length
+                }
+
+                val normalisedWordCount: Double = characterCount.toDouble() / standardisedWordLength
+                println("Session $sessionNumber \tcontains \t$normalisedWordCount words (normalised).")
+            }
         }
     }
 }

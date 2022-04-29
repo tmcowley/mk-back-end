@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > SentenceTree</title>
+  <title>Coverage Report > KeyboardSide</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -17,15 +17,18 @@
 <div class="breadCrumbs">
 Current scope:     <a href="../../index.html">all classes</a>
     <span class="separator">|</span>
-    <a href="../index.html">tmcowley.appserver.structures</a>
+    <a href="../index.html">tmcowley.appserver.models</a>
 </div>
 
-<h1>Coverage Summary for Class: SentenceTree (tmcowley.appserver.structures)</h1>
+<h1>Coverage Summary for Class: KeyboardSide (tmcowley.appserver.models)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -36,26 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">SentenceTree</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (3/3)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (11/11)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">SentenceTree$readSentences$sentences$1$1$sentence$1</td>
+  <td class="name">KeyboardSide</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -72,26 +56,16 @@ Current scope:     <a href="../../index.html">all classes</a>
     (1/1)
   </span>
 </td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
   </span>
   <span class="absValue">
-    (4/4)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (12/12)
+    (2/2)
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -99,35 +73,13 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.structures
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.models
 <i class="no-highlight">2</i>&nbsp;
-<b class="fc"><i class="no-highlight">3</i>&nbsp;class SentenceTree : CartesianProductTree&lt;String&gt;(Node(&quot;?&quot;)) {</b>
-<i class="no-highlight">4</i>&nbsp;
-<i class="no-highlight">5</i>&nbsp;    /** get the matching sentences set from a list of matching words */
-<i class="no-highlight">6</i>&nbsp;    fun getSentences(listOfSetOfWords: List&lt;Set&lt;String&gt;&gt;): Set&lt;String&gt; {
-<i class="no-highlight">7</i>&nbsp;        // insert each set, in order
-<b class="fc"><i class="no-highlight">8</i>&nbsp;        insertAll(listOfSetOfWords)</b>
-<i class="no-highlight">9</i>&nbsp;
-<i class="no-highlight">10</i>&nbsp;        // read the sentences (down paths of tree)
-<b class="fc"><i class="no-highlight">11</i>&nbsp;        return readSentences()</b>
-<i class="no-highlight">12</i>&nbsp;    }
-<i class="no-highlight">13</i>&nbsp;
-<i class="no-highlight">14</i>&nbsp;    /** get all matched words (computed from node paths) */
-<i class="no-highlight">15</i>&nbsp;    private fun readSentences(): Set&lt;String&gt; {
-<i class="no-highlight">16</i>&nbsp;        // read the paths down the three (equal to the n-ary cartesian product)
-<b class="fc"><i class="no-highlight">17</i>&nbsp;        val paths: List&lt;List&lt;Node&lt;String&gt;&gt;&gt; = this.getCartesianProduct()</b>
-<i class="no-highlight">18</i>&nbsp;
-<i class="no-highlight">19</i>&nbsp;        // generate the sentence array, removing duplicates
-<b class="fc"><i class="no-highlight">20</i>&nbsp;        val sentences: Set&lt;String&gt; = buildSet {</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;            paths.forEach { path -&gt;</b>
-<b class="fc"><i class="no-highlight">22</i>&nbsp;                val sentence = path.joinToString(separator = &quot; &quot;) { node -&gt; node.value }</b>
-<b class="fc"><i class="no-highlight">23</i>&nbsp;                add(sentence)</b>
-<b class="fc"><i class="no-highlight">24</i>&nbsp;            }</b>
-<b class="fc"><i class="no-highlight">25</i>&nbsp;        }</b>
-<i class="no-highlight">26</i>&nbsp;
-<b class="fc"><i class="no-highlight">27</i>&nbsp;        return sentences</b>
-<i class="no-highlight">28</i>&nbsp;    }
-<i class="no-highlight">29</i>&nbsp;}
+<i class="no-highlight">3</i>&nbsp;/** the left, or right, portions of the keyboard */
+<i class="no-highlight">4</i>&nbsp;enum class KeyboardSide {
+<b class="fc"><i class="no-highlight">5</i>&nbsp;    LEFT,</b>
+<b class="fc"><i class="no-highlight">6</i>&nbsp;    RIGHT</b>
+<i class="no-highlight">7</i>&nbsp;}
 </div>
 </pre>
 </div>
@@ -154,7 +106,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-04-28 15:34</div>
+    <div style="float:right;">generated on 2022-04-29 18:35</div>
 </div>
 </body>
 </html>

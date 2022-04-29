@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > Users</title>
+  <title>Coverage Report > TrainingSessions</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,7 +20,7 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">tmcowley.appserver.controllers</a>
 </div>
 
-<h1>Coverage Summary for Class: Users (tmcowley.appserver.controllers)</h1>
+<h1>Coverage Summary for Class: TrainingSessions (tmcowley.appserver.controllers)</h1>
 
 <table class="coverageStats">
 <tr>
@@ -39,7 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">Users</td>
+  <td class="name">TrainingSessions</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -90,10 +90,10 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">15</i>&nbsp;import tmcowley.appserver.Singleton
 <i class="no-highlight">16</i>&nbsp;import tmcowley.appserver.models.TrainingSessionData
 <i class="no-highlight">17</i>&nbsp;
-<b class="fc"><i class="no-highlight">18</i>&nbsp;object Users : IntIdTable() {</b>
-<b class="fc"><i class="no-highlight">19</i>&nbsp;    val userCode = varchar(&quot;uid&quot;, 120).uniqueIndex()</b>
-<b class="fc"><i class="no-highlight">20</i>&nbsp;    val speed = integer(&quot;speed&quot;)</b>
-<b class="fc"><i class="no-highlight">21</i>&nbsp;    val age = integer(&quot;age&quot;)</b>
+<i class="no-highlight">18</i>&nbsp;object Users : IntIdTable() {
+<i class="no-highlight">19</i>&nbsp;    val userCode = varchar(&quot;uid&quot;, 120).uniqueIndex()
+<i class="no-highlight">20</i>&nbsp;    val speed = integer(&quot;speed&quot;)
+<i class="no-highlight">21</i>&nbsp;    val age = integer(&quot;age&quot;)
 <i class="no-highlight">22</i>&nbsp;    // val sessions = reference(&quot;sessions&quot;, Sessions)
 <i class="no-highlight">23</i>&nbsp;}
 <i class="no-highlight">24</i>&nbsp;
@@ -119,12 +119,12 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">44</i>&nbsp;    var sessionId by SessionsToUsers.session_id
 <i class="no-highlight">45</i>&nbsp;}
 <i class="no-highlight">46</i>&nbsp;
-<i class="no-highlight">47</i>&nbsp;object TrainingSessions : IntIdTable() {
-<i class="no-highlight">48</i>&nbsp;    val number = integer(&quot;number&quot;)
+<b class="fc"><i class="no-highlight">47</i>&nbsp;object TrainingSessions : IntIdTable() {</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;    val number = integer(&quot;number&quot;)</b>
 <i class="no-highlight">49</i>&nbsp;
 <i class="no-highlight">50</i>&nbsp;    // val metrics = reference(&quot;metrics&quot;, Metrics)
-<i class="no-highlight">51</i>&nbsp;    val speed = float(&quot;speed&quot;)
-<i class="no-highlight">52</i>&nbsp;    val accuracy = float(&quot;accuracy&quot;)
+<b class="fc"><i class="no-highlight">51</i>&nbsp;    val speed = float(&quot;speed&quot;)</b>
+<b class="fc"><i class="no-highlight">52</i>&nbsp;    val accuracy = float(&quot;accuracy&quot;)</b>
 <i class="no-highlight">53</i>&nbsp;}
 <i class="no-highlight">54</i>&nbsp;
 <i class="no-highlight">55</i>&nbsp;class TrainingSession(id: EntityID&lt;Int&gt;) : IntEntity(id) {
@@ -405,7 +405,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-04-28 15:34</div>
+    <div style="float:right;">generated on 2022-04-29 18:35</div>
 </div>
 </body>
 </html>

@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html id="htmlId">
 <head>
-  <title>Coverage Report > User</title>
+  <title>Coverage Report > SessionsToUsers</title>
   <style type="text/css">
     @import "../../css/coverage.css";
     @import "../../css/highlight-idea.css";
@@ -20,12 +20,15 @@ Current scope:     <a href="../../index.html">all classes</a>
     <a href="../index.html">tmcowley.appserver.controllers</a>
 </div>
 
-<h1>Coverage Summary for Class: User (tmcowley.appserver.controllers)</h1>
+<h1>Coverage Summary for Class: SessionsToUsers (tmcowley.appserver.controllers)</h1>
 
 <table class="coverageStats">
-
 <tr>
   <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
 <th class="coverageStat 
 ">
   Method, %
@@ -36,26 +39,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 </th>
 </tr>
 <tr>
-  <td class="name">User</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (2/2)
-  </span>
-</td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (5/5)
-  </span>
-</td>
-</tr>
-  <tr>
-    <td class="name">User$Companion</td>
+  <td class="name">SessionsToUsers</td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -64,17 +48,6 @@ Current scope:     <a href="../../index.html">all classes</a>
     (1/1)
   </span>
 </td>
-<td class="coverageStat">
-  <span class="percent">
-    100%
-  </span>
-  <span class="absValue">
-    (1/1)
-  </span>
-</td>
-  </tr>
-<tr>
-  <td class="name"><strong>Total</strong></td>
 <td class="coverageStat">
   <span class="percent">
     100%
@@ -88,10 +61,11 @@ Current scope:     <a href="../../index.html">all classes</a>
     100%
   </span>
   <span class="absValue">
-    (6/6)
+    (3/3)
   </span>
 </td>
 </tr>
+
 </table>
 
 <br/>
@@ -99,7 +73,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 
 <pre>
-<div class="sourceCode" id="sourceCode"><b class="fc"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.controllers</b>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.controllers
 <i class="no-highlight">2</i>&nbsp;
 <i class="no-highlight">3</i>&nbsp;// using:
 <i class="no-highlight">4</i>&nbsp;// https://github.com/JetBrains/Exposed
@@ -123,17 +97,17 @@ Current scope:     <a href="../../index.html">all classes</a>
 <i class="no-highlight">22</i>&nbsp;    // val sessions = reference(&quot;sessions&quot;, Sessions)
 <i class="no-highlight">23</i>&nbsp;}
 <i class="no-highlight">24</i>&nbsp;
-<b class="fc"><i class="no-highlight">25</i>&nbsp;class User(id: EntityID&lt;Int&gt;) : IntEntity(id) {</b>
-<b class="fc"><i class="no-highlight">26</i>&nbsp;    companion object : IntEntityClass&lt;User&gt;(Users)</b>
+<i class="no-highlight">25</i>&nbsp;class User(id: EntityID&lt;Int&gt;) : IntEntity(id) {
+<i class="no-highlight">26</i>&nbsp;    companion object : IntEntityClass&lt;User&gt;(Users)
 <i class="no-highlight">27</i>&nbsp;
-<b class="fc"><i class="no-highlight">28</i>&nbsp;    var userCode by Users.userCode</b>
-<b class="fc"><i class="no-highlight">29</i>&nbsp;    var speed by Users.speed</b>
-<b class="fc"><i class="no-highlight">30</i>&nbsp;    var age by Users.age</b>
+<i class="no-highlight">28</i>&nbsp;    var userCode by Users.userCode
+<i class="no-highlight">29</i>&nbsp;    var speed by Users.speed
+<i class="no-highlight">30</i>&nbsp;    var age by Users.age
 <i class="no-highlight">31</i>&nbsp;}
 <i class="no-highlight">32</i>&nbsp;
-<i class="no-highlight">33</i>&nbsp;object SessionsToUsers : IntIdTable() {
-<i class="no-highlight">34</i>&nbsp;    val user_id = reference(&quot;user_id&quot;, Users)
-<i class="no-highlight">35</i>&nbsp;    val session_id = reference(&quot;session_id&quot;, TrainingSessions)
+<b class="fc"><i class="no-highlight">33</i>&nbsp;object SessionsToUsers : IntIdTable() {</b>
+<b class="fc"><i class="no-highlight">34</i>&nbsp;    val user_id = reference(&quot;user_id&quot;, Users)</b>
+<b class="fc"><i class="no-highlight">35</i>&nbsp;    val session_id = reference(&quot;session_id&quot;, TrainingSessions)</b>
 <i class="no-highlight">36</i>&nbsp;
 <i class="no-highlight">37</i>&nbsp;    // override val primaryKey = PrimaryKey(user, session)
 <i class="no-highlight">38</i>&nbsp;}
@@ -431,7 +405,7 @@ Current scope:     <a href="../../index.html">all classes</a>
 
 <div class="footer">
     
-    <div style="float:right;">generated on 2022-04-28 15:34</div>
+    <div style="float:right;">generated on 2022-04-29 18:35</div>
 </div>
 </body>
 </html>

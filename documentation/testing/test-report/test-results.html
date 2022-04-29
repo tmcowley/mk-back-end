@@ -2,7 +2,7 @@
 <html xmlns:str="http://exslt.org/strings" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Test Results &mdash; All in mk-back-end (4)</title>
+        <title>Test Results &mdash; All in mk-back-end (2)</title>
         <style type="text/css">
           html {
             height: 100%
@@ -572,9 +572,9 @@ jQuery.cookie = function(name, value, options) {
     <body>
         <div id="container">
             <div id="header">
-                <div class="time" xmlns="">6.69 s</div>
+                <div class="time" xmlns="">4.60 s</div>
                 <h1>
-                    All in mk-back-end (4): <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">86 total, </span><span class="passed">86 passed</span></strong>
+                    All in mk-back-end (2): <strong><span class="total" xmlns="http://www.w3.org/1999/xhtml">89 total, </span><span class="ignored">3 ignored, </span><span class="passed">86 passed</span></strong>
                 </h1>
                 <div id="treecontrol">
                     <ul>
@@ -591,93 +591,70 @@ jQuery.cookie = function(name, value, options) {
             </div>
             <div id="content">
                 <ul id="tree">
-                    C:\Users\tmcowley\.jdks\openjdk-18.0.1\bin\java.exe -ea -Xmx12g -javaagent:C:\Users\tmcowley\AppData\Local\JetBrains\IntelliJIdea2022.1\testAgent\intellij-coverage-agent-1.0.656.jar=C:\Users\tmcowley\AppData\Local\Temp\coverage4args -Didea.new.sampling.coverage=true -Dcoverage.ignore.private.constructor.util.class=true -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\lib\idea_rt.jar=53188:C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\bin" -Dfile.encoding=UTF-8 -classpath "C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\plugins\junit\lib\junit-rt.jar;C:\Users\tmcowley\IdeaProjects\mk-back-end\target\test-classes;C:\Users\tmcowley\IdeaProjects\mk-back-end\target\classes;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-web\2.6.5\spring-boot-starter-web-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter\2.6.5\spring-boot-starter-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-logging\2.6.5\spring-boot-starter-logging-2.6.5.jar;C:\Users\tmcowley\.m2\repository\ch\qos\logback\logback-classic\1.2.11\logback-classic-1.2.11.jar;C:\Users\tmcowley\.m2\repository\ch\qos\logback\logback-core\1.2.11\logback-core-1.2.11.jar;C:\Users\tmcowley\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.17.2\log4j-to-slf4j-2.17.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.2\log4j-api-2.17.2.jar;C:\Users\tmcowley\.m2\repository\org\slf4j\jul-to-slf4j\1.7.36\jul-to-slf4j-1.7.36.jar;C:\Users\tmcowley\.m2\repository\jakarta\annotation\jakarta.annotation-api\1.3.5\jakarta.annotation-api-1.3.5.jar;C:\Users\tmcowley\.m2\repository\org\yaml\snakeyaml\1.29\snakeyaml-1.29.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-json\2.6.5\spring-boot-starter-json-2.6.5.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.13.2\jackson-databind-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.13.2\jackson-annotations-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.13.2\jackson-core-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.13.2\jackson-datatype-jdk8-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.13.2\jackson-datatype-jsr310-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.13.2\jackson-module-parameter-names-2.13.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\2.6.5\spring-boot-starter-tomcat-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\9.0.60\tomcat-embed-core-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\9.0.60\tomcat-embed-el-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\9.0.60\tomcat-embed-websocket-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-web\5.3.17\spring-web-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-webmvc\5.3.17\spring-webmvc-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-aop\5.3.17\spring-aop-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-expression\5.3.17\spring-expression-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-configuration-processor\2.6.7\spring-boot-configuration-processor-2.6.7.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-reflect\1.6.20\kotlin-reflect-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib\1.6.20\kotlin-stdlib-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\annotations\13.0\annotations-13.0.jar;C:\Users\tmcowley\.m2\repository\org\springframework\session\spring-session-core\2.6.2\spring-session-core-2.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-jcl\5.3.17\spring-jcl-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-devtools\2.6.5\spring-boot-devtools-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot\2.6.5\spring-boot-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\2.6.5\spring-boot-autoconfigure-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\postgresql\postgresql\42.3.3\postgresql-42.3.3.jar;C:\Users\tmcowley\.m2\repository\org\checkerframework\checker-qual\3.5.0\checker-qual-3.5.0.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-test\5.6.2\spring-security-test-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-core\5.6.2\spring-security-core-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-crypto\5.6.2\spring-security-crypto-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-web\5.6.2\spring-security-web-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-core\5.3.17\spring-core-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-test\5.3.17\spring-test-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-test\2.6.5\spring-boot-starter-test-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-test\2.6.5\spring-boot-test-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\2.6.5\spring-boot-test-autoconfigure-2.6.5.jar;C:\Users\tmcowley\.m2\repository\com\jayway\jsonpath\json-path\2.6.0\json-path-2.6.0.jar;C:\Users\tmcowley\.m2\repository\net\minidev\json-smart\2.4.8\json-smart-2.4.8.jar;C:\Users\tmcowley\.m2\repository\net\minidev\accessors-smart\2.4.8\accessors-smart-2.4.8.jar;C:\Users\tmcowley\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\2.3.3\jakarta.xml.bind-api-2.3.3.jar;C:\Users\tmcowley\.m2\repository\jakarta\activation\jakarta.activation-api\1.2.2\jakarta.activation-api-1.2.2.jar;C:\Users\tmcowley\.m2\repository\org\assertj\assertj-core\3.21.0\assertj-core-3.21.0.jar;C:\Users\tmcowley\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\tmcowley\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\tmcowley\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\tmcowley\.m2\repository\net\bytebuddy\byte-buddy\1.11.22\byte-buddy-1.11.22.jar;C:\Users\tmcowley\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.22\byte-buddy-agent-1.11.22.jar;C:\Users\tmcowley\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\tmcowley\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;C:\Users\tmcowley\.m2\repository\org\skyscreamer\jsonassert\1.5.0\jsonassert-1.5.0.jar;C:\Users\tmcowley\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;C:\Users\tmcowley\.m2\repository\org\xmlunit\xmlunit-core\2.8.4\xmlunit-core-2.8.4.jar;C:\Users\tmcowley\.m2\repository\org\languagetool\language-en\5.7\language-en-5.7.jar;C:\Users\tmcowley\.m2\repository\org\languagetool\languagetool-core\5.7\languagetool-core-5.7.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-text\1.9\commons-text-1.9.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-fsa\2.1.7\morfologik-fsa-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-fsa-builders\2.1.7\morfologik-fsa-builders-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-speller\2.1.7\morfologik-speller-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-stemming\2.1.7\morfologik-stemming-2.1.7.jar;C:\Users\tmcowley\.m2\repository\com\carrotsearch\hppc\0.8.2\hppc-0.8.2.jar;C:\Users\tmcowley\.m2\repository\net\loomchild\segment\2.0.1\segment-2.0.1.jar;C:\Users\tmcowley\.m2\repository\com\hankcs\aho-corasick-double-array-trie\1.2.2\aho-corasick-double-array-trie-1.2.2.jar;C:\Users\tmcowley\.m2\repository\com\optimaize\languagedetector\language-detector\0.6\language-detector-0.6.jar;C:\Users\tmcowley\.m2\repository\net\arnx\jsonic\1.2.11\jsonic-1.2.11.jar;C:\Users\tmcowley\.m2\repository\com\intellij\annotations\12.0\annotations-12.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\lucene\lucene-core\5.5.5\lucene-core-5.5.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\lucene\lucene-backward-codecs\5.5.5\lucene-backward-codecs-5.5.5.jar;C:\Users\tmcowley\.m2\repository\javax\measure\unit-api\1.0\unit-api-1.0.jar;C:\Users\tmcowley\.m2\repository\tech\units\indriya\1.3\indriya-1.3.jar;C:\Users\tmcowley\.m2\repository\tech\uom\lib\uom-lib-common\1.1\uom-lib-common-1.1.jar;C:\Users\tmcowley\.m2\repository\javax\xml\bind\jaxb-api\2.3.1\jaxb-api-2.3.1.jar;C:\Users\tmcowley\.m2\repository\org\glassfish\jaxb\jaxb-runtime\2.3.6\jaxb-runtime-2.3.6.jar;C:\Users\tmcowley\.m2\repository\org\glassfish\jaxb\txw2\2.3.6\txw2-2.3.6.jar;C:\Users\tmcowley\.m2\repository\com\sun\istack\istack-commons-runtime\3.0.12\istack-commons-runtime-3.0.12.jar;C:\Users\tmcowley\.m2\repository\com\sun\activation\jakarta.activation\1.2.2\jakarta.activation-1.2.2.jar;C:\Users\tmcowley\.m2\repository\javax\activation\javax.activation-api\1.2.0\javax.activation-api-1.2.0.jar;C:\Users\tmcowley\.m2\repository\com\gitlab\dumonts\hunspell\1.1.1\hunspell-1.1.1.jar;C:\Users\tmcowley\.m2\repository\com\nativelibs4java\bridj\0.7.0\bridj-0.7.0.jar;C:\Users\tmcowley\.m2\repository\com\google\android\tools\dx\1.7\dx-1.7.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient\0.12.0\simpleclient-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_otel\0.12.0\simpleclient_tracer_otel-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_common\0.12.0\simpleclient_tracer_common-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_otel_agent\0.12.0\simpleclient_tracer_otel_agent-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_guava\0.12.0\simpleclient_guava-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-circuitbreaker\1.7.1\resilience4j-circuitbreaker-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\vavr\vavr\0.10.2\vavr-0.10.2.jar;C:\Users\tmcowley\.m2\repository\io\vavr\vavr-match\0.10.2\vavr-match-0.10.2.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-core\1.7.1\resilience4j-core-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-micrometer\1.7.1\resilience4j-micrometer-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\micrometer\micrometer-registry-prometheus\1.8.4\micrometer-registry-prometheus-1.8.4.jar;C:\Users\tmcowley\.m2\repository\io\micrometer\micrometer-core\1.8.4\micrometer-core-1.8.4.jar;C:\Users\tmcowley\.m2\repository\org\hdrhistogram\HdrHistogram\2.1.12\HdrHistogram-2.1.12.jar;C:\Users\tmcowley\.m2\repository\org\latencyutils\LatencyUtils\2.0.3\LatencyUtils-2.0.3.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_common\0.12.0\simpleclient_common-0.12.0.jar;C:\Users\tmcowley\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-netty-shaded\1.42.1\grpc-netty-shaded-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\perfmark\perfmark-api\0.23.0\perfmark-api-0.23.0.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-core\1.42.1\grpc-core-1.42.1.jar;C:\Users\tmcowley\.m2\repository\com\google\code\gson\gson\2.8.9\gson-2.8.9.jar;C:\Users\tmcowley\.m2\repository\com\google\android\annotations\4.1.1.4\annotations-4.1.1.4.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-protobuf\1.42.1\grpc-protobuf-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-api\1.42.1\grpc-api-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-context\1.42.1\grpc-context-1.42.1.jar;C:\Users\tmcowley\.m2\repository\com\google\protobuf\protobuf-java\3.17.2\protobuf-java-3.17.2.jar;C:\Users\tmcowley\.m2\repository\com\google\api\grpc\proto-google-common-protos\2.0.1\proto-google-common-protos-2.0.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-protobuf-lite\1.42.1\grpc-protobuf-lite-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-stub\1.42.1\grpc-stub-1.42.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-pool2\2.11.1\commons-pool2-2.11.1.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\intellij\deps\trove4j\1.0.20200330\trove4j-1.0.20200330.jar;C:\Users\tmcowley\.m2\repository\commons-validator\commons-validator\1.7\commons-validator-1.7.jar;C:\Users\tmcowley\.m2\repository\commons-digester\commons-digester\2.1\commons-digester-2.1.jar;C:\Users\tmcowley\.m2\repository\com\vdurmont\emoji-java\5.1.1\emoji-java-5.1.1.jar;C:\Users\tmcowley\.m2\repository\org\json\json\20170516\json-20170516.jar;C:\Users\tmcowley\.m2\repository\org\apache\opennlp\opennlp-tools\1.9.4\opennlp-tools-1.9.4.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-tokenize-models\1.5\opennlp-tokenize-models-1.5.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-postag-models\1.5\opennlp-postag-models-1.5.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-chunk-models\1.5\opennlp-chunk-models-1.5.jar;C:\Users\tmcowley\.m2\repository\com\github\doyaaaaaken\kotlin-csv-jvm\1.2.0\kotlin-csv-jvm-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-common\1.6.20\kotlin-stdlib-common-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk8\1.6.20\kotlin-stdlib-jdk8-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk7\1.6.20\kotlin-stdlib-jdk7-1.6.20.jar;C:\Users\tmcowley\.m2\repository\io\github\microutils\kotlin-logging-jvm\2.0.11\kotlin-logging-jvm-2.0.11.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-coroutines-core-jvm\1.5.2\kotlinx-coroutines-core-jvm-1.5.2.jar;C:\Users\tmcowley\.m2\repository\com\github\doyaaaaaken\kotlin-csv-js\1.2.0\kotlin-csv-js-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-js\1.6.20\kotlin-stdlib-js-1.6.20.jar;C:\Users\tmcowley\.m2\repository\io\github\microutils\kotlin-logging-js\2.0.11\kotlin-logging-js-2.0.11.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-core\0.38.2\exposed-core-0.38.2.jar;C:\Users\tmcowley\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-dao\0.38.2\exposed-dao-0.38.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-jdbc\0.38.2\exposed-jdbc-0.38.2.jar;C:\Users\tmcowley\.m2\repository\com\h2database\h2\2.1.212\h2-2.1.212.jar;C:\Users\tmcowley\.m2\repository\org\springframework\session\spring-session\1.3.5.RELEASE\spring-session-1.3.5.RELEASE.jar;C:\Users\tmcowley\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-json\1.3.2\kotlinx-serialization-json-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-json-jvm\1.3.2\kotlinx-serialization-json-jvm-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-core-jvm\1.3.2\kotlinx-serialization-core-jvm-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-test\1.6.21\kotlin-test-1.6.21.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-context-support\5.3.19\spring-context-support-5.3.19.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-beans\5.3.17\spring-beans-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-context\5.3.17\spring-context-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-maven-plugin\1.6.21\kotlin-maven-plugin-1.6.21.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-core\3.0.5\maven-core-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-model\3.0.5\maven-model-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-settings\3.0.5\maven-settings-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-settings-builder\3.0.5\maven-settings-builder-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-repository-metadata\3.0.5\maven-repository-metadata-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-artifact\3.0.5\maven-artifact-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-model-builder\3.0.5\maven-model-builder-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-aether-provider\3.0.5\maven-aether-provider-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-spi\1.13.1\aether-spi-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-impl\1.13.1\aether-impl-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-api\1.13.1\aether-api-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-util\1.13.1\aether-util-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-inject-plexus\2.3.0\sisu-inject-plexus-2.3.0.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-inject-bean\2.3.0\sisu-inject-bean-2.3.0.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-interpolation\1.14\plexus-interpolation-1.14.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-classworlds\2.4\plexus-classworlds-2.4.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-component-annotations\1.5.5\plexus-component-annotations-1.5.5.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\plexus\plexus-sec-dispatcher\1.3\plexus-sec-dispatcher-1.3.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\plexus\plexus-cipher\1.4\plexus-cipher-1.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-plugin-api\3.0.5\maven-plugin-api-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugin-tools\maven-plugin-annotations\3.4\maven-plugin-annotations-3.4.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-compiler\1.6.20\kotlin-compiler-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-script-runtime\1.6.20\kotlin-script-runtime-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-compiler\1.6.21\kotlin-scripting-compiler-1.6.21.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-common\1.6.20\kotlin-scripting-common-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-jvm\1.6.20\kotlin-scripting-jvm-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-compiler-impl\1.6.21\kotlin-scripting-compiler-impl-1.6.21.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugins\maven-compiler-plugin\3.5.1\maven-compiler-plugin-3.5.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-toolchain\2.2.1\maven-toolchain-2.2.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-shared-incremental\1.1\maven-shared-incremental-1.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-api\2.7\plexus-compiler-api-2.7.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-manager\2.7\plexus-compiler-manager-2.7.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-javac\2.7\plexus-compiler-javac-2.7.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugins\maven-dependency-plugin\3.3.0\maven-dependency-plugin-3.3.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\reporting\maven-reporting-impl\3.1.0\maven-reporting-impl-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\reporting\maven-reporting-api\3.1.0\maven-reporting-api-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-sink-api\1.11.1\doxia-sink-api-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-logging-api\1.11.1\doxia-logging-api-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-decoration-model\1.11.1\doxia-decoration-model-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-core\1.11.1\doxia-core-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-container-default\2.1.0\plexus-container-default-2.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\xbean\xbean-reflect\3.7\xbean-reflect-3.7.jar;C:\Users\tmcowley\.m2\repository\com\google\collections\google-collections\1.0\google-collections-1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\tmcowley\.m2\repository\commons-codec\commons-codec\1.15\commons-codec-1.15.jar;C:\Users\tmcowley\.m2\repository\org\apache\httpcomponents\httpcore\4.4.15\httpcore-4.4.15.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-site-renderer\1.11.1\doxia-site-renderer-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-skin-model\1.11.1\doxia-skin-model-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-module-xhtml\1.11.1\doxia-module-xhtml-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-module-xhtml5\1.11.1\doxia-module-xhtml5-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-i18n\1.0-beta-10\plexus-i18n-1.0-beta-10.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-velocity\1.2\plexus-velocity-1.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\velocity\velocity\1.7\velocity-1.7.jar;C:\Users\tmcowley\.m2\repository\commons-lang\commons-lang\2.4\commons-lang-2.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\velocity\velocity-tools\2.0\velocity-tools-2.0.jar;C:\Users\tmcowley\.m2\repository\commons-chain\commons-chain\1.1\commons-chain-1.1.jar;C:\Users\tmcowley\.m2\repository\dom4j\dom4j\1.1\dom4j-1.1.jar;C:\Users\tmcowley\.m2\repository\oro\oro\2.0.8\oro-2.0.8.jar;C:\Users\tmcowley\.m2\repository\commons-io\commons-io\2.11.0\commons-io-2.11.0.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-archiver\4.2.2\plexus-archiver-4.2.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-compress\1.20\commons-compress-1.20.jar;C:\Users\tmcowley\.m2\repository\org\iq80\snappy\snappy\0.4\snappy-0.4.jar;C:\Users\tmcowley\.m2\repository\org\tukaani\xz\1.8\xz-1.8.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-utils\3.4.1\plexus-utils-3.4.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-io\3.2.0\plexus-io-3.2.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-dependency-analyzer\1.12.0\maven-dependency-analyzer-1.12.0.jar;C:\Users\tmcowley\.m2\repository\org\ow2\asm\asm\9.2\asm-9.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-dependency-tree\3.1.0\maven-dependency-tree-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\aether\aether-util\1.1.0\aether-util-1.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-common-artifact-filters\3.2.0\maven-common-artifact-filters-3.2.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\aether\aether-api\0.9.0.M2\aether-api-0.9.0.M2.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\sisu\org.eclipse.sisu.plexus\0.0.0.M5\org.eclipse.sisu.plexus-0.0.0.M5.jar;C:\Users\tmcowley\.m2\repository\javax\enterprise\cdi-api\1.0\cdi-api-1.0.jar;C:\Users\tmcowley\.m2\repository\javax\annotation\jsr250-api\1.0\jsr250-api-1.0.jar;C:\Users\tmcowley\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-guice\3.1.0\sisu-guice-3.1.0-no_aop.jar;C:\Users\tmcowley\.m2\repository\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\sisu\org.eclipse.sisu.inject\0.0.0.M5\org.eclipse.sisu.inject-0.0.0.M5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-artifact-transfer\0.13.1\maven-artifact-transfer-0.13.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-shared-utils\3.3.4\maven-shared-utils-3.3.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-collections4\4.2\commons-collections4-4.2.jar;C:\Users\tmcowley\.m2\repository\commons-beanutils\commons-beanutils\1.9.4\commons-beanutils-1.9.4.jar;C:\Users\tmcowley\.m2\repository\commons-collections\commons-collections\3.2.2\commons-collections-3.2.2.jar;C:\Users\tmcowley\.m2\repository\org\locationtech\jts\jts-core\1.18.2\jts-core-1.18.2.jar;C:\Users\tmcowley\.m2\repository\javax\mail\mail\1.5.0-b01\mail-1.5.0-b01.jar;C:\Users\tmcowley\.m2\repository\javax\activation\activation\1.1\activation-1.1.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\guava\31.1-jre\guava-31.1-jre.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\tmcowley\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\tmcowley\.m2\repository\com\google\errorprone\error_prone_annotations\2.11.0\error_prone_annotations-2.11.0.jar;C:\Users\tmcowley\.m2\repository\com\google\j2objc\j2objc-annotations\1.3\j2objc-annotations-1.3.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 @w@C:\Users\tmcowley\AppData\Local\Temp\idea_working_dirs_junit.tmp @C:\Users\tmcowley\AppData\Local\Temp\idea_junit.tmp -socket53187
+                    C:\Users\tmcowley\.jdks\openjdk-18.0.1\bin\java.exe -ea -Xmx12g -javaagent:C:\Users\tmcowley\AppData\Local\JetBrains\IntelliJIdea2022.1\testAgent\intellij-coverage-agent-1.0.656.jar=C:\Users\tmcowley\AppData\Local\Temp\coverageargs -Didea.new.sampling.coverage=true -Dcoverage.ignore.private.constructor.util.class=true -Didea.test.cyclic.buffer.size=1048576 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\lib\idea_rt.jar=63255:C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\bin" -Dfile.encoding=UTF-8 -classpath "C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-launcher\1.8.2\junit-platform-launcher-1.8.2.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\lib\idea_rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\plugins\junit\lib\junit5-rt.jar;C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.3\plugins\junit\lib\junit-rt.jar;C:\Users\tmcowley\IdeaProjects\mk-back-end\target\test-classes;C:\Users\tmcowley\IdeaProjects\mk-back-end\target\classes;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-web\2.6.5\spring-boot-starter-web-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter\2.6.5\spring-boot-starter-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-logging\2.6.5\spring-boot-starter-logging-2.6.5.jar;C:\Users\tmcowley\.m2\repository\ch\qos\logback\logback-classic\1.2.11\logback-classic-1.2.11.jar;C:\Users\tmcowley\.m2\repository\ch\qos\logback\logback-core\1.2.11\logback-core-1.2.11.jar;C:\Users\tmcowley\.m2\repository\org\apache\logging\log4j\log4j-to-slf4j\2.17.2\log4j-to-slf4j-2.17.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\logging\log4j\log4j-api\2.17.2\log4j-api-2.17.2.jar;C:\Users\tmcowley\.m2\repository\org\slf4j\jul-to-slf4j\1.7.36\jul-to-slf4j-1.7.36.jar;C:\Users\tmcowley\.m2\repository\jakarta\annotation\jakarta.annotation-api\1.3.5\jakarta.annotation-api-1.3.5.jar;C:\Users\tmcowley\.m2\repository\org\yaml\snakeyaml\1.29\snakeyaml-1.29.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-json\2.6.5\spring-boot-starter-json-2.6.5.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jdk8\2.13.2\jackson-datatype-jdk8-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\datatype\jackson-datatype-jsr310\2.13.2\jackson-datatype-jsr310-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\module\jackson-module-parameter-names\2.13.2\jackson-module-parameter-names-2.13.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-tomcat\2.6.5\spring-boot-starter-tomcat-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-core\9.0.60\tomcat-embed-core-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-el\9.0.60\tomcat-embed-el-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\apache\tomcat\embed\tomcat-embed-websocket\9.0.60\tomcat-embed-websocket-9.0.60.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-web\5.3.17\spring-web-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-webmvc\5.3.17\spring-webmvc-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-aop\5.3.17\spring-aop-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-expression\5.3.17\spring-expression-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-configuration-processor\2.6.6\spring-boot-configuration-processor-2.6.6.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-reflect\1.6.20\kotlin-reflect-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib\1.6.20\kotlin-stdlib-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\annotations\13.0\annotations-13.0.jar;C:\Users\tmcowley\.m2\repository\org\springframework\session\spring-session-core\2.6.2\spring-session-core-2.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-jcl\5.3.17\spring-jcl-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-devtools\2.6.5\spring-boot-devtools-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot\2.6.5\spring-boot-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-autoconfigure\2.6.5\spring-boot-autoconfigure-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\postgresql\postgresql\42.3.3\postgresql-42.3.3.jar;C:\Users\tmcowley\.m2\repository\org\checkerframework\checker-qual\3.5.0\checker-qual-3.5.0.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-test\5.6.2\spring-security-test-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-core\5.6.2\spring-security-core-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-crypto\5.6.2\spring-security-crypto-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\security\spring-security-web\5.6.2\spring-security-web-5.6.2.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-core\5.3.17\spring-core-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-test\5.3.17\spring-test-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-starter-test\2.6.5\spring-boot-starter-test-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-test\2.6.5\spring-boot-test-2.6.5.jar;C:\Users\tmcowley\.m2\repository\org\springframework\boot\spring-boot-test-autoconfigure\2.6.5\spring-boot-test-autoconfigure-2.6.5.jar;C:\Users\tmcowley\.m2\repository\com\jayway\jsonpath\json-path\2.6.0\json-path-2.6.0.jar;C:\Users\tmcowley\.m2\repository\net\minidev\json-smart\2.4.8\json-smart-2.4.8.jar;C:\Users\tmcowley\.m2\repository\net\minidev\accessors-smart\2.4.8\accessors-smart-2.4.8.jar;C:\Users\tmcowley\.m2\repository\jakarta\xml\bind\jakarta.xml.bind-api\2.3.3\jakarta.xml.bind-api-2.3.3.jar;C:\Users\tmcowley\.m2\repository\jakarta\activation\jakarta.activation-api\1.2.2\jakarta.activation-api-1.2.2.jar;C:\Users\tmcowley\.m2\repository\org\assertj\assertj-core\3.21.0\assertj-core-3.21.0.jar;C:\Users\tmcowley\.m2\repository\org\hamcrest\hamcrest\2.2\hamcrest-2.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter\5.8.2\junit-jupiter-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.8.2\junit-jupiter-api-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-commons\1.8.2\junit-platform-commons-1.8.2.jar;C:\Users\tmcowley\.m2\repository\org\apiguardian\apiguardian-api\1.1.2\apiguardian-api-1.1.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.8.2\junit-jupiter-params-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.8.2\junit-jupiter-engine-5.8.2.jar;C:\Users\tmcowley\.m2\repository\org\junit\platform\junit-platform-engine\1.8.2\junit-platform-engine-1.8.2.jar;C:\Users\tmcowley\.m2\repository\org\mockito\mockito-core\4.0.0\mockito-core-4.0.0.jar;C:\Users\tmcowley\.m2\repository\net\bytebuddy\byte-buddy\1.11.22\byte-buddy-1.11.22.jar;C:\Users\tmcowley\.m2\repository\net\bytebuddy\byte-buddy-agent\1.11.22\byte-buddy-agent-1.11.22.jar;C:\Users\tmcowley\.m2\repository\org\objenesis\objenesis\3.2\objenesis-3.2.jar;C:\Users\tmcowley\.m2\repository\org\mockito\mockito-junit-jupiter\4.0.0\mockito-junit-jupiter-4.0.0.jar;C:\Users\tmcowley\.m2\repository\org\skyscreamer\jsonassert\1.5.0\jsonassert-1.5.0.jar;C:\Users\tmcowley\.m2\repository\com\vaadin\external\google\android-json\0.0.20131108.vaadin1\android-json-0.0.20131108.vaadin1.jar;C:\Users\tmcowley\.m2\repository\org\xmlunit\xmlunit-core\2.8.4\xmlunit-core-2.8.4.jar;C:\Users\tmcowley\.m2\repository\org\languagetool\language-en\5.7\language-en-5.7.jar;C:\Users\tmcowley\.m2\repository\org\languagetool\languagetool-core\5.7\languagetool-core-5.7.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-text\1.9\commons-text-1.9.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-fsa\2.1.7\morfologik-fsa-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-fsa-builders\2.1.7\morfologik-fsa-builders-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-speller\2.1.7\morfologik-speller-2.1.7.jar;C:\Users\tmcowley\.m2\repository\org\carrot2\morfologik-stemming\2.1.7\morfologik-stemming-2.1.7.jar;C:\Users\tmcowley\.m2\repository\com\carrotsearch\hppc\0.8.2\hppc-0.8.2.jar;C:\Users\tmcowley\.m2\repository\net\loomchild\segment\2.0.1\segment-2.0.1.jar;C:\Users\tmcowley\.m2\repository\com\hankcs\aho-corasick-double-array-trie\1.2.2\aho-corasick-double-array-trie-1.2.2.jar;C:\Users\tmcowley\.m2\repository\com\optimaize\languagedetector\language-detector\0.6\language-detector-0.6.jar;C:\Users\tmcowley\.m2\repository\net\arnx\jsonic\1.2.11\jsonic-1.2.11.jar;C:\Users\tmcowley\.m2\repository\com\intellij\annotations\12.0\annotations-12.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\lucene\lucene-core\5.5.5\lucene-core-5.5.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\lucene\lucene-backward-codecs\5.5.5\lucene-backward-codecs-5.5.5.jar;C:\Users\tmcowley\.m2\repository\javax\measure\unit-api\1.0\unit-api-1.0.jar;C:\Users\tmcowley\.m2\repository\tech\units\indriya\1.3\indriya-1.3.jar;C:\Users\tmcowley\.m2\repository\tech\uom\lib\uom-lib-common\1.1\uom-lib-common-1.1.jar;C:\Users\tmcowley\.m2\repository\javax\xml\bind\jaxb-api\2.3.1\jaxb-api-2.3.1.jar;C:\Users\tmcowley\.m2\repository\org\glassfish\jaxb\jaxb-runtime\2.3.6\jaxb-runtime-2.3.6.jar;C:\Users\tmcowley\.m2\repository\org\glassfish\jaxb\txw2\2.3.6\txw2-2.3.6.jar;C:\Users\tmcowley\.m2\repository\com\sun\istack\istack-commons-runtime\3.0.12\istack-commons-runtime-3.0.12.jar;C:\Users\tmcowley\.m2\repository\com\sun\activation\jakarta.activation\1.2.2\jakarta.activation-1.2.2.jar;C:\Users\tmcowley\.m2\repository\javax\activation\javax.activation-api\1.2.0\javax.activation-api-1.2.0.jar;C:\Users\tmcowley\.m2\repository\com\gitlab\dumonts\hunspell\1.1.1\hunspell-1.1.1.jar;C:\Users\tmcowley\.m2\repository\com\nativelibs4java\bridj\0.7.0\bridj-0.7.0.jar;C:\Users\tmcowley\.m2\repository\com\google\android\tools\dx\1.7\dx-1.7.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient\0.12.0\simpleclient-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_otel\0.12.0\simpleclient_tracer_otel-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_common\0.12.0\simpleclient_tracer_common-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_tracer_otel_agent\0.12.0\simpleclient_tracer_otel_agent-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_guava\0.12.0\simpleclient_guava-0.12.0.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-circuitbreaker\1.7.1\resilience4j-circuitbreaker-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\vavr\vavr\0.10.2\vavr-0.10.2.jar;C:\Users\tmcowley\.m2\repository\io\vavr\vavr-match\0.10.2\vavr-match-0.10.2.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-core\1.7.1\resilience4j-core-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\github\resilience4j\resilience4j-micrometer\1.7.1\resilience4j-micrometer-1.7.1.jar;C:\Users\tmcowley\.m2\repository\io\micrometer\micrometer-registry-prometheus\1.8.4\micrometer-registry-prometheus-1.8.4.jar;C:\Users\tmcowley\.m2\repository\io\micrometer\micrometer-core\1.8.4\micrometer-core-1.8.4.jar;C:\Users\tmcowley\.m2\repository\org\hdrhistogram\HdrHistogram\2.1.12\HdrHistogram-2.1.12.jar;C:\Users\tmcowley\.m2\repository\org\latencyutils\LatencyUtils\2.0.3\LatencyUtils-2.0.3.jar;C:\Users\tmcowley\.m2\repository\io\prometheus\simpleclient_common\0.12.0\simpleclient_common-0.12.0.jar;C:\Users\tmcowley\.m2\repository\javax\annotation\javax.annotation-api\1.3.2\javax.annotation-api-1.3.2.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-netty-shaded\1.42.1\grpc-netty-shaded-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\perfmark\perfmark-api\0.23.0\perfmark-api-0.23.0.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-core\1.42.1\grpc-core-1.42.1.jar;C:\Users\tmcowley\.m2\repository\com\google\code\gson\gson\2.8.9\gson-2.8.9.jar;C:\Users\tmcowley\.m2\repository\com\google\android\annotations\4.1.1.4\annotations-4.1.1.4.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-protobuf\1.42.1\grpc-protobuf-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-api\1.42.1\grpc-api-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-context\1.42.1\grpc-context-1.42.1.jar;C:\Users\tmcowley\.m2\repository\com\google\protobuf\protobuf-java\3.17.2\protobuf-java-3.17.2.jar;C:\Users\tmcowley\.m2\repository\com\google\api\grpc\proto-google-common-protos\2.0.1\proto-google-common-protos-2.0.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-protobuf-lite\1.42.1\grpc-protobuf-lite-1.42.1.jar;C:\Users\tmcowley\.m2\repository\io\grpc\grpc-stub\1.42.1\grpc-stub-1.42.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-pool2\2.11.1\commons-pool2-2.11.1.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\intellij\deps\trove4j\1.0.20200330\trove4j-1.0.20200330.jar;C:\Users\tmcowley\.m2\repository\commons-validator\commons-validator\1.7\commons-validator-1.7.jar;C:\Users\tmcowley\.m2\repository\commons-digester\commons-digester\2.1\commons-digester-2.1.jar;C:\Users\tmcowley\.m2\repository\com\vdurmont\emoji-java\5.1.1\emoji-java-5.1.1.jar;C:\Users\tmcowley\.m2\repository\org\json\json\20170516\json-20170516.jar;C:\Users\tmcowley\.m2\repository\org\apache\opennlp\opennlp-tools\1.9.4\opennlp-tools-1.9.4.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-tokenize-models\1.5\opennlp-tokenize-models-1.5.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-postag-models\1.5\opennlp-postag-models-1.5.jar;C:\Users\tmcowley\.m2\repository\edu\washington\cs\knowitall\opennlp-chunk-models\1.5\opennlp-chunk-models-1.5.jar;C:\Users\tmcowley\.m2\repository\com\github\doyaaaaaken\kotlin-csv-jvm\1.2.0\kotlin-csv-jvm-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-common\1.6.20\kotlin-stdlib-common-1.6.20.jar;C:\Users\tmcowley\.m2\repository\io\github\microutils\kotlin-logging-jvm\2.0.11\kotlin-logging-jvm-2.0.11.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-coroutines-core-jvm\1.5.2\kotlinx-coroutines-core-jvm-1.5.2.jar;C:\Users\tmcowley\.m2\repository\com\github\doyaaaaaken\kotlin-csv-js\1.2.0\kotlin-csv-js-1.2.0.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-js\1.6.20\kotlin-stdlib-js-1.6.20.jar;C:\Users\tmcowley\.m2\repository\io\github\microutils\kotlin-logging-js\2.0.11\kotlin-logging-js-2.0.11.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-core\0.37.3\exposed-core-0.37.3.jar;C:\Users\tmcowley\.m2\repository\org\slf4j\slf4j-api\1.7.36\slf4j-api-1.7.36.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-dao\0.37.3\exposed-dao-0.37.3.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\exposed\exposed-jdbc\0.37.3\exposed-jdbc-0.37.3.jar;C:\Users\tmcowley\.m2\repository\org\springframework\session\spring-session\1.3.5.RELEASE\spring-session-1.3.5.RELEASE.jar;C:\Users\tmcowley\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-json\1.3.2\kotlinx-serialization-json-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-json-jvm\1.3.2\kotlinx-serialization-json-jvm-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlinx\kotlinx-serialization-core-jvm\1.3.2\kotlinx-serialization-core-jvm-1.3.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-test\1.6.20\kotlin-test-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-context-support\5.3.18\spring-context-support-5.3.18.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-beans\5.3.17\spring-beans-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\springframework\spring-context\5.3.17\spring-context-5.3.17.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-maven-plugin\1.6.20\kotlin-maven-plugin-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-core\3.0.5\maven-core-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-model\3.0.5\maven-model-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-settings\3.0.5\maven-settings-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-settings-builder\3.0.5\maven-settings-builder-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-repository-metadata\3.0.5\maven-repository-metadata-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-artifact\3.0.5\maven-artifact-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-model-builder\3.0.5\maven-model-builder-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-aether-provider\3.0.5\maven-aether-provider-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-spi\1.13.1\aether-spi-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-impl\1.13.1\aether-impl-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-api\1.13.1\aether-api-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\aether\aether-util\1.13.1\aether-util-1.13.1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-inject-plexus\2.3.0\sisu-inject-plexus-2.3.0.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-inject-bean\2.3.0\sisu-inject-bean-2.3.0.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-interpolation\1.14\plexus-interpolation-1.14.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-classworlds\2.4\plexus-classworlds-2.4.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-component-annotations\1.5.5\plexus-component-annotations-1.5.5.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\plexus\plexus-sec-dispatcher\1.3\plexus-sec-dispatcher-1.3.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\plexus\plexus-cipher\1.4\plexus-cipher-1.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-plugin-api\3.0.5\maven-plugin-api-3.0.5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugin-tools\maven-plugin-annotations\3.4\maven-plugin-annotations-3.4.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-compiler\1.6.20\kotlin-compiler-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-script-runtime\1.6.20\kotlin-script-runtime-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-compiler\1.6.20\kotlin-scripting-compiler-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-common\1.6.20\kotlin-scripting-common-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-jvm\1.6.20\kotlin-scripting-jvm-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-scripting-compiler-impl\1.6.20\kotlin-scripting-compiler-impl-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugins\maven-compiler-plugin\3.5.1\maven-compiler-plugin-3.5.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\maven-toolchain\2.2.1\maven-toolchain-2.2.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-shared-incremental\1.1\maven-shared-incremental-1.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-api\2.7\plexus-compiler-api-2.7.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-manager\2.7\plexus-compiler-manager-2.7.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-compiler-javac\2.7\plexus-compiler-javac-2.7.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\plugins\maven-dependency-plugin\3.3.0\maven-dependency-plugin-3.3.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\reporting\maven-reporting-impl\3.1.0\maven-reporting-impl-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\reporting\maven-reporting-api\3.1.0\maven-reporting-api-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-sink-api\1.11.1\doxia-sink-api-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-logging-api\1.11.1\doxia-logging-api-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-decoration-model\1.11.1\doxia-decoration-model-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-core\1.11.1\doxia-core-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-container-default\2.1.0\plexus-container-default-2.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\xbean\xbean-reflect\3.7\xbean-reflect-3.7.jar;C:\Users\tmcowley\.m2\repository\com\google\collections\google-collections\1.0\google-collections-1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\tmcowley\.m2\repository\commons-codec\commons-codec\1.15\commons-codec-1.15.jar;C:\Users\tmcowley\.m2\repository\org\apache\httpcomponents\httpcore\4.4.15\httpcore-4.4.15.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-site-renderer\1.11.1\doxia-site-renderer-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-skin-model\1.11.1\doxia-skin-model-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-module-xhtml\1.11.1\doxia-module-xhtml-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\doxia\doxia-module-xhtml5\1.11.1\doxia-module-xhtml5-1.11.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-i18n\1.0-beta-10\plexus-i18n-1.0-beta-10.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-velocity\1.2\plexus-velocity-1.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\velocity\velocity\1.7\velocity-1.7.jar;C:\Users\tmcowley\.m2\repository\commons-lang\commons-lang\2.4\commons-lang-2.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\velocity\velocity-tools\2.0\velocity-tools-2.0.jar;C:\Users\tmcowley\.m2\repository\commons-chain\commons-chain\1.1\commons-chain-1.1.jar;C:\Users\tmcowley\.m2\repository\dom4j\dom4j\1.1\dom4j-1.1.jar;C:\Users\tmcowley\.m2\repository\oro\oro\2.0.8\oro-2.0.8.jar;C:\Users\tmcowley\.m2\repository\commons-io\commons-io\2.11.0\commons-io-2.11.0.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-archiver\4.2.2\plexus-archiver-4.2.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-compress\1.20\commons-compress-1.20.jar;C:\Users\tmcowley\.m2\repository\org\iq80\snappy\snappy\0.4\snappy-0.4.jar;C:\Users\tmcowley\.m2\repository\org\tukaani\xz\1.8\xz-1.8.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-utils\3.4.1\plexus-utils-3.4.1.jar;C:\Users\tmcowley\.m2\repository\org\codehaus\plexus\plexus-io\3.2.0\plexus-io-3.2.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-dependency-analyzer\1.12.0\maven-dependency-analyzer-1.12.0.jar;C:\Users\tmcowley\.m2\repository\org\ow2\asm\asm\9.2\asm-9.2.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-dependency-tree\3.1.0\maven-dependency-tree-3.1.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\aether\aether-util\1.1.0\aether-util-1.1.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-common-artifact-filters\3.2.0\maven-common-artifact-filters-3.2.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\aether\aether-api\0.9.0.M2\aether-api-0.9.0.M2.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\sisu\org.eclipse.sisu.plexus\0.0.0.M5\org.eclipse.sisu.plexus-0.0.0.M5.jar;C:\Users\tmcowley\.m2\repository\javax\enterprise\cdi-api\1.0\cdi-api-1.0.jar;C:\Users\tmcowley\.m2\repository\javax\annotation\jsr250-api\1.0\jsr250-api-1.0.jar;C:\Users\tmcowley\.m2\repository\javax\inject\javax.inject\1\javax.inject-1.jar;C:\Users\tmcowley\.m2\repository\org\sonatype\sisu\sisu-guice\3.1.0\sisu-guice-3.1.0-no_aop.jar;C:\Users\tmcowley\.m2\repository\aopalliance\aopalliance\1.0\aopalliance-1.0.jar;C:\Users\tmcowley\.m2\repository\org\eclipse\sisu\org.eclipse.sisu.inject\0.0.0.M5\org.eclipse.sisu.inject-0.0.0.M5.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-artifact-transfer\0.13.1\maven-artifact-transfer-0.13.1.jar;C:\Users\tmcowley\.m2\repository\org\apache\maven\shared\maven-shared-utils\3.3.4\maven-shared-utils-3.3.4.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-lang3\3.12.0\commons-lang3-3.12.0.jar;C:\Users\tmcowley\.m2\repository\org\apache\commons\commons-collections4\4.2\commons-collections4-4.2.jar;C:\Users\tmcowley\.m2\repository\commons-beanutils\commons-beanutils\1.9.4\commons-beanutils-1.9.4.jar;C:\Users\tmcowley\.m2\repository\commons-collections\commons-collections\3.2.2\commons-collections-3.2.2.jar;C:\Users\tmcowley\.m2\repository\org\locationtech\jts\jts-core\1.18.2\jts-core-1.18.2.jar;C:\Users\tmcowley\.m2\repository\javax\mail\mail\1.5.0-b01\mail-1.5.0-b01.jar;C:\Users\tmcowley\.m2\repository\javax\activation\activation\1.1\activation-1.1.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\guava\31.1-jre\guava-31.1-jre.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar;C:\Users\tmcowley\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\tmcowley\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\tmcowley\.m2\repository\com\google\errorprone\error_prone_annotations\2.11.0\error_prone_annotations-2.11.0.jar;C:\Users\tmcowley\.m2\repository\com\google\j2objc\j2objc-annotations\1.3\j2objc-annotations-1.3.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-maven-noarg\1.6.20\kotlin-maven-noarg-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-maven-allopen\1.6.20\kotlin-maven-allopen-1.6.20.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\module\jackson-module-kotlin\2.13.2\jackson-module-kotlin-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.13.2\jackson-databind-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.13.2\jackson-core-2.13.2.jar;C:\Users\tmcowley\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.13.2\jackson-annotations-2.13.2.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk8\1.6.20\kotlin-stdlib-jdk8-1.6.20.jar;C:\Users\tmcowley\.m2\repository\org\jetbrains\kotlin\kotlin-stdlib-jdk7\1.6.20\kotlin-stdlib-jdk7-1.6.20.jar;C:\Users\tmcowley\.m2\repository\com\h2database\h2\1.4.200\h2-1.4.200.jar" com.intellij.rt.junit.JUnitStarter -ideVersion5 -junit5 @w@C:\Users\tmcowley\AppData\Local\Temp\idea_working_dirs_junit.tmp @C:\Users\tmcowley\AppData\Local\Temp\idea_junit.tmp -socket63254
 ---- IntelliJ IDEA coverage runner ---- 
 sampling ...
 include patterns:
 exclude patterns:
-Class transformation time: 3.090129028s for 9735 classes or 3.1742465618900874E-4s per class
+Class transformation time: 2.6837331s for 9893 classes or 2.712759628019812E-4s per class
 Process finished with exit code 0
 
                     <li xmlns="" class="level top open">
                         <span><em class="time">
-                                <div class="time">772 ms</div>
+                                <div class="time">737 ms</div>
                             </em>FormConversionTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">767 ms</div>
+                                        <div class="time">733 ms</div>
                                     </em><em class="status">passed</em>test right form conversion()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">5 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>test left form conversion()</span>
                             </li>
                         </ul>
                     </li>
-                    <li class="level top open">
-                        <span><em class="time">
-                                <div class="time">1.90 s</div>
-                            </em>Evaluation</span>
+                    <li class="level top ignored open">
+                        <span><em class="time"></em>Evaluation</span>
                         <ul>
-                            <li class="level test">
-                                <span><em class="time">
-                                        <div class="time">110 ms</div>
-                                    </em><em class="status">passed</em>rank words by match count()</span>
-                                <ul>
-                                    <li class="text">
-                                        <span class="stdout">Testing: evaluation of words by match count started<br/>Top 20 word sets by match count: <br/>Position 1: 	6 matches for 	{ west, welt, wist, wilt, wily, oily }<br/>Position 2: 	5 matches for 	{ bet, bey, bit, net, nit }<br/>Position 3: 	5 matches for 	{ deb, den, din, ken, kin }<br/>Position 4: 	5 matches for 	{ bets, beys, bits, nets, nits }<br/>Position 5: 	5 matches for 	{ debs, dens, dibs, dins, kens }<br/>Position 6: 	5 matches for 	{ debt, dent, deny, dint, kent }<br/>Position 7: 	5 matches for 	{ dell, diss, dill, kiss, kill }<br/>Position 8: 	5 matches for 	{ fest, felt, fist, jest, jilt }<br/>Position 9: 	5 matches for 	{ gels, gill, hell, hiss, hill }<br/>Position 10: 	5 matches for 	{ gelt, gist, gilt, hist, hilt }<br/>Position 11: 	5 matches for 	{ silt, lest, list, lilt, lily }<br/>Position 12: 	5 matches for 	{ fests, felts, fists, jests, jilts }<br/>Position 13: 	4 matches for 	{ bub, bun, nub, nun }<br/>Position 14: 	4 matches for 	{ fen, fib, fin, jib }<br/>Position 15: 	4 matches for 	{ see, lee, lei, lie }<br/>Position 16: 	4 matches for 	{ set, sit, let, lit }<br/>Position 17: 	4 matches for 	{ ten, tin, yen, yin }<br/>Position 18: 	4 matches for 	{ two, tow, too, yow }<br/>Position 19: 	4 matches for 	{ bard, bark, baud, nark }<br/>Position 20: 	4 matches for 	{ bows, bowl, boos, nows }<br/></span>
-                                    </li>
-                                </ul>
+                            <li class="level test ignored open">
+                                <span><em class="time"></em><em class="status">ignored</em>rank words by match count()</span>
                             </li>
-                            <li class="level test">
-                                <span><em class="time">
-                                        <div class="time">38 ms</div>
-                                    </em><em class="status">passed</em>find proportion of single-matching words()</span>
-                                <ul>
-                                    <li class="text">
-                                        <span class="stdout">Testing: evaluation: finding proportion of single-matching words<br/>Proportion of single-matching words: 93%<br/></span>
-                                    </li>
-                                </ul>
+                            <li class="level test ignored open">
+                                <span><em class="time"></em><em class="status">ignored</em>find proportion of single-matching words()</span>
                             </li>
-                            <li class="level test">
-                                <span><em class="time">
-                                        <div class="time">1.75 s</div>
-                                    </em><em class="status">passed</em>eval algorithm with phrase set()</span>
-                                <ul>
-                                    <li class="text">
-                                        <span class="stdout">Testing: evaluation of algorithm accuracy started<br/>Notice: Automatic evaluation complete: <br/>Matched in the top 1 results: 88% [439/497]<br/>Matched in the top 3 results: 96% [481/497]<br/>Matched in the top 5 results: 99% [493/497]<br/>Matched: 100% [497/497]<br/></span>
-                                    </li>
-                                </ul>
+                            <li class="level test ignored open">
+                                <span><em class="time"></em><em class="status">ignored</em>eval algorithm with phrase set()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">2.32 s</div>
+                                <div class="time">2.23 s</div>
                             </em>LangToolTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">2.32 s</div>
+                                        <div class="time">2.23 s</div>
                                     </em><em class="status">passed</em>countErrors()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">491 ms</div>
+                                <div class="time">398 ms</div>
                             </em>PostTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">223 ms</div>
+                                        <div class="time">140 ms</div>
                                     </em><em class="status">passed</em>sign-up - with valid form()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">2 ms</div>
                                     </em><em class="status">passed</em>sign-in - with invalid form()</span>
                                 <ul>
                                     <li class="text">
@@ -687,31 +664,31 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">22 ms</div>
+                                        <div class="time">17 ms</div>
                                     </em><em class="status">passed</em>get phrase number()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:offed-summa-uncut<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:hosed-umbra-often<br/></span>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="level test">
+                                <span><em class="time">
+                                        <div class="time">18 ms</div>
+                                    </em><em class="status">passed</em>get session number()</span>
+                                <ul>
+                                    <li class="text">
+                                        <span class="stdout">Notice: sign in attempt with user-code:crawl-hunts-sagas<br/></span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
                                         <div class="time">20 ms</div>
-                                    </em><em class="status">passed</em>get session number()</span>
-                                <ul>
-                                    <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:slide-slink-siren<br/></span>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li class="level test">
-                                <span><em class="time">
-                                        <div class="time">23 ms</div>
                                     </em><em class="status">passed</em>get next phrase - initial request()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:unfed-aimer-scale<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:husky-bight-inure<br/></span>
                                     </li>
                                 </ul>
                             </li>
@@ -721,13 +698,13 @@ Process finished with exit code 0
                                     </em><em class="status">passed</em>is signed-in()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:clave-weedy-tabor<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:adman-blimp-miens<br/></span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">2 ms</div>
                                     </em><em class="status">passed</em>sign-in - with invalidly serialized form()</span>
                                 <ul>
                                     <li class="text">
@@ -737,21 +714,21 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">17 ms</div>
+                                        <div class="time">15 ms</div>
                                     </em><em class="status">passed</em>get user-code()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:cured-waned-grams<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:toter-waved-phone<br/></span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">16 ms</div>
+                                        <div class="time">17 ms</div>
                                     </em><em class="status">passed</em>sign-out()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:exits-sedge-feued<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:voila-windy-piety<br/></span>
                                     </li>
                                 </ul>
                             </li>
@@ -766,17 +743,17 @@ Process finished with exit code 0
                                     </em><em class="status">passed</em>sign-in - with valid form()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:luted-happy-mungy<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:poems-malts-farce<br/></span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">16 ms</div>
+                                        <div class="time">17 ms</div>
                                     </em><em class="status">passed</em>get next phrase - request out of phrase bounds()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:baddy-summa-round<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:layer-dados-assay<br/></span>
                                     </li>
                                 </ul>
                             </li>
@@ -792,26 +769,26 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">33 ms</div>
+                                        <div class="time">30 ms</div>
                                     </em><em class="status">passed</em>get next phrase - request session one, phrase two()</span>
                                 <ul>
                                     <li class="text">
-                                        <span class="stdout">Notice: sign in attempt with user-code:sword-recta-depot<br/>Notice: sign in attempt with user-code:liner-soils-bared<br/></span>
+                                        <span class="stdout">Notice: sign in attempt with user-code:blowy-mucky-kaiak<br/>Notice: sign in attempt with user-code:vaned-whine-floes<br/></span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">75 ms</div>
+                                        <div class="time">80 ms</div>
                                     </em>ReportCompletedSession</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">19 ms</div>
+                                                <div class="time">20 ms</div>
                                             </em><em class="status">passed</em>report completed session - failing - metrics invalid()</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Notice: sign in attempt with user-code:pipes-juror-frets<br/>reportCompletedSession called<br/>training session data invalid: TrainingSessionData(speed=60.0, accuracy=101.0)<br/></span>
+                                                <span class="stdout">Notice: sign in attempt with user-code:muted-cynic-braes<br/>reportCompletedSession called<br/>training session data invalid: TrainingSessionData(speed=60.0, accuracy=101.0)<br/></span>
                                             </li>
                                         </ul>
                                     </li>
@@ -821,17 +798,17 @@ Process finished with exit code 0
                                             </em><em class="status">passed</em>report completed session - failing - form encoding invalid()</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Notice: sign in attempt with user-code:inure-meted-filer<br/>reportCompletedSession called<br/>Error: login(): failed to deserialize form<br/></span>
+                                                <span class="stdout">Notice: sign in attempt with user-code:paths-yanks-sidle<br/>reportCompletedSession called<br/>Error: login(): failed to deserialize form<br/></span>
                                             </li>
                                         </ul>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">39 ms</div>
+                                                <div class="time">43 ms</div>
                                             </em><em class="status">passed</em>report completed session - passing()</span>
                                         <ul>
                                             <li class="text">
-                                                <span class="stdout">Notice: sign in attempt with user-code:mezzo-tings-hangs<br/>reportCompletedSession called<br/>Sessions for user-code: mezzo-tings-hangs<br/>Full-keyboard typing speed: 60.0<br/>Training session: 1 has wpm: 60.0, and accuracy: 100.0<br/></span>
+                                                <span class="stdout">Notice: sign in attempt with user-code:downs-adult-wimps<br/>reportCompletedSession called<br/>Sessions for user-code: downs-adult-wimps<br/>Full-keyboard typing speed: 60.0<br/>Training session: 1 has wpm: 60.0, and accuracy: 100.0<br/></span>
                                             </li>
                                         </ul>
                                     </li>
@@ -851,12 +828,12 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">41 ms</div>
+                                <div class="time">38 ms</div>
                             </em>ParsingKtTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">11 ms</div>
+                                        <div class="time">12 ms</div>
                                     </em><em class="status">passed</em>get five-grams with invalid file()</span>
                                 <ul>
                                     <li class="text">
@@ -886,7 +863,7 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">5 ms</div>
                                     </em><em class="status">passed</em>get phrases with invalid file()</span>
                                 <ul>
                                     <li class="text">
@@ -896,17 +873,17 @@ Process finished with exit code 0
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">18 ms</div>
+                                        <div class="time">13 ms</div>
                                     </em>MapOfKeysToKeyPairs</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">10 ms</div>
+                                                <div class="time">7 ms</div>
                                             </em><em class="status">passed</em>ensure key mappings include original key()</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">8 ms</div>
+                                                <div class="time">6 ms</div>
                                             </em><em class="status">passed</em>ensure full alphabet coverage()</span>
                                     </li>
                                 </ul>
@@ -915,29 +892,29 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">16 ms</div>
+                                <div class="time">18 ms</div>
                             </em>WordTreeTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">16 ms</div>
+                                        <div class="time">18 ms</div>
                                     </em><em class="status">passed</em>test getting words and inserting key-pair()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">26 ms</div>
+                                <div class="time">35 ms</div>
                             </em>LogicAlternativeKtTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">23 ms</div>
+                                        <div class="time">31 ms</div>
                                     </em><em class="status">passed</em>getMatchedWordsUsingCartesianProduct - basic example()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>getSentencesUsingCartesianProduct - basic example()</span>
                             </li>
                         </ul>
@@ -956,12 +933,17 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">7 ms</div>
+                                <div class="time">28 ms</div>
                             </em>CartesianProductTreeTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">7 ms</div>
+                                        <div class="time">5 ms</div>
+                                    </em><em class="status">passed</em>test empty word()</span>
+                            </li>
+                            <li class="level test">
+                                <span><em class="time">
+                                        <div class="time">23 ms</div>
                                     </em><em class="status">passed</em>test insertion and leaf collection()</span>
                             </li>
                         </ul>
@@ -979,7 +961,7 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">818 ms</div>
+                                <div class="time">794 ms</div>
                             </em>GetTests</span>
                         <ul>
                             <li class="level test">
@@ -989,22 +971,22 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">234 ms</div>
+                                        <div class="time">244 ms</div>
                                     </em><em class="status">passed</em>getSessionsForEachUserByCode - add some users()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">6 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>basic submission()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">220 ms</div>
+                                        <div class="time">210 ms</div>
                                     </em><em class="status">passed</em>getSessionsForEachUser - add some users()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>get random phrase()</span>
                             </li>
                             <li class="level test">
@@ -1014,22 +996,22 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">58 ms</div>
+                                        <div class="time">50 ms</div>
                                     </em><em class="status">passed</em>basic submission with analysis combinations()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">5 ms</div>
                                     </em><em class="status">passed</em>basic submission containing whole number()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">190 ms</div>
+                                        <div class="time">168 ms</div>
                                     </em><em class="status">passed</em>getSessionsForEachUserById - add some users()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">6 ms</div>
+                                        <div class="time">13 ms</div>
                                     </em><em class="status">passed</em>basic submission containing decimal number()</span>
                             </li>
                             <li class="level test">
@@ -1039,79 +1021,83 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">3 ms</div>
                                     </em><em class="status">passed</em>get status()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">22 ms</div>
+                                        <div class="time">23 ms</div>
                                     </em><em class="status">passed</em>get user-id to sessions map - size check()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>get phrases per session()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">52 ms</div>
+                                        <div class="time">50 ms</div>
                                     </em><em class="status">passed</em>get user-id to sessions map - deep check()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">3 ms</div>
                                     </em><em class="status">passed</em>side conversions - right()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
-                        <span><em class="time"></em>SingletonControllersTests</span>
+                        <span><em class="time">
+                                <div class="time">1 ms</div>
+                            </em>SingletonControllersTests</span>
                         <ul>
                             <li class="level test">
-                                <span><em class="time"></em><em class="status">passed</em>get db controller instance()</span>
+                                <span><em class="time">
+                                        <div class="time">1 ms</div>
+                                    </em><em class="status">passed</em>get db controller instance()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">2 ms</div>
+                                <div class="time">5 ms</div>
                             </em>AppTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">2 ms</div>
+                                        <div class="time">5 ms</div>
                                     </em><em class="status">passed</em>entry point invocation()</span>
                             </li>
                         </ul>
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">220 ms</div>
+                                <div class="time">243 ms</div>
                             </em>DatabaseControllerTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">13 ms</div>
+                                        <div class="time">16 ms</div>
                                     </em><em class="status">passed</em>adding users, sessions, sessions_to_users()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">6 ms</div>
+                                        <div class="time">11 ms</div>
                                     </em><em class="status">passed</em>user-code taken()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">8 ms</div>
+                                        <div class="time">12 ms</div>
                                     </em><em class="status">passed</em>user creation getting id()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">56 ms</div>
+                                        <div class="time">55 ms</div>
                                     </em><em class="status">passed</em>user creation()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">19 ms</div>
+                                        <div class="time">26 ms</div>
                                     </em><em class="status">passed</em>get top completed session of (non-initial) user()</span>
                             </li>
                             <li class="level test">
@@ -1121,7 +1107,7 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">12 ms</div>
+                                        <div class="time">14 ms</div>
                                     </em><em class="status">passed</em>count users()</span>
                             </li>
                             <li class="level test">
@@ -1136,39 +1122,39 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">18 ms</div>
+                                        <div class="time">17 ms</div>
                                     </em><em class="status">passed</em>create new session under user by user-code()</span>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">44 ms</div>
+                                        <div class="time">46 ms</div>
                                     </em>GetAllTrainingSessions</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">25 ms</div>
+                                                <div class="time">24 ms</div>
                                             </em><em class="status">passed</em>for a user with recorded sessions()</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">14 ms</div>
+                                                <div class="time">16 ms</div>
                                             </em><em class="status">passed</em>for a new user()</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">5 ms</div>
+                                                <div class="time">6 ms</div>
                                             </em><em class="status">passed</em>invalid arguments()</span>
                                     </li>
                                 </ul>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">15 ms</div>
+                                        <div class="time">17 ms</div>
                                     </em>Entities</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">15 ms</div>
+                                                <div class="time">17 ms</div>
                                             </em><em class="status">passed</em>Session overwritten functions()</span>
                                     </li>
                                 </ul>
@@ -1177,7 +1163,7 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">3 ms</div>
+                                <div class="time">2 ms</div>
                             </em>ValidationKtTests</span>
                         <ul>
                             <li class="level test">
@@ -1186,17 +1172,15 @@ Process finished with exit code 0
                                     </em><em class="status">passed</em>sign-up form validation - invalid forms()</span>
                             </li>
                             <li class="level test">
-                                <span><em class="time">
-                                        <div class="time">1 ms</div>
-                                    </em><em class="status">passed</em>user-code format validation - valid()</span>
+                                <span><em class="time"></em><em class="status">passed</em>user-code format validation - valid()</span>
+                            </li>
+                            <li class="level test">
+                                <span><em class="time"></em><em class="status">passed</em>sign-up form validation - valid forms()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
                                         <div class="time">1 ms</div>
-                                    </em><em class="status">passed</em>sign-up form validation - valid forms()</span>
-                            </li>
-                            <li class="level test">
-                                <span><em class="time"></em><em class="status">passed</em>training session validation - valid()</span>
+                                    </em><em class="status">passed</em>training session validation - valid()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time"></em><em class="status">passed</em>user-code format validation - invalid()</span>
@@ -1208,12 +1192,12 @@ Process finished with exit code 0
                     </li>
                     <li class="level top open">
                         <span><em class="time">
-                                <div class="time">59 ms</div>
+                                <div class="time">66 ms</div>
                             </em>SingletonTests</span>
                         <ul>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">3 ms</div>
+                                        <div class="time">4 ms</div>
                                     </em><em class="status">passed</em>find longest phrase length()</span>
                                 <ul>
                                     <li class="text">
@@ -1223,12 +1207,12 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">15 ms</div>
+                                        <div class="time">16 ms</div>
                                     </em><em class="status">passed</em>word list should not contain empty string()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">3 ms</div>
                                     </em><em class="status">passed</em>get longest word in word list()</span>
                                 <ul>
                                     <li class="text">
@@ -1238,33 +1222,53 @@ Process finished with exit code 0
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">7 ms</div>
+                                        <div class="time">5 ms</div>
                                     </em><em class="status">passed</em>get key pair with Char()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">3 ms</div>
                                     </em><em class="status">passed</em>get key pair with Key()</span>
                             </li>
                             <li class="level test">
                                 <span><em class="time">
-                                        <div class="time">4 ms</div>
+                                        <div class="time">3 ms</div>
                                     </em><em class="status">passed</em>user code generation()</span>
                             </li>
                             <li class="level suite open">
                                 <span><em class="time">
-                                        <div class="time">22 ms</div>
+                                        <div class="time">32 ms</div>
                                     </em>get phrase</span>
                                 <ul>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">5 ms</div>
+                                            </em><em class="status">passed</em>test normalised word-counts for the first 10 sessions()</span>
+                                        <ul>
+                                            <li class="text">
+                                                <span class="stdout">Session 1 	contains 	44.2 words (normalised).<br/>Session 2 	contains 	48.2 words (normalised).<br/>Session 3 	contains 	42.2 words (normalised).<br/>Session 4 	contains 	47.4 words (normalised).<br/>Session 5 	contains 	48.4 words (normalised).<br/>Session 6 	contains 	42.4 words (normalised).<br/>Session 7 	contains 	46.2 words (normalised).<br/>Session 8 	contains 	42.8 words (normalised).<br/>Session 9 	contains 	38.8 words (normalised).<br/>Session 10 	contains 	47.6 words (normalised).<br/></span>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">4 ms</div>
                                             </em><em class="status">passed</em>session uniqueness()</span>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
                                                 <div class="time">4 ms</div>
                                             </em><em class="status">passed</em>valid args()</span>
+                                    </li>
+                                    <li class="level test">
+                                        <span><em class="time">
+                                                <div class="time">5 ms</div>
+                                            </em><em class="status">passed</em>test word-counts for the first 10 sessions()</span>
+                                        <ul>
+                                            <li class="text">
+                                                <span class="stdout">Session 1 	contains 	43 words.<br/>Session 2 	contains 	49 words.<br/>Session 3 	contains 	41 words.<br/>Session 4 	contains 	50 words.<br/>Session 5 	contains 	44 words.<br/>Session 6 	contains 	42 words.<br/>Session 7 	contains 	42 words.<br/>Session 8 	contains 	45 words.<br/>Session 9 	contains 	38 words.<br/>Session 10 	contains 	47 words.<br/></span>
+                                            </li>
+                                        </ul>
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
@@ -1278,7 +1282,7 @@ Process finished with exit code 0
                                     </li>
                                     <li class="level test">
                                         <span><em class="time">
-                                                <div class="time">4 ms</div>
+                                                <div class="time">5 ms</div>
                                             </em><em class="status">passed</em>uniqueness in the first 5 sessions()</span>
                                     </li>
                                 </ul>
@@ -1289,7 +1293,7 @@ Process finished with exit code 0
             </div>
         </div>
         <div id="footer">
-            <p>Generated by IntelliJ IDEA on 28/04/2022, 15:34</p>
+            <p>Generated by IntelliJ IDEA on 29/04/2022, 18:35</p>
         </div>
     </body>
 </html>
