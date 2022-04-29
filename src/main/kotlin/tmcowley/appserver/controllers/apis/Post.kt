@@ -15,12 +15,11 @@ import tmcowley.appserver.utils.validateUserCode
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 
+@RestController
 @CrossOrigin(
-    methods = [RequestMethod.GET],
-
     // enabled cross-origin urls
-    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com",
-        "https://mirrored-keyboard.vercel.app"],
+    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
+    methods = [RequestMethod.GET],
 
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation
     // /CrossOrigin.html#allowedHeaders
@@ -29,10 +28,9 @@ import javax.servlet.http.HttpSession
 
     // allow client cookies
     // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-    allowCredentials = "true",
+    allowCredentials = "true"
 )
 @RequestMapping(value = ["/api/v0"], consumes = ["application/json"], produces = ["application/json"])
-@RestController
 class Post {
 
     private val db = SingletonControllers.db
@@ -212,7 +210,7 @@ class Post {
         }
 
         // validate session data object
-        if (!validateTrainingSessionData(sessionData)) println("training session data invalid: ${sessionData.toString()}")
+        if (!validateTrainingSessionData(sessionData)) println("training session data invalid: $sessionData")
         if (!validateTrainingSessionData(sessionData)) return false
 
         // store completed session in database
@@ -221,6 +219,27 @@ class Post {
         // increment session number (if exists next session); reset phrase number
         session.setAttribute("sessionNumber", db.getNextSessionNumber(userCode))
         session.setAttribute("phraseNumber", 0)
+
+        // output training session data
+
+        println("Sessions for user-code: $userCode")
+
+        // display full-keyboard typing speed
+        val fullBoardTypingSpeed = db.getAllSessions(userCode)?.find { trainingSession ->
+            trainingSession.number == 0
+        }
+        println("Full-keyboard typing speed: ${fullBoardTypingSpeed?.speed}")
+
+        // output all half-board training sessions
+        db.getAllSessions(userCode)
+            ?.filterNot { trainingSession ->
+                // remove the full-board typing speed entry (under number 0)
+                trainingSession.number == 0
+            }
+            ?.forEach { trainingSession ->
+                // output the training session data
+                println("Training session: ${trainingSession.number} has wpm: ${trainingSession.speed}, and accuracy: ${trainingSession.accuracy}")
+            }
 
         // report success
         return true

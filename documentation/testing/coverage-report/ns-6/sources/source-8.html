@@ -1,0 +1,155 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > ValidationKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tmcowley.appserver.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: ValidationKt (tmcowley.appserver.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">ValidationKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (3/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.utils
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import tmcowley.appserver.models.TrainingSessionData
+<i class="no-highlight">4</i>&nbsp;import tmcowley.appserver.models.SignUpForm
+<i class="no-highlight">5</i>&nbsp;
+<i class="no-highlight">6</i>&nbsp;/** validate a sign-up form */
+<i class="no-highlight">7</i>&nbsp;fun validateSignUpForm(form: SignUpForm): Boolean {
+<i class="no-highlight">8</i>&nbsp;    // validate age
+<b class="fc"><i class="no-highlight">9</i>&nbsp;    if (form.age &lt; 13) return false</b>
+<b class="fc"><i class="no-highlight">10</i>&nbsp;    if (form.age &gt; 200) return false</b>
+<i class="no-highlight">11</i>&nbsp;
+<i class="no-highlight">12</i>&nbsp;    // validate original typing speed
+<b class="fc"><i class="no-highlight">13</i>&nbsp;    if (form.speed &lt; 0) return false</b>
+<b class="fc"><i class="no-highlight">14</i>&nbsp;    if (form.speed &gt; 400) return false</b>
+<i class="no-highlight">15</i>&nbsp;
+<i class="no-highlight">16</i>&nbsp;    // form is valid
+<b class="fc"><i class="no-highlight">17</i>&nbsp;    return true</b>
+<i class="no-highlight">18</i>&nbsp;}
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;/** validate a training session */
+<i class="no-highlight">21</i>&nbsp;fun validateTrainingSessionData(session: TrainingSessionData): Boolean {
+<i class="no-highlight">22</i>&nbsp;    // validate speed
+<b class="fc"><i class="no-highlight">23</i>&nbsp;    if (session.speed &lt; 0f) return false</b>
+<i class="no-highlight">24</i>&nbsp;
+<i class="no-highlight">25</i>&nbsp;    // validate accuracy
+<b class="fc"><i class="no-highlight">26</i>&nbsp;    if (session.accuracy &lt; 0f) return false</b>
+<b class="fc"><i class="no-highlight">27</i>&nbsp;    if (session.accuracy &gt; 100f) return false</b>
+<i class="no-highlight">28</i>&nbsp;
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    return true</b>
+<i class="no-highlight">30</i>&nbsp;}
+<i class="no-highlight">31</i>&nbsp;
+<i class="no-highlight">32</i>&nbsp;/** validate the format of a user-code (5gram-5gram-5gram) */
+<i class="no-highlight">33</i>&nbsp;fun validateUserCode(userCode: String): Boolean {
+<i class="no-highlight">34</i>&nbsp;    // length check
+<b class="fc"><i class="no-highlight">35</i>&nbsp;    if (userCode.length != 17) return false</b>
+<i class="no-highlight">36</i>&nbsp;
+<i class="no-highlight">37</i>&nbsp;    // case check - must be lowercase
+<b class="fc"><i class="no-highlight">38</i>&nbsp;    if (userCode.lowercase() != userCode) return false</b>
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;    // split on dashes
+<b class="fc"><i class="no-highlight">41</i>&nbsp;    val words = userCode.split(&quot;-&quot;)</b>
+<i class="no-highlight">42</i>&nbsp;
+<i class="no-highlight">43</i>&nbsp;    // check there are three words
+<b class="fc"><i class="no-highlight">44</i>&nbsp;    if (words.size != 3) return false</b>
+<i class="no-highlight">45</i>&nbsp;
+<i class="no-highlight">46</i>&nbsp;    // check each word is a 5-gram
+<b class="fc"><i class="no-highlight">47</i>&nbsp;    if (!words.all { word -&gt; word.length == 5}) return false</b>
+<i class="no-highlight">48</i>&nbsp;
+<b class="fc"><i class="no-highlight">49</i>&nbsp;    return true</b>
+<i class="no-highlight">50</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-04-28 15:34</div>
+</div>
+</body>
+</html>

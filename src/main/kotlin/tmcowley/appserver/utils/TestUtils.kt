@@ -3,7 +3,11 @@ package tmcowley.appserver.utils
 import tmcowley.appserver.controllers.DatabaseController
 import tmcowley.appserver.controllers.User
 import tmcowley.appserver.models.TrainingSessionData
+import kotlin.math.pow
 import kotlin.test.assertNotNull
+
+/** allow exponentiation on integers */
+infix fun Int.pow(exponent: Int): Int = toDouble().pow(exponent).toInt()
 
 /** create a fresh user, returning the user's user-code */
 fun createUserGettingCode(db: DatabaseController): String {

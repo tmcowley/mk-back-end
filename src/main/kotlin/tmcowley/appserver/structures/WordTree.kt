@@ -1,27 +1,52 @@
 package tmcowley.appserver.structures
 
+import tmcowley.appserver.utils.getWordInKeyPairForm
 import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.models.Key
 
 class WordTree : CartesianProductTree<Key>(Node(Key('ε'))) {
 
-    /** get all matched words (computes from node paths) */
-    fun getWords(): Set<String> {
-        val paths: List<List<Node<Key>>> = this.getPaths()
+    /** get the matching words from a word in key-pair list form */
+    fun getWords(word: String): Set<String> =
+        getAllWords(word).toSet()
+
+    /** get the matching words from a word in key-pair list form */
+    fun getAllWords(word: String): List<String> {
+        // ensure empty word does not build empty tree
+        if (word.isEmpty()) return listOf()
+
+        // convert word to key-pair form
+        val wordAsKeyPairList: List<KeyPair> = getWordInKeyPairForm(word)
+
+        // convert key-pairs to sets of keys, e.g. [Key('q'), Key('p')] -> {Key('q'), Key('p')}
+        val wordAsKeyPairSetList = wordAsKeyPairList.map { keyPair ->
+            keyPair.toSet()
+        }
+
+        // insert each key-pair set, in order
+        insertAll(wordAsKeyPairSetList)
+
+        // read the words (down paths of tree)
+        return readWords()
+    }
+
+    /** get all matched words (computed from node paths) */
+    private fun readWords(): List<String> {
+        // read the paths down the three (equal to the n-ary cartesian product)
+        val paths: List<List<Node<Key>>> = this.getCartesianProduct()
 
         // generate the words array, removing duplicates
-        val words: Set<String> = buildSet {
+        val words: List<String> = buildList {
             paths.forEach { path ->
-                val word = (path.map { node -> node.value }.joinToString(separator = ""))
+                val word = path
+                    .map { node ->
+                        node.value
+                    }
+                    .joinToString(separator = "")
                 add(word)
             }
         }
 
         return words
-    }
-
-    /** insert using a key-pair (calls insert on each key of key-pair) */
-    fun insertKeyPair(keyPair: KeyPair) {
-        insert(setOf(keyPair.leftKey, keyPair.rightKey))
     }
 }

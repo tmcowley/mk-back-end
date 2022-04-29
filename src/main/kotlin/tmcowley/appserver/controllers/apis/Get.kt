@@ -5,13 +5,14 @@ import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.*
 import tmcowley.appserver.controllers.TrainingSession
 import tmcowley.appserver.controllers.User
+import tmcowley.appserver.utils.convertToLeft
+import tmcowley.appserver.utils.convertToRight
 
+@RestController
 @CrossOrigin(
-    methods = [RequestMethod.GET],
-
     // enabled cross-origin urls
-    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com",
-        "https://mirrored-keyboard.vercel.app"],
+    origins = ["http://localhost:3000", "https://localhost:3000", "https://www.tcowley.com", "https://tcowley.com", "https://mirrored-keyboard.vercel.app"],
+    methods = [RequestMethod.GET],
 
     // see: https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/bind/annotation
     // /CrossOrigin.html#allowedHeaders
@@ -20,10 +21,9 @@ import tmcowley.appserver.controllers.User
 
     // allow client cookies
     // see: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Allow-Credentials
-    allowCredentials = "true",
+    allowCredentials = "true"
 )
 @RequestMapping(value = ["/api/v0"], produces = ["application/json"])
-@RestController
 class Get {
 
     /** For converting any form to full form (main computation) */

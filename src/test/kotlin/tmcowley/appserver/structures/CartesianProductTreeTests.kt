@@ -1,52 +1,53 @@
 package tmcowley.appserver.structures
 
-import kotlin.math.pow
+import tmcowley.appserver.utils.pow
 
 // junit5
 import org.junit.jupiter.api.Test
 
 // for fluent assertions
 import org.assertj.core.api.Assertions.assertThat
-
-// for assertions with smart-casts (nullability inferred)
-import kotlin.test.assertNotNull
-
 import org.springframework.boot.test.context.SpringBootTest
-import tmcowley.appserver.Singleton
-import tmcowley.appserver.models.Key
 
+/** as CartesianProductTree is abstract, we test using the derived class WordTree */
 @SpringBootTest
 internal class CartesianProductTreeTests {
 
-    // test using word tree as derived class
-    var tree = WordTree()
+    @Test
+    fun `test empty word`() {
+        // given
+        // a word of length zero
+        val emptyString = ""
 
-    fun resetTree() {
-        this.tree = WordTree()
+        // when
+        // we compute the matching words
+        val matchingWords = WordTree().getAllWords(emptyString)
+
+        // then
+        // ensure there are no matches
+        assertThat(matchingWords.size).isEqualTo(0)
     }
-
-    // allow exponentiation on integers
-    infix fun Int.pow(exponent: Int): Int = toDouble().pow(exponent).toInt()
 
     @Test
     fun `test insertion and leaf collection`() {
+        // for indexes 1 to 10:
+        (1 .. 10).forEach { index ->
 
-        repeat(10) { index ->
-
-            this.resetTree()
-
-            // insert an arbitrary key index times
-            repeat(index) {
-                val keyPair = Singleton.getKeyPairOrNull(Key('q'))
-                assertNotNull(keyPair)
-
-                this.tree.insertKeyPair(keyPair)
+            // given
+            // a word of length index with arbitrary character (without loss of generality)
+            val wordOfLengthIndex = buildString {
+                repeat(index) {
+                    append('q')
+                }
             }
 
-            // ensure tree leaf count is 2^index
-            assertThat(this.tree.getLeaves().size).isEqualTo(2.pow(index))
-        }
+            // when
+            // we compute the matching words
+            val matchingWords = WordTree().getAllWords(wordOfLengthIndex)
 
-        this.resetTree()
+            // then
+            // ensure tree leaf count is at most 2^index (matching words has distinct elements)
+            assertThat(matchingWords.size).isEqualTo(2.pow(index))
+        }
     }
 }

@@ -21,10 +21,23 @@ abstract class CartesianProductTree<T>(val root: Node<T>) {
     private var leaves: MutableList<Node<T>> = mutableListOf()
 
     /** insert a set of values to the tree; adds each object to each leaf node */
-    fun insert(childValues: Set<T>) {
+    protected fun insert(childValues: Set<T>) {
         // add each child to each leaf
-        val leaves = getLeaves()
-        leaves.forEach { leaf -> childValues.forEach { childValue -> insert(childValue, leaf) } }
+        getLeaves()
+            .forEach { leaf ->
+                childValues.forEach { childValue ->
+                    insert(childValue, leaf)
+                }
+            }
+    }
+
+    /**
+     * insert a list of set of values to the tree;
+     * for each set in the list, adds each set item to each leaf nodes */
+    protected fun insertAll(allChildValues: List<Set<T>>) {
+        allChildValues.forEach { childValues ->
+            insert(childValues)
+        }
     }
 
     /** add a child underneath a parent node */
@@ -34,8 +47,8 @@ abstract class CartesianProductTree<T>(val root: Node<T>) {
         parent.addChild(child)
     }
 
-    /** get the leaf nodes of the tree */
-    fun getLeaves(): List<Node<T>> {
+    /** get the leaf nodes of the tree; public access-modifier for testing */
+    private fun getLeaves(): List<Node<T>> {
         // reset global leaves list
         this.leaves = mutableListOf()
 
@@ -52,18 +65,20 @@ abstract class CartesianProductTree<T>(val root: Node<T>) {
 
     /** find the tree leaves, traversing down from the given node */
     private fun findLeaves(node: Node<T>?) {
+        // base cases
         if (node == null) return
         if (node.isLeaf()) {
             leaves.add(node)
             return
         }
 
+        // recursive case:
         // traverse down, from each child
         node.getChildren().forEach { child -> findLeaves(child) }
     }
 
     /** get the paths down the tree */
-    fun getPaths(): List<List<Node<T>>> {
+    protected fun getCartesianProduct(): List<List<Node<T>>> {
         val leaves = getLeaves()
 
         val paths = buildList(leaves.size) {

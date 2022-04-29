@@ -1,0 +1,197 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LogicKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tmcowley.appserver</a>
+</div>
+
+<h1>Coverage Summary for Class: LogicKt (tmcowley.appserver)</h1>
+
+<table class="coverageStats">
+
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LogicKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/27)
+  </span>
+</td>
+</tr>
+  <tr>
+    <td class="name">LogicKt$rankSentences$$inlined$sortBy$1</td>
+  </tr>
+  <tr>
+    <td class="name">LogicKt$rankSentences$$inlined$sortByDescending$1</td>
+  </tr>
+<tr>
+  <td class="name"><strong>Total</strong></td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (27/27)
+  </span>
+</td>
+</tr>
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import tmcowley.appserver.structures.SentenceTree
+<i class="no-highlight">4</i>&nbsp;import tmcowley.appserver.structures.WordTree
+<i class="no-highlight">5</i>&nbsp;import tmcowley.appserver.utils.getFrequencyScore
+<i class="no-highlight">6</i>&nbsp;import tmcowley.appserver.utils.splitIntoWords
+<i class="no-highlight">7</i>&nbsp;import tmcowley.appserver.utils.isNumber
+<i class="no-highlight">8</i>&nbsp;
+<i class="no-highlight">9</i>&nbsp;/** submit a sentence to turn an input phrase into an array of matched phrases */
+<i class="no-highlight">10</i>&nbsp;fun submitSentence(sentence: String): List&lt;String&gt; {
+<i class="no-highlight">11</i>&nbsp;    // compute the matching sentences
+<b class="fc"><i class="no-highlight">12</i>&nbsp;    val listOfMatchedWords = createListOfMatchedWords(sentence.lowercase()).toMutableList()</b>
+<i class="no-highlight">13</i>&nbsp;
+<i class="no-highlight">14</i>&nbsp;    // compute viable sentences
+<b class="fc"><i class="no-highlight">15</i>&nbsp;    val sentences = SentenceTree().getSentences(listOfMatchedWords).toMutableList()</b>
+<i class="no-highlight">16</i>&nbsp;    // val sentences = getSentencesUsingCartesian(listOfMatchedWords)
+<i class="no-highlight">17</i>&nbsp;
+<b class="fc"><i class="no-highlight">18</i>&nbsp;    if (sentences.isEmpty()) println(&quot;Notice: no results found&quot;)</b>
+<i class="no-highlight">19</i>&nbsp;
+<i class="no-highlight">20</i>&nbsp;    // rank sentences based on word frequency, syntax analysis (if enabled)
+<b class="fc"><i class="no-highlight">21</i>&nbsp;    rankSentences(sentences)</b>
+<i class="no-highlight">22</i>&nbsp;
+<b class="fc"><i class="no-highlight">23</i>&nbsp;    return sentences</b>
+<i class="no-highlight">24</i>&nbsp;}
+<i class="no-highlight">25</i>&nbsp;
+<i class="no-highlight">26</i>&nbsp;/** get resulting sentences from the input sentence */
+<i class="no-highlight">27</i>&nbsp;private fun createListOfMatchedWords(sentence: String): List&lt;Set&lt;String&gt;&gt; {
+<i class="no-highlight">28</i>&nbsp;    // create sentence word list
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    val words = splitIntoWords(sentence)</b>
+<i class="no-highlight">30</i>&nbsp;
+<i class="no-highlight">31</i>&nbsp;    // ensure word length is not exceeded
+<b class="fc"><i class="no-highlight">32</i>&nbsp;    val wordLengthExceeded = words.any { word -&gt; (word.length &gt; Singleton.maxInputLength) }</b>
+<b class="fc"><i class="no-highlight">33</i>&nbsp;    if (wordLengthExceeded) return listOf(setOf(&quot;Maximum word length of ${Singleton.maxInputLength} exceeded&quot;))</b>
+<i class="no-highlight">34</i>&nbsp;
+<i class="no-highlight">35</i>&nbsp;    // create the list of matched words
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    val listOfMatchedWords = buildList {</b>
+<b class="fc"><i class="no-highlight">37</i>&nbsp;        words.forEach { word -&gt;</b>
+<b class="fc"><i class="no-highlight">38</i>&nbsp;            var matchedWords = getWords(word)</b>
+<i class="no-highlight">39</i>&nbsp;
+<i class="no-highlight">40</i>&nbsp;            // numbers should not be in non-matched form
+<i class="no-highlight">41</i>&nbsp;            // non-numbers should be in non-matched form (e.g. {&lt;word&gt;})
+<b class="fc"><i class="no-highlight">42</i>&nbsp;            if (matchedWords.isEmpty()) {</b>
+<b class="fc"><i class="no-highlight">43</i>&nbsp;                matchedWords = if (isNumber(word)) setOf(word) else setOf(&quot;{$word}&quot;)</b>
+<i class="no-highlight">44</i>&nbsp;            }
+<i class="no-highlight">45</i>&nbsp;
+<b class="fc"><i class="no-highlight">46</i>&nbsp;            add(matchedWords)</b>
+<b class="fc"><i class="no-highlight">47</i>&nbsp;        }</b>
+<b class="fc"><i class="no-highlight">48</i>&nbsp;    }</b>
+<i class="no-highlight">49</i>&nbsp;
+<i class="no-highlight">50</i>&nbsp;    // no results found
+<b class="fc"><i class="no-highlight">51</i>&nbsp;    if (listOfMatchedWords.isEmpty()) println(&quot;Notice: $sentence returned zero matches&quot;)</b>
+<i class="no-highlight">52</i>&nbsp;
+<b class="fc"><i class="no-highlight">53</i>&nbsp;    return listOfMatchedWords</b>
+<i class="no-highlight">54</i>&nbsp;}
+<i class="no-highlight">55</i>&nbsp;
+<i class="no-highlight">56</i>&nbsp;/** get the matching words from a word in key-pair list form */
+<i class="no-highlight">57</i>&nbsp;fun getWords(word: String): Set&lt;String&gt; =
+<i class="no-highlight">58</i>&nbsp;    // generate word cartesian-product tree
+<b class="fc"><i class="no-highlight">59</i>&nbsp;    WordTree()</b>
+<i class="no-highlight">60</i>&nbsp;        // find matched words by traversing the tree paths
+<b class="fc"><i class="no-highlight">61</i>&nbsp;        .getWords(word)</b>
+<i class="no-highlight">62</i>&nbsp;        // filter out words not in the dictionary
+<b class="fc"><i class="no-highlight">63</i>&nbsp;        .filter { matchedWord -&gt;</b>
+<b class="fc"><i class="no-highlight">64</i>&nbsp;            Singleton.wordExists(matchedWord)</b>
+<i class="no-highlight">65</i>&nbsp;        }
+<b class="fc"><i class="no-highlight">66</i>&nbsp;        .toSet()</b>
+<i class="no-highlight">67</i>&nbsp;
+<i class="no-highlight">68</i>&nbsp;/** rank sentences based on frequency, syntax (if enabled) */
+<i class="no-highlight">69</i>&nbsp;private fun rankSentences(sentences: MutableList&lt;String&gt;) {
+<i class="no-highlight">70</i>&nbsp;    // syntax analysis enabled -&gt; rank according to syntax correctness (lower better)
+<b class="fc"><i class="no-highlight">71</i>&nbsp;    if (Singleton.syntaxAnalysisEnabled) sentences.sortBy { resultingSentence -&gt;</b>
+<b class="fc"><i class="no-highlight">72</i>&nbsp;        Singleton.langTool.countErrors(resultingSentence)</b>
+<i class="no-highlight">73</i>&nbsp;    }
+<i class="no-highlight">74</i>&nbsp;
+<i class="no-highlight">75</i>&nbsp;    // frequency analysis enabled -&gt; rank according to frequency (higher better)
+<b class="fc"><i class="no-highlight">76</i>&nbsp;    if (Singleton.frequencyAnalysisEnabled) sentences.sortByDescending { resultingSentence -&gt;</b>
+<b class="fc"><i class="no-highlight">77</i>&nbsp;        getFrequencyScore(resultingSentence)</b>
+<i class="no-highlight">78</i>&nbsp;    }
+<i class="no-highlight">79</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-04-28 15:34</div>
+</div>
+</body>
+</html>

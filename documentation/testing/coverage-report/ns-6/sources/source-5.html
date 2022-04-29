@@ -1,0 +1,152 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > LogicUtilsKt</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/highlight-idea.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.pack.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">tmcowley.appserver.utils</a>
+</div>
+
+<h1>Coverage Summary for Class: LogicUtilsKt (tmcowley.appserver.utils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">LogicUtilsKt</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (5/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (14/14)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<div class="sourceCode" id="sourceCode"><i class="no-highlight">1</i>&nbsp;package tmcowley.appserver.utils
+<i class="no-highlight">2</i>&nbsp;
+<i class="no-highlight">3</i>&nbsp;import tmcowley.appserver.Singleton
+<i class="no-highlight">4</i>&nbsp;import tmcowley.appserver.models.KeyPair
+<i class="no-highlight">5</i>&nbsp;import kotlin.test.assertNotNull
+<i class="no-highlight">6</i>&nbsp;
+<i class="no-highlight">7</i>&nbsp;// -----
+<i class="no-highlight">8</i>&nbsp;// utility methods
+<i class="no-highlight">9</i>&nbsp;// -----
+<i class="no-highlight">10</i>&nbsp;
+<i class="no-highlight">11</i>&nbsp;/** get a word in key-pair form, e.g. &quot;word&quot; -&gt; [(w, o), (w, o), (r, u), (d, k)] */
+<i class="no-highlight">12</i>&nbsp;fun getWordInKeyPairForm(word: String): List&lt;KeyPair&gt; {
+<i class="no-highlight">13</i>&nbsp;    // filter out non-alphabetic characters, and non-mapping chars
+<b class="fc"><i class="no-highlight">14</i>&nbsp;    val wordAlphabetic = word</b>
+<b class="fc"><i class="no-highlight">15</i>&nbsp;        .filter { char -&gt; isAlphabetic(char) }</b>
+<b class="fc"><i class="no-highlight">16</i>&nbsp;        .filter { char -&gt; Singleton.getKeyPairOrNull(char) != null }</b>
+<i class="no-highlight">17</i>&nbsp;
+<i class="no-highlight">18</i>&nbsp;    // create key-pair list for word (word as key-pairs)
+<b class="fc"><i class="no-highlight">19</i>&nbsp;    return wordAlphabetic</b>
+<b class="fc"><i class="no-highlight">20</i>&nbsp;        .map { char -&gt;</b>
+<b class="fc"><i class="no-highlight">21</i>&nbsp;            val keyPair = Singleton.getKeyPairOrNull(char)</b>
+<b class="fc"><i class="no-highlight">22</i>&nbsp;            assertNotNull(keyPair)</b>
+<b class="fc"><i class="no-highlight">23</i>&nbsp;            keyPair</b>
+<i class="no-highlight">24</i>&nbsp;        }
+<i class="no-highlight">25</i>&nbsp;}
+<i class="no-highlight">26</i>&nbsp;
+<i class="no-highlight">27</i>&nbsp;/** split a sentence into a list of non-empty words */
+<i class="no-highlight">28</i>&nbsp;fun splitIntoWords(sentence: String): List&lt;String&gt; {
+<b class="fc"><i class="no-highlight">29</i>&nbsp;    return sentence</b>
+<b class="fc"><i class="no-highlight">30</i>&nbsp;        .split(&quot; &quot;)</b>
+<b class="fc"><i class="no-highlight">31</i>&nbsp;        .filter { word -&gt; word != &quot;&quot; }</b>
+<i class="no-highlight">32</i>&nbsp;}
+<i class="no-highlight">33</i>&nbsp;
+<i class="no-highlight">34</i>&nbsp;/** check if the given string is a number */
+<i class="no-highlight">35</i>&nbsp;fun isNumber(str: String): Boolean {
+<b class="fc"><i class="no-highlight">36</i>&nbsp;    return (str.toDoubleOrNull() != null)</b>
+<i class="no-highlight">37</i>&nbsp;}
+<i class="no-highlight">38</i>&nbsp;
+<i class="no-highlight">39</i>&nbsp;/** check if a character is in the alphabet */
+<i class="no-highlight">40</i>&nbsp;fun isAlphabetic(char: Char): Boolean {
+<b class="fc"><i class="no-highlight">41</i>&nbsp;    return (char in (&#39;a&#39; .. &#39;z&#39;) || char in (&#39;A&#39; .. &#39;Z&#39;))</b>
+<i class="no-highlight">42</i>&nbsp;}
+<i class="no-highlight">43</i>&nbsp;
+<i class="no-highlight">44</i>&nbsp;/** check if a character is not alphabetic */
+<i class="no-highlight">45</i>&nbsp;fun isNotAlphabetic(char: Char): Boolean {
+<b class="fc"><i class="no-highlight">46</i>&nbsp;    return (!isAlphabetic(char))</b>
+<i class="no-highlight">47</i>&nbsp;}
+</div>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+        var codeBlock = document.getElementById('sourceCode');
+
+        if (codeBlock) {
+            hljs.highlightBlock(codeBlock);
+        }
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2022-04-28 15:34</div>
+</div>
+</body>
+</html>

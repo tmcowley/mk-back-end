@@ -7,7 +7,6 @@ import org.springframework.cache.annotation.EnableCaching
 @SpringBootApplication
 @EnableCaching
 class App {
-
     init{
         // output algorithm configuration
         println("\nNotice: Syntax analysis ${

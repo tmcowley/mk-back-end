@@ -33,7 +33,9 @@ internal class Evaluation {
                 // progress metre
                 if (index % 5_000 == 0) println("\rProgress: ${(index * 100) / words.size}%")
 
-                val wordMatches = getMatchedWords(word)
+                // get word matches by building and reading down cartesian-product tree
+                // then filtering against the dictionary
+                val wordMatches = getWords(word)
                 put(word, wordMatches)
             }
         }
