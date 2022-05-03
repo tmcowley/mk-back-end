@@ -164,7 +164,10 @@ internal class SingletonTests {
                     Singleton.getPhrase(sessionNumber, phraseNumber)
                 }.filterNotNull()
 
-                // ensure no phrase was null
+                // ensure session returns phrases
+                assertThat(phrases).isNotEmpty
+
+                // ensure the session had eight phrases
                 assertThat(phrases.size).isEqualTo(8)
 
                 // ensure all phrases are unique

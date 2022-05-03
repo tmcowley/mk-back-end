@@ -12,11 +12,10 @@ hand symmetry.
 
 ## About this component
 
-This back-end component serves as the processing core of our web application, serving REST APIs that facilitate
+This back-end component serves as the processing core of our web application, hosting our business logic and serving REST APIs that facilitate
 single-handed typing and communicate typing-related metrics. The key API is our `submit()` GET-API, which takes a
-sentence of left, right, or full-form, converts this to left-form, and then returns the predicted full-board sentence.
-We split APIs into GET (for state-independent operations), and POST (for state-dependent operations, such as sign-up and
-sign-in).
+sentence of left, right, or full-form, converts this to left-form, and then returns an ordered list of viable intended sentences.
+We split APIs into GET, and POST, with the latter being used for authenticated requests (such as sign-up and sign-in).
 
 The core logic underpinning our sentence processing can be found in `./src/main/kotlin/tmcowley/appserver/Logic.kt`.
 
