@@ -11,12 +11,15 @@ import tmcowley.appserver.Singleton
 fun getMatchedWordsUsingCartesianProduct(currentWord: List<KeyPair>): Set<String> {
     if (currentWord.isEmpty()) return setOf()
 
-    // compute cartesian product, make distinct, filter in word-list
-    return cartesianProduct(
+    // compute cartesian product of current word
+    val cartesianProduct = cartesianProduct(
         // create word in (key-pair as list) form:
         // "word" -> [['w', 'o'], ['w', 'o'], ['r', 'u'], ['d', 'k']]
         currentWord.map { keyPair -> keyPair.toList() }
     )
+
+    // make distinct, filter in word-list
+    return cartesianProduct
         .distinct()
         .map { path -> path.joinToString("") }
         .filter { word -> Singleton.wordExists(word) }

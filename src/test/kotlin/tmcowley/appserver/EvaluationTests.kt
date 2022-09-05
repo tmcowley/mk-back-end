@@ -10,12 +10,12 @@ import tmcowley.appserver.controllers.apis.Get
 import kotlin.test.assertNotNull
 
 /** Test class for automated evaluation */
-@Disabled
+@SpringBootTest
 @Tags(
     Tag("slow")
 )
-@SpringBootTest
-internal class Evaluation {
+@Disabled
+internal class EvaluationTests {
 
     private val getAPIs: Get = Get()
     private val phrases = Singleton.phrases
@@ -35,8 +35,8 @@ internal class Evaluation {
 
                 // get word matches by building and reading down cartesian-product tree
                 // then filtering against the dictionary
-                val wordMatches = getWords(word)
-                put(word, wordMatches)
+                val matches = getWords(word)
+                put(word, matches)
             }
         }
     }
@@ -49,7 +49,7 @@ internal class Evaluation {
         val wordsMutable = words.toMutableList()
 
         // filter out non-mapped words
-        wordsMutable.filter { word -> matchLookup[word] != null}
+        wordsMutable.filter { word -> word in matchLookup }
 
         // words sorted by length (asc.), then match count (desc.)
         wordsMutable.sortBy { word -> word.length }
@@ -90,10 +90,9 @@ internal class Evaluation {
         val singleMatchingWords = words.count { word ->
             val matches = matchLookup[word]
             assertNotNull(matches)
-
-            (matches.size == 1)
+            matches.size == 1
         }
-        val proportionOfSingleMatchingWords = ((singleMatchingWords * 100) / words.size)
+        val proportionOfSingleMatchingWords = (singleMatchingWords * 100) / words.size
         println("Proportion of single-matching words: ${proportionOfSingleMatchingWords}%")
         println()
     }
@@ -105,16 +104,16 @@ internal class Evaluation {
         // count matches for each level: first, in top 3, in top 5, found
         val phraseCount = phrases.size
         val matchedAsTop = phrases.count { phrase ->
-            (getAPIs.submit(phrase).indexOf(phrase.lowercase()) == 0)
+            getAPIs.submit(phrase).indexOf(phrase.lowercase()) == 0
         }
         val matchedInTop3 = phrases.count { phrase ->
-            (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 3)
+            getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 3
         }
         val matchedInTop5 = phrases.count { phrase ->
-            (getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 5)
+            getAPIs.submit(phrase).indexOf(phrase.lowercase()) < 5
         }
         val matched = phrases.count { phrase ->
-            (getAPIs.submit(phrase).contains(phrase.lowercase()))
+            phrase.lowercase() in getAPIs.submit(phrase)
         }
 
         // output results
@@ -126,17 +125,19 @@ internal class Evaluation {
         println("Matched: ${(matched * 100) / phraseCount}% [$matched/$phraseCount]")
         println()
 
+        // check if any phrases have not been matched
+        val anyUnmatched = matched != phraseCount
+
         // check for non-matched phrases
-        phrases
+        if (anyUnmatched) phrases
             .filter { phrase ->
-                (!getAPIs.submit(phrase).contains(phrase.lowercase()))
+                phrase.lowercase() !in getAPIs.submit(phrase)
             }
             .forEach { phrase ->
                 println("Non-matched phrase found: $phrase")
             }
 
         // ensure all phrases were matched
-        val anyUnmatched = (matched != phraseCount)
         assertThat(anyUnmatched).isFalse
     }
 }

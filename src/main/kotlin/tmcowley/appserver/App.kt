@@ -23,7 +23,7 @@ fun main(args: Array<String>) {
 
     // testing flag for full code-coverage in testing
     val firstArgument = args.firstOrNull()
-    val inTesting = (firstArgument != null)
+    val inTesting = firstArgument != null
 
     if (!inTesting) runApplication<App>(*args)
 }
