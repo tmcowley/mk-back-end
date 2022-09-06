@@ -1,5 +1,7 @@
 # mirrored-keyboard
 
+[![Java CI with Maven](https://github.com/tmcowley/mk-back-end/actions/workflows/maven.yml/badge.svg?branch=main)](https://github.com/tmcowley/mk-back-end/actions/workflows/maven.yml)
+
 Third-Year Project: The predictive mirrored keyboard
 
 ## About the Project
