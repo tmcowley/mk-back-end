@@ -24,13 +24,13 @@ The core logic underpinning our sentence processing can be found in `./src/main/
 To test: <br />
 
 ```
-mvn clean install test
+mvn clean test
 ```
 
 To run: <br />
 
 ```
-mvn clean install package exec:exec
+mvn clean package exec:exec
 ```
 
 ## Technical Configuration
