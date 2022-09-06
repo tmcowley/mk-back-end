@@ -2,9 +2,8 @@ package tmcowley.appserver.utils
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import tmcowley.appserver.models.TrainingSessionData
-
 import tmcowley.appserver.models.SignUpForm
+import tmcowley.appserver.models.TrainingSessionData
 
 internal class ValidationKtTests {
 

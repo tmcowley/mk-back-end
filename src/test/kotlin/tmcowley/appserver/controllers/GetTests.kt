@@ -1,15 +1,13 @@
 package tmcowley.appserver.controllers
 
-import org.junit.jupiter.api.Test
-
 import org.assertj.core.api.Assertions.assertThat
-
+import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.controllers.apis.Get
-import tmcowley.appserver.utils.reportTrainingSession
 import tmcowley.appserver.utils.createUser
+import tmcowley.appserver.utils.reportTrainingSession
 import kotlin.reflect.KMutableProperty
 import kotlin.reflect.full.memberProperties
 

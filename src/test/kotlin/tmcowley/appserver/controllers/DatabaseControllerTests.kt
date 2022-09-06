@@ -1,22 +1,17 @@
 package tmcowley.appserver.controllers
 
-import org.junit.jupiter.api.Test
+// for assertions with smart-casts (nullability inferred)
 
 import org.assertj.core.api.Assertions.assertThat
-
-// for assertions with smart-casts (nullability inferred)
-import kotlin.test.assertNotNull
-import kotlin.test.assertNull
-
-import org.springframework.boot.test.context.SpringBootTest
-
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.junit.jupiter.api.Nested
-
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
 import tmcowley.appserver.models.TrainingSessionData
-
-import tmcowley.appserver.utils.createUserGettingCode
 import tmcowley.appserver.utils.createUser
+import tmcowley.appserver.utils.createUserGettingCode
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 @SpringBootTest
 internal class DatabaseControllerTests {

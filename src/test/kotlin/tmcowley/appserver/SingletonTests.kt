@@ -1,22 +1,20 @@
 package tmcowley.appserver
 
-import tmcowley.appserver.models.Key
-import tmcowley.appserver.models.KeyPair
-
-import org.springframework.boot.test.context.SpringBootTest
-
 // junit5
-import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.Nested
-import org.junit.jupiter.api.DisplayName
 
 // for fluent assertions
-import org.assertj.core.api.Assertions.assertThat
-import tmcowley.appserver.utils.splitIntoWords
 
 // for assertions with smart-casts (nullability inferred)
-import kotlin.test.assertNull
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+import org.springframework.boot.test.context.SpringBootTest
+import tmcowley.appserver.models.Key
+import tmcowley.appserver.models.KeyPair
+import tmcowley.appserver.utils.splitIntoWords
 import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
 @SpringBootTest
 internal class SingletonTests {

@@ -1,8 +1,8 @@
 # locally running the back-end
 
 ```
-mvn clean install package; # installs, compiles, tests, makes jar;
-mvn exec:exec; # runs: java -jar target/app-server-0.0.1-SNAPSHOT.jar;
+mvn clean package; # compiles, tests, makes jar;
+mvn exec:exec; # runs: java -jar target/app-server-1.0.0.jar;
 ```
 
 ## Compile and run:

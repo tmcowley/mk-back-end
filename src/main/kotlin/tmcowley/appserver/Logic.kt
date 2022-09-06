@@ -3,8 +3,8 @@ package tmcowley.appserver
 import tmcowley.appserver.structures.SentenceTree
 import tmcowley.appserver.structures.WordTree
 import tmcowley.appserver.utils.getFrequencyScore
-import tmcowley.appserver.utils.splitIntoWords
 import tmcowley.appserver.utils.isNumber
+import tmcowley.appserver.utils.splitIntoWords
 
 /** submit a sentence to turn an input phrase into an array of matched phrases */
 fun submitSentence(sentence: String): List<String> {

@@ -1,8 +1,8 @@
 package tmcowley.appserver.utils
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.assertj.core.api.Assertions.assertThat
 import tmcowley.appserver.Singleton
 
 @SpringBootTest

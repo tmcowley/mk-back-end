@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.models.SignInForm
-import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.models.SignUpForm
-import tmcowley.appserver.utils.validateTrainingSessionData
+import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.utils.validateSignUpForm
+import tmcowley.appserver.utils.validateTrainingSessionData
 import tmcowley.appserver.utils.validateUserCode
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession

@@ -1,10 +1,9 @@
 package tmcowley.appserver.utils
 
-import org.junit.jupiter.api.Test
-
 // for assertions with smart-casts (nullability inferred)
-import org.assertj.core.api.Assertions.assertThat
 
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest

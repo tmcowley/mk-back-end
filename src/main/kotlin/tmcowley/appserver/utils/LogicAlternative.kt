@@ -1,11 +1,10 @@
 package tmcowley.appserver.utils
 
-import tmcowley.appserver.models.KeyPair
-
 // for computing the n-ary Cartesian product (alternative matching algorithm)
 // see: https://guava.dev/releases/23.5-jre/api/docs/com/google/common/collect/Lists.html#cartesianProduct-java.util.List...-
 import com.google.common.collect.Lists.cartesianProduct
 import tmcowley.appserver.Singleton
+import tmcowley.appserver.models.KeyPair
 
 /** alternative word matching algorithm using n-ary cartesian product */
 fun getMatchedWordsUsingCartesianProduct(currentWord: List<KeyPair>): Set<String> {

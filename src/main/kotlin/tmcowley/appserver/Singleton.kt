@@ -1,17 +1,12 @@
 package tmcowley.appserver
 
-import java.io.File
-import java.io.FileInputStream
-import java.util.Properties
-import kotlin.random.Random
 import tmcowley.appserver.models.Key
 import tmcowley.appserver.models.KeyPair
-import tmcowley.appserver.utils.LangTool
-import tmcowley.appserver.utils.getWords
-import tmcowley.appserver.utils.getPhrases
-import tmcowley.appserver.utils.getFiveGrams
-import tmcowley.appserver.utils.getKeyPairMap
-import tmcowley.appserver.utils.getWordFrequencies
+import tmcowley.appserver.utils.*
+import java.io.File
+import java.io.FileInputStream
+import java.util.*
+import kotlin.random.Random
 
 object Singleton {
 

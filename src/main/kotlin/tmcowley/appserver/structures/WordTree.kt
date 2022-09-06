@@ -1,8 +1,8 @@
 package tmcowley.appserver.structures
 
-import tmcowley.appserver.utils.getWordInKeyPairForm
-import tmcowley.appserver.models.KeyPair
 import tmcowley.appserver.models.Key
+import tmcowley.appserver.models.KeyPair
+import tmcowley.appserver.utils.getWordInKeyPairForm
 
 class WordTree : CartesianProductTree<Key>(Node(Key('ε'))) {
 

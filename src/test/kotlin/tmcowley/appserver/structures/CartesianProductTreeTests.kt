@@ -1,13 +1,12 @@
 package tmcowley.appserver.structures
 
-import tmcowley.appserver.utils.pow
-
 // junit5
-import org.junit.jupiter.api.Test
 
 // for fluent assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
+import tmcowley.appserver.utils.pow
 
 /** as CartesianProductTree is abstract, we test using the derived class WordTree */
 @SpringBootTest

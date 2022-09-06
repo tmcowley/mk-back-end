@@ -14,10 +14,10 @@
     <name>app-server</name>
     <description>CS310 - Third Year Project - Single Handed Keyboard</description>
     <properties>
-        <java.version>18</java.version>
+        <java.version>17</java.version>
         <kotlin.version>1.7.10</kotlin.version>
-        <maven.compiler.target>18</maven.compiler.target>
-        <maven.compiler.source>18</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
         <serialization.version>1.4.0</serialization.version>
         <exec.mainClass>tmcowley.appserver.App</exec.mainClass>
     </properties>
@@ -495,7 +495,7 @@
                         </goals>
                         <!-- https://stackoverflow.com/questions/36573510/suppress-maven-dependency-plugins-unused-declared-dependencies-found-warnings -->
                         <configuration>
-<!--                            <failOnWarning>true</failOnWarning>-->
+                            <failOnWarning>false</failOnWarning>
                             <ignoredUnusedDeclaredDependencies>
                                 <ignoredUnusedDeclaredDependency>
                                     org.springframework.boot:spring-boot-starter-web:jar:2.7.3

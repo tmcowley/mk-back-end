@@ -2,9 +2,11 @@ package tmcowley.appserver.controllers.apis
 
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation.*
-import tmcowley.appserver.*
+import tmcowley.appserver.Singleton
+import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.controllers.TrainingSession
 import tmcowley.appserver.controllers.User
+import tmcowley.appserver.submitSentence
 import tmcowley.appserver.utils.convertToLeft
 import tmcowley.appserver.utils.convertToRight
 

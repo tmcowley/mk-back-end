@@ -1,7 +1,7 @@
 package tmcowley.appserver.utils
 
-import tmcowley.appserver.models.TrainingSessionData
 import tmcowley.appserver.models.SignUpForm
+import tmcowley.appserver.models.TrainingSessionData
 
 /** validate a sign-up form */
 fun validateSignUpForm(form: SignUpForm): Boolean {

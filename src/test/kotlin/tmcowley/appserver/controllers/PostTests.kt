@@ -1,11 +1,11 @@
 package tmcowley.appserver.controllers
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.springframework.mock.web.MockHttpServletRequest
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.encodeToString
-import org.junit.jupiter.api.Nested
 import tmcowley.appserver.Singleton
 import tmcowley.appserver.SingletonControllers
 import tmcowley.appserver.controllers.apis.Post
