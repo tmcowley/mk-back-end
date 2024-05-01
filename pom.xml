@@ -367,7 +367,7 @@
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-core</artifactId>
             <!-- Changing below version breaks build -->
-            <version>9.0.60</version>
+            <version>9.0.86</version>
         </dependency>
 
         <!--
